@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Container} from "react-bootstrap";
-import SearchHeader from "../../components/Layout/Header";
+import SearchHeader from "../components/Layout/MainHeader";
 
 class Discover extends Component {
     render() {
