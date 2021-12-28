@@ -1,24 +1,16 @@
-import {API_URL} from "../config/constant";
-import axios from "axios";
-import {useNavigate, Navigate} from "react-router-dom";
+import {useContext, useEffect} from "react";
+import {Navigate} from "react-router-dom";
+
+import AuthContext from "../store/AuthContext";
 
 function Logout() {
-    let history = useNavigate();
-    const token = localStorage.getItem("token");
+    const authCtx = useContext(AuthContext);
 
-    localStorage.clear();
-    return <Navigate to="/login" replace />
-    /*
-    axios.post(
-        API_URL + '/user/logout', {}, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
-    ).then(
-        localStorage.clear();
-        history('/login');
-    ); */
+    useEffect(() => {
+        authCtx.deauthorize()
+    }, [authCtx]);
+
+    return <Navigate to="/login" replace/>
 }
 
 export default Logout;

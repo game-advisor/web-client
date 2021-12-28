@@ -1,18 +1,16 @@
-import React, { Component } from 'react';
 import {Container} from "react-bootstrap";
-import SearchHeader from "../components/Layout/MainHeader";
+import {Fragment} from "react";
+import MainHeader from "../components/Layout/Header/MainHeader";
 
-class Explore extends Component {
-    render() {
-        return (
-            <React.Fragment>
-                <SearchHeader />
-                <Container>
-                    <p>Lista grufff</p>
-                </Container>
-            </React.Fragment>
-        );
-    }
+function Explore() {
+    return (
+        <Fragment>
+            <MainHeader/>
+            <Container>
+                <p>Lista grufff</p>
+            </Container>
+        </Fragment>
+    );
 }
 
 export default Explore;

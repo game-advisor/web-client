@@ -1,11 +1,15 @@
+import { useContext } from "react";
+import AuthContext from "../../store/AuthContext";
 import {Link} from "react-router-dom";
 
 import {Container, Nav, Navbar as NavContainer, NavDropdown} from "react-bootstrap";
-import logo from "./MainNavigation/logo.svg";
+import logo from "../../assets/logo.svg";
 import UserLinks from "./MainNavigation/UserLinks";
 import RegistrationLinks from "./MainNavigation/RegistrationLinks";
 
 function MainNavigation() {
+    const authCtx = useContext(AuthContext);
+
     return (
         <NavContainer bg="dark" variant="dark" expand="lg">
             <Container>
@@ -25,13 +29,13 @@ function MainNavigation() {
                         <Nav.Link as={Link} to="/explore">Explore</Nav.Link>
                         <Nav.Link>Community</Nav.Link>
                         <NavDropdown title="Support" id="main-nav-dropdown">
-                            <NavDropdown.Item hhref="/about">About</NavDropdown.Item>
+                            <NavDropdown.Item href="/about">About</NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/blog">Blog</NavDropdown.Item>
                             <NavDropdown.Divider/>
                             <NavDropdown.Item as={Link} to="/contact">Contact</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
-                    {localStorage.getItem("token") === null ? <RegistrationLinks /> : <UserLinks />}
+                    {authCtx.isLoggedIn ? <UserLinks /> : <RegistrationLinks />}
                 </NavContainer.Collapse>
             </Container>
         </NavContainer>
