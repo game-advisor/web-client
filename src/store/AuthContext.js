@@ -7,6 +7,7 @@ const AuthContext = createContext({
     details: {},
     authorize: (token) => {},
     deauthorize: () => {},
+    getstatus: () => {},
 });
 
 export function AuthContextProvider(props) {
@@ -20,11 +21,34 @@ export function AuthContextProvider(props) {
         details: userDetails,
         authorize: authorizeHandler,
         deauthorize: deAuthorizeHandler,
+        getstatus: statusHandler
     };
+
+    function statusHandler() {
+        if(this.isLoggedIn)
+            return true;
+
+        const savedToken = localStorage.getItem("api_token");
+        if(savedToken !== null) {
+            const savedTokenDetails = jwt(savedToken);
+
+            if(savedTokenDetails.exp > ((new Date()).getTime() / 1000)) {
+                authorizeHandler(savedToken);
+                return true;
+            }
+
+            deAuthorizeHandler();
+            return false;
+        }
+
+        return false;
+    }
 
     function authorizeHandler(token) {
         setUserLoggedIn(true);
         setUserToken(token);
+        localStorage.setItem("api_token", token);
+
         if(token != null) {
             setUserDetails(jwt(token))
         }
@@ -33,6 +57,8 @@ export function AuthContextProvider(props) {
     function deAuthorizeHandler() {
         setUserLoggedIn(false);
         setUserToken(null);
+        localStorage.removeItem("api_token");
+
         setUserDetails({});
     }
 

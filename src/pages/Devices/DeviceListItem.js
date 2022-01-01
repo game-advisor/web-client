@@ -1,6 +1,6 @@
 import {Button, ButtonGroup, Card, Col, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import computer from "../../../assets/computer.svg";
+import computer from "../../assets/computer.svg";
 
 function DeviceListItem(props) {
     function DeleteDevice(id) {

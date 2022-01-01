@@ -8,7 +8,7 @@ import {Navigate} from "react-router-dom";
 
 function Home() {
     const authCtx = useContext(AuthContext);
-    if(authCtx.isLoggedIn === false)
+    if(authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>;
 
     return (

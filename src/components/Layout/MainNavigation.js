@@ -35,7 +35,7 @@ function MainNavigation() {
                             <NavDropdown.Item as={Link} to="/contact">Contact</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
-                    {authCtx.isLoggedIn ? <UserLinks /> : <RegistrationLinks />}
+                    {authCtx.getstatus() ? <UserLinks /> : <RegistrationLinks />}
                 </NavContainer.Collapse>
             </Container>
         </NavContainer>

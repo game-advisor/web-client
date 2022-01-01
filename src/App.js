@@ -12,8 +12,6 @@ import Logout from "./pages/Logout";
 import Layout from "./components/Layout";
 import Devices from "./pages/Devices";
 import AddDevice from "./pages/Devices/AddDevice";
-import NotFound from "./errorpages/NotFound";
-import AllDevices from "./pages/Devices/AllDevices";
 import SingleDevice from "./pages/Devices/SingleDevice";
 import EditDevice from "./pages/Devices/EditDevice";
 
@@ -27,13 +25,10 @@ function App() {
                 <Route path='login' element={<Login/>}/>
                 <Route path='logout' element={<Logout/>}/>
                 <Route path='register' element={<Register/>}/>
-                <Route path='devices' element={<Devices/>}>
-                    <Route index element={<AllDevices/>}/>
-                    <Route path='add' element={<AddDevice/>}/>
-                    <Route path=':id' element={<SingleDevice/>}/>
-                    <Route path=':id/edit' element={<EditDevice/>}/>
-                    <Route path="*" element={<NotFound/>}/>
-                </Route>
+                <Route path='devices' element={<Devices/>}/>
+                <Route path='devices/add' element={<AddDevice/>}/>
+                <Route path='devices/:id' element={<SingleDevice/>}/>
+                <Route path='devices/:id/edit' element={<EditDevice/>}/>
             </Routes>
         </Layout>
     );

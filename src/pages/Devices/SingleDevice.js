@@ -14,47 +14,48 @@ function SingleDevice() {
     const deviceID = params.id;
     const authCtx = useContext(authContext);
 
-    const [isLoading, setisLoading] = useState(true);
+    const [isLoaded, setIsLoaded] = useState(false);
     const [fetchedDevice, setFetchedDevice] = useState({});
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        setisLoading(true);
+        setIsLoaded(false);
         setError(null);
 
         axios.get(`${API_URL}/device/${deviceID}`, {
             headers: {
                 Authorization: `${authCtx.token}`
             }
-        }).then(response => {
-            setisLoading(false);
+        }).then((response) => {
             setFetchedDevice(response.data);
-
+            setIsLoaded(true);
+            console.log(response.data);
         }).catch((error) => {
             if (error.response) {
-                setisLoading(false);
                 setError(`[${error.response.data.code}] ${error.response.data.message}. Try refresh the page.`);
 
             } else if (error.request) {
-                setisLoading(false);
                 setError("Incorrect request. Try refresh the page.");
 
             } else {
-                setisLoading(false);
                 setError("Unexpected error occured.");
             }
         });
     }, [deviceID, authCtx]);
 
-    if (isLoading) {
+    if (isLoaded) {
         return (
-            <LoadingScreen/>
+            <Container>
+                {error ? <Alert variant="danger">{error}</Alert> : ''}
+                {fetchedDevice !== {} ? <DeviceDetails device={fetchedDevice}/> : ''}
+            </Container>
         );
     }
-    console.log(fetchedDevice);
+
     return (
         <Container>
-            {error ? <Alert variant="danger">{error}</Alert> : <DeviceDetails device={fetchedDevice} /> }
+            {error ? <Alert variant="danger">{error}</Alert> : ''}
+            <LoadingScreen/>
         </Container>
     );
 }
