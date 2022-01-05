@@ -5,7 +5,7 @@ import { useContext } from "react";
 import AuthContext from "../../../store/AuthContext";
 import {API_URL} from "../../../config/constant";
 
-function UserLinks(props) {
+function UserLinks() {
     const authCtx = useContext(AuthContext);
     const userId = authCtx.details.userID;
 
@@ -19,11 +19,13 @@ function UserLinks(props) {
                 className="d-inline-block align-top"
             />
         } id="main-nav-dropdown">
-            <NavDropdown.Item as={Link} to="/devices">Your devices</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="/favorites">Your favorites</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="me">View profile</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="me/devices">Your devices</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="me/favorites">Your favorites</NavDropdown.Item>
             <NavDropdown.Divider/>
-            <NavDropdown.Item as={Link} to="/settings">Settings</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="/logout">Logout</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="me/edit">Edit profile</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="settings">Settings</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="logout">Logout</NavDropdown.Item>
         </NavDropdown>
     );
 }

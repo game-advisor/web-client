@@ -1,11 +1,11 @@
-import AuthLayout from "../components/Layout/AuthLayout";
+import AuthLayout from "../../components/Layout/AuthLayout";
 import LoginForm from "./Login/LoginForm";
 
-import {API_URL} from "../config/constant";
+import {API_URL} from "../../config/constant";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
-import AuthContext from "../store/AuthContext";
+import AuthContext from "../../store/AuthContext";
 
 function Login() {
     const history = useNavigate();

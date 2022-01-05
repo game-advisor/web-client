@@ -7,9 +7,9 @@ import {useParams} from "react-router-dom";
 
 import {Alert, Container} from "react-bootstrap";
 import LoadingScreen from "../../components/Layout/LoadingScreen";
-import DeviceDetails from "./SingleDevice/DeviceDetails";
+import DeviceDetails from "./ViewDevice/DeviceDetails";
 
-function SingleDevice() {
+function ViewDevice() {
     const params = useParams();
     const deviceID = params.id;
     const authCtx = useContext(authContext);
@@ -60,4 +60,4 @@ function SingleDevice() {
     );
 }
 
-export default SingleDevice;
+export default ViewDevice;

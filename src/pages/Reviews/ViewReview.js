@@ -5,7 +5,7 @@ import {useParams, Navigate} from "react-router-dom";
 import MainHeader from "../../components/Layout/Header/MainHeader";
 import {Container} from "react-bootstrap";
 
-function EditDevice() {
+function ViewReview() {
     const params = useParams();
     const authCtx = useContext(AuthContext);
     if(authCtx.getstatus() === false)
@@ -14,9 +14,9 @@ function EditDevice() {
     return (
         <Fragment>
             <MainHeader />
-            <Container>Edit device {params.id} placeholder</Container>
+            <Container>View review {params.reviewId} placeholder</Container>
         </Fragment>
     );
 }
 
-export default EditDevice;
+export default ViewReview;

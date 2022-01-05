@@ -1,6 +1,6 @@
 import {Button, Card} from "react-bootstrap";
 
-function GameItem(props) {
+function GameListItem(props) {
     return (
         <Card>
             <Card.Img variant="top" src={props.image} alt={props.title} />
@@ -15,4 +15,4 @@ function GameItem(props) {
     );
 }
 
-export default GameItem;
+export default GameListItem;

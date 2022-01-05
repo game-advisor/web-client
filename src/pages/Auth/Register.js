@@ -1,7 +1,7 @@
-import AuthLayout from "../components/Layout/AuthLayout";
+import AuthLayout from "../../components/Layout/AuthLayout";
 import RegisterForm from "./Register/RegisterForm";
 
-import {API_URL} from "../config/constant";
+import {API_URL} from "../../config/constant";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 

@@ -1,16 +1,16 @@
 import {useState, useEffect, useContext, Fragment} from 'react';
 
 import axios from "axios";
-import {API_URL} from "../config/constant";
-import authContext from "../store/AuthContext";
+import {API_URL} from "../../config/constant";
+import authContext from "../../store/AuthContext";
 
-import {Alert} from "react-bootstrap";
-import LoadingScreen from "../components/Layout/LoadingScreen";
+import {Alert, Container} from "react-bootstrap";
+import LoadingScreen from "../../components/Layout/LoadingScreen";
 import {Navigate, useNavigate} from "react-router-dom";
-import ActionHeader from "../components/Layout/Header/ActionHeader";
-import DeviceList from "./Devices/DeviceList";
+import ActionHeader from "../../components/Layout/Header/ActionHeader";
+import DeviceList from "../../components/Devices/DeviceList";
 
-function Devices() {
+function AllDevices() {
     const authCtx = useContext(authContext);
     const history = useNavigate();
 
@@ -52,8 +52,10 @@ function Devices() {
     if (isLoaded) {
         return (
             <Fragment>
-                <ActionHeader name="Your devices" description="You suck" actionName="Add device" onAction={() => history("/devices/add")}/>
-                {error ? <Alert variant="danger">{error}</Alert> : <DeviceList devices={fetchedDevices}/>}
+                <ActionHeader name="Your devices" description="" actionName="Add device" onAction={() => history("/devices/add")}/>
+                <Container>
+                    {error ? <Alert variant="danger">{error}</Alert> : <DeviceList devices={fetchedDevices}/>}
+                </Container>
             </Fragment>
         );
     }
@@ -61,10 +63,12 @@ function Devices() {
     return (
         <Fragment>
             <ActionHeader name="Your devices" description="You suck" actionName="Add device" onAction={() => history("/devices/add")}/>
-            {error ? <Alert variant="danger">{error}</Alert> : ''}
-            <LoadingScreen/>
+            <Container>
+                {error ? <Alert variant="danger">{error}</Alert> : ''}
+                <LoadingScreen/>
+            </Container>
         </Fragment>
     );
 }
 
-export default Devices;
+export default AllDevices;

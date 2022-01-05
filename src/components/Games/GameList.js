@@ -1,4 +1,4 @@
-import GameItem from './GameItem';
+import GameListItem from './GameListItem';
 import {Row} from "react-bootstrap";
 
 function GameList(props) {
@@ -6,7 +6,7 @@ function GameList(props) {
         <Row as="ul" className="list-unstyled">
             {props.games.map((game) => (
                 <li key={game.id} className="col-xs-12 col-md-6 col-lg-4">
-                    <GameItem
+                    <GameListItem
                         id={game.id}
                         image={game.image}
                         title={game.title}
