@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.profile-header {
+  transform: translateY(4rem);
+}
+
+.h-5 {
+  height: 3rem;
+}

@@ -10,7 +10,7 @@ function DeviceListItem(props) {
     return (
         <Card>
             <Row>
-                <Col md={3}>
+                <Col md={3} className="d-flex justify-content-center align-content-center">
                     <img
                         alt={props.shortname}
                         src={computer}
@@ -24,9 +24,9 @@ function DeviceListItem(props) {
                         <Card.Title>{props.shortname}</Card.Title>
                         <Card.Text className="text-muted">{props.cpu} &bull; {props.gpu} &bull; {props.os}</Card.Text>
                         <ButtonGroup>
-                            <Button as={Link} to={`devices/${props.id}`} variant="primary">See details</Button>
-                            <Button as={Link} to={`devices/${props.id}/edit`} variant="secondary">Edit</Button>
-                            <Button variant="primary" onClick={DeleteDevice(props.id)}>Delete</Button>
+                            <Button as={Link} to={`${props.id}`} variant="primary">See details</Button>
+                            <Button as={Link} to={`${props.id}/edit`} variant="outline-secondary">Edit</Button>
+                            <Button variant="outline-danger" onClick={DeleteDevice(props.id)}>Delete</Button>
                         </ButtonGroup>
 
                     </Card.Body>

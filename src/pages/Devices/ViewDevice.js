@@ -1,17 +1,17 @@
-import {useState, useEffect, useContext} from 'react';
+import {useState, useEffect, useContext, Fragment} from 'react';
 
 import axios from "axios";
 import {API_URL} from "../../config/constant";
 import authContext from "../../store/AuthContext";
 import {useParams} from "react-router-dom";
-
 import {Alert, Container} from "react-bootstrap";
-import LoadingScreen from "../../components/Layout/LoadingScreen";
+import LoadingSection from "../../components/Layout/LoadingSection";
 import DeviceDetails from "./ViewDevice/DeviceDetails";
+import ProfileHeader from "../../components/User/ProfileHeader";
 
 function ViewDevice() {
     const params = useParams();
-    const deviceID = params.id;
+    const deviceID = params.deviceId;
     const authCtx = useContext(authContext);
 
     const [isLoaded, setIsLoaded] = useState(false);
@@ -45,18 +45,21 @@ function ViewDevice() {
 
     if (isLoaded) {
         return (
-            <Container>
-                {error ? <Alert variant="danger">{error}</Alert> : ''}
-                {fetchedDevice !== {} ? <DeviceDetails device={fetchedDevice}/> : ''}
-            </Container>
+            <Fragment>
+                <ProfileHeader id={authCtx.details.userID} isPersonal="true"  />
+                <Container>
+                    {error ? <Alert variant="danger">{error}</Alert> : ''}
+                    {fetchedDevice !== {} ? <DeviceDetails device={fetchedDevice}/> : ''}
+                </Container>
+            </Fragment>
         );
     }
 
     return (
-        <Container>
-            {error ? <Alert variant="danger">{error}</Alert> : ''}
-            <LoadingScreen/>
-        </Container>
+        <Fragment>
+            <ProfileHeader id={authCtx.details.userID} />
+            <LoadingSection error={error}/>
+        </Fragment>
     );
 }
 

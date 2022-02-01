@@ -4,11 +4,12 @@ import axios from "axios";
 import {API_URL} from "../../config/constant";
 import authContext from "../../store/AuthContext";
 
-import {Alert, Container} from "react-bootstrap";
-import LoadingScreen from "../../components/Layout/LoadingScreen";
+import {Alert} from "react-bootstrap";
+import LoadingSection from "../../components/Layout/LoadingSection";
 import {Navigate, useNavigate} from "react-router-dom";
-import ActionHeader from "../../components/Layout/Header/ActionHeader";
+import SectionWithAction from "../../components/Layout/Section/SectionWithAction";
 import DeviceList from "../../components/Devices/DeviceList";
+import ProfileHeader from "../../components/User/ProfileHeader";
 
 function AllDevices() {
     const authCtx = useContext(authContext);
@@ -34,8 +35,10 @@ function AllDevices() {
             if (error.response) {
                 setError(`[${error.response.data.code}] ${error.response.data.message}. Try refresh the page.`);
 
-                if(error.response.data.code === 404)
+                if (error.response.data.code === 404) {
+                    setIsLoaded(true);
                     setError(`[${error.response.data.code}] ${error.response.data.message}. Try add some devices using button above.`);
+                }
 
             } else if (error.request) {
                 setError("Incorrect request. Try refresh the page.");
@@ -46,27 +49,28 @@ function AllDevices() {
         });
     }, [authCtx]);
 
-    if(authCtx.getstatus() === false)
-        return <Navigate to="/login" replace />
+    if (authCtx.getstatus() === false)
+        return <Navigate to="/login" replace/>
 
     if (isLoaded) {
         return (
             <Fragment>
-                <ActionHeader name="Your devices" description="" actionName="Add device" onAction={() => history("/devices/add")}/>
-                <Container>
+                <ProfileHeader id={authCtx.details.userID} isPersonal="true" />
+                <SectionWithAction name="Your devices" description="" actionName="Add device"
+                                   onAction={() => history("/devices/add")}>
                     {error ? <Alert variant="danger">{error}</Alert> : <DeviceList devices={fetchedDevices}/>}
-                </Container>
+                </SectionWithAction>
             </Fragment>
         );
     }
 
     return (
         <Fragment>
-            <ActionHeader name="Your devices" description="You suck" actionName="Add device" onAction={() => history("/devices/add")}/>
-            <Container>
-                {error ? <Alert variant="danger">{error}</Alert> : ''}
-                <LoadingScreen/>
-            </Container>
+            <ProfileHeader id={authCtx.details.userID} />
+            <SectionWithAction name="Your devices" description="" actionName="Add device"
+                               onAction={() => history("/devices/add")}>
+                <LoadingSection error={error}/>
+            </SectionWithAction>
         </Fragment>
     );
 }

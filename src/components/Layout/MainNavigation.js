@@ -26,7 +26,10 @@ function MainNavigation() {
                 <Navbar.Collapse id="main-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
-                        <Nav.Link as={Link} to="/games">Explore</Nav.Link>
+                        <Nav.Link as={Link} to="/games">Discover</Nav.Link>
+                        <Nav.Link as={Link} to="/tags">Explore</Nav.Link>
+                        <Nav.Link as={Link} to="/search">Find</Nav.Link>
+                        {authCtx.getstatus() ? <Nav.Link as={Link} to="/me/favorites">Saves</Nav.Link> : '' }
                     </Nav>
                     {authCtx.getstatus() ? <UserLinks /> : <RegistrationLinks />}
                 </Navbar.Collapse>

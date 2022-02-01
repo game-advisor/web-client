@@ -2,8 +2,8 @@ import {Fragment, useContext} from "react";
 import AuthContext from "../../store/AuthContext";
 import {Navigate} from "react-router-dom";
 
-import MainHeader from "../../components/Layout/Header/MainHeader";
 import {Container} from "react-bootstrap";
+import ProfileHeader from "../../components/User/ProfileHeader";
 
 function MyProfile() {
     const authCtx = useContext(AuthContext);
@@ -12,7 +12,7 @@ function MyProfile() {
 
     return (
         <Fragment>
-            <MainHeader />
+            <ProfileHeader id={authCtx.details.userID} isPersonal="true"  />
             <Container>My profile placeholder</Container>
         </Fragment>
     );
