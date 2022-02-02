@@ -9,13 +9,54 @@ import {
     ListGroup,
     Row
 } from "react-bootstrap";
-import {Link, Navigate} from "react-router-dom";
+import {Link, Navigate, useNavigate, useParams} from "react-router-dom";
 import computer from "../../../assets/computer.svg";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/outline";
+import axios from "axios";
+import {API_URL} from "../../../config/constant";
+import {useContext} from "react";
+import AuthContext from "../../../store/AuthContext";
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 function DeviceDetails(props) {
+    const authCtx = useContext(AuthContext);
+    const params = useParams();
+    const history = useNavigate();
+
     function DeleteDevice(id) {
-        return <Navigate to="/me/devices" replace/>
+        confirmAlert({
+            title: 'Are you sure?',
+            message: 'You\'re going to delete your device permanently. This operation cannot be undone',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => {
+                        alert(`Task failed successfully!`);
+                        axios.delete(`${API_URL}/device/${id}/delete`).then((response) => {
+                            alert("Device deleted successfully!");
+                            setInterval(5000);
+                            history('/me/devices');
+                        }).catch((error) => {
+                            if (error.response) {
+                                alert(`[${error.response.data.code}] ${error.response.data.message}. Try refresh the page.`);
+
+                            } else if (error.request) {
+                                alert("Incorrect request. Try refresh the page.");
+
+                            } else {
+                                alert("Unexpected error occured.");
+                            }
+                        });
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => {
+                    }
+                }
+            ]
+        })
     }
 
     return (
@@ -42,7 +83,8 @@ function DeviceDetails(props) {
                                 <Card.Title>{props.device.shortName}</Card.Title>
                                 <ButtonGroup>
                                     <Button as={Link} to={`edit`} variant="primary">Edit</Button>
-                                    <Button variant="outline-danger" onClick={DeleteDevice(props.id)}>Delete</Button>
+                                    <Button variant="outline-danger"
+                                            onClick={() => DeleteDevice(props.device.deviceID)}>Delete</Button>
                                 </ButtonGroup>
 
                             </Card.Body>
@@ -84,7 +126,8 @@ function DeviceDetails(props) {
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
                                     <div className="fw-bold">HDD</div>
-                                    {props.device.hdd ? <CheckCircleIcon width="24" height="24"/> : <XCircleIcon width="24" height="24"/>}
+                                    {props.device.hdd ? <CheckCircleIcon width="24" height="24"/> :
+                                        <XCircleIcon width="24" height="24"/>}
                                 </div>
                             </ListGroup.Item>
 
@@ -92,7 +135,8 @@ function DeviceDetails(props) {
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
                                     <div className="fw-bold">SSD</div>
-                                    {props.device.ssd ? <CheckCircleIcon width="24" height="24"/> : <XCircleIcon width="24" height="24"/>}
+                                    {props.device.ssd ? <CheckCircleIcon width="24" height="24"/> :
+                                        <XCircleIcon width="24" height="24"/>}
                                 </div>
                             </ListGroup.Item>
 

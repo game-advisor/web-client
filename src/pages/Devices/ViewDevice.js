@@ -29,7 +29,6 @@ function ViewDevice() {
         }).then((response) => {
             setFetchedDevice(response.data);
             setIsLoaded(true);
-            console.log(response.data);
         }).catch((error) => {
             if (error.response) {
                 setError(`[${error.response.data.code}] ${error.response.data.message}. Try refresh the page.`);
