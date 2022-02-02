@@ -1,4 +1,5 @@
 import {Link} from "react-router-dom";
+import {i18n} from "../../../i18n/en";
 
 import {NavDropdown} from "react-bootstrap";
 import { useContext } from "react";
@@ -7,25 +8,24 @@ import {API_URL} from "../../../config/constant";
 
 function UserLinks() {
     const authCtx = useContext(AuthContext);
-    const userId = authCtx.details.userID;
 
     return (
         <NavDropdown className="ms-auto" title={
             <img
                 alt=""
-                src={`${API_URL}/user/${userId}/avatar`}
+                src={`${API_URL}/user/${authCtx.details.userID}/avatar`}
                 width="30"
                 height="30"
                 className="d-inline-block align-top"
             />
         } id="main-nav-dropdown">
-            <NavDropdown.Item as={Link} to="me">View profile</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="me/devices">Your devices</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="me/favorites">Your favorites</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="me">{i18n["usermenu.profile"]}</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="me/devices">{i18n["usermenu.devices"]}</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="me/favorites">{i18n["usermenu.favorites"]}</NavDropdown.Item>
             <NavDropdown.Divider/>
-            <NavDropdown.Item as={Link} to="me/edit">Edit profile</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="settings">Settings</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="logout">Logout</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="me/edit">{i18n["usermenu.edit"]}</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="settings">{i18n["usermenu.settings"]}</NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="logout">{i18n["usermenu.logout"]}</NavDropdown.Item>
         </NavDropdown>
     );
 }

@@ -1,15 +1,16 @@
 import {useState, useEffect, useContext, Fragment} from 'react';
+import {Navigate, useNavigate} from "react-router-dom";
 
 import axios from "axios";
 import {API_URL} from "../../config/constant";
 import authContext from "../../store/AuthContext";
+import {i18n} from "../../i18n/en";
 
-import {Alert} from "react-bootstrap";
+import ProfileHeader from "../../components/Layout/Header/ProfileHeader";
+import SectionContainer from "../../components/Layout/SectionContainer";
 import LoadingSection from "../../components/Layout/LoadingSection";
-import {Navigate, useNavigate} from "react-router-dom";
-import SectionWithAction from "../../components/Layout/Section/SectionWithAction";
 import DeviceList from "../../components/Devices/DeviceList";
-import ProfileHeader from "../../components/User/ProfileHeader";
+import {Alert} from "react-bootstrap";
 
 function AllDevices() {
     const authCtx = useContext(authContext);
@@ -55,22 +56,22 @@ function AllDevices() {
     if (isLoaded) {
         return (
             <Fragment>
-                <ProfileHeader id={authCtx.details.userID} isPersonal="true" />
-                <SectionWithAction name="Your devices" description="" actionName="Add device"
-                                   onAction={() => history("/devices/add")}>
+                <ProfileHeader id={authCtx.details.userID} isPersonal="true"/>
+                <SectionContainer name={i18n["devices.sectionTitle"]} description={i18n["devices.sectionDesc"]} withAction={true}
+                                  actionName={i18n["devices.actionAdd"]} onAction={() => history("/devices/add")}>
                     {error ? <Alert variant="danger">{error}</Alert> : <DeviceList devices={fetchedDevices}/>}
-                </SectionWithAction>
+                </SectionContainer>
             </Fragment>
         );
     }
 
     return (
         <Fragment>
-            <ProfileHeader id={authCtx.details.userID} />
-            <SectionWithAction name="Your devices" description="" actionName="Add device"
-                               onAction={() => history("/devices/add")}>
+            <ProfileHeader id={authCtx.details.userID}/>
+            <SectionContainer name={i18n["devices.sectionTitle"]} description={i18n["devices.sectionDesc"]} withAction={true}
+                              actionName={i18n["devices.actionAdd"]} onAction={() => history("/devices/add")}>
                 <LoadingSection error={error}/>
-            </SectionWithAction>
+            </SectionContainer>
         </Fragment>
     );
 }

@@ -3,7 +3,7 @@ import AuthContext from "../../store/AuthContext";
 import {Navigate} from "react-router-dom";
 
 import {Container} from "react-bootstrap";
-import ProfileHeader from "../../components/User/ProfileHeader";
+import ProfileHeader from "../../components/Layout/Header/ProfileHeader";
 
 function MyProfile() {
     const authCtx = useContext(AuthContext);

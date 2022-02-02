@@ -7,12 +7,10 @@ function GameList(props) {
             {props.games.map((game) => (
                 <li key={game.id} className="col-xs-12 col-md-6 col-lg-4">
                     <GameListItem
-                        id={game.id}
-                        image={game.image}
-                        title={game.title}
-                        description={game.description}
-                        reviewCount={game.reviewCount}
-                        publisher={game.publisher}
+                        id={game.gameID}
+                        title={game.name}
+                        publisher={game.company.name}
+                        date={game.publishDate}
                     />
                 </li>
             ))}

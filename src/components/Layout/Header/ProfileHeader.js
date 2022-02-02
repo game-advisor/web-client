@@ -1,10 +1,10 @@
 import {Alert, Container} from "react-bootstrap";
 import {useContext, useEffect, useState, Fragment} from "react";
 import axios from "axios";
-import {API_URL} from "../../config/constant";
-import authContext from "../../store/AuthContext";
-import ProfileLayout from "../Layout/ProfileLayout";
-import LoadingHeader from "../Layout/LoadingHeader";
+import {API_URL} from "../../../config/constant";
+import authContext from "../../../store/AuthContext";
+import ProfileLayout from "./ProfileHeader/ProfileLayout";
+import LoadingHeader from "./LoadingHeader";
 
 function ProfileHeader(props) {
     const authCtx = useContext(authContext);

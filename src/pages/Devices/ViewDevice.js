@@ -1,13 +1,14 @@
 import {useState, useEffect, useContext, Fragment} from 'react';
+import {useParams} from "react-router-dom";
 
 import axios from "axios";
 import {API_URL} from "../../config/constant";
 import authContext from "../../store/AuthContext";
-import {useParams} from "react-router-dom";
-import {Alert, Container} from "react-bootstrap";
+
+import ProfileHeader from "../../components/Layout/Header/ProfileHeader";
 import LoadingSection from "../../components/Layout/LoadingSection";
 import DeviceDetails from "./ViewDevice/DeviceDetails";
-import ProfileHeader from "../../components/User/ProfileHeader";
+import {Alert, Container} from "react-bootstrap";
 
 function ViewDevice() {
     const params = useParams();

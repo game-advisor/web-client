@@ -18,6 +18,7 @@ import {useContext} from "react";
 import AuthContext from "../../../store/AuthContext";
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import {i18n} from "../../../i18n/en";
 
 function DeviceDetails(props) {
     const authCtx = useContext(AuthContext);
@@ -25,18 +26,18 @@ function DeviceDetails(props) {
 
     function DeleteDevice(id) {
         confirmAlert({
-            title: 'Are you sure?',
-            message: 'You\'re going to delete your device permanently. This operation cannot be undone',
+            title: i18n["device.deleteTitle"],
+            message: i18n["device.deleteMessage"],
             buttons: [
                 {
-                    label: 'Yes',
+                    label: i18n["device.deleteConfirm"],
                     onClick: () => {
                         axios.delete(`${API_URL}/device/${id}/delete`, {
                             headers: {
                                 Authorization: `${authCtx.token}`
                             }
                         }).then((response) => {
-                            alert("Device deleted successfully!");
+                            alert(i18n["device.deleteSuccess"]);
                             setInterval(3000);
                             history('/me/devices');
                         }).catch((error) => {
@@ -53,7 +54,7 @@ function DeviceDetails(props) {
                     }
                 },
                 {
-                    label: 'No',
+                    label: i18n["device.deleteCancel"],
                     onClick: () => {
                     }
                 }
@@ -97,7 +98,7 @@ function DeviceDetails(props) {
                             <ListGroup.Item as="li"
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
-                                    <div className="fw-bold">CPU</div>
+                                    <div className="fw-bold">{i18n["device.cpu"]}</div>
                                     {props.device.cpu.company.name} {props.device.cpu.name} ({props.device.cpu.series} Series)
                                 </div>
                                 <Badge variant="primary" pill>
@@ -107,7 +108,7 @@ function DeviceDetails(props) {
                             <ListGroup.Item as="li"
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
-                                    <div className="fw-bold">GPU</div>
+                                    <div className="fw-bold">{i18n["device.gpu"]}</div>
                                     {props.device.gpu.company.name} {props.device.gpu.name} ({props.device.gpu.series} Series)
                                 </div>
                                 <Badge variant="primary" pill>
@@ -117,7 +118,7 @@ function DeviceDetails(props) {
                             <ListGroup.Item as="li"
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
-                                    <div className="fw-bold">RAM</div>
+                                    <div className="fw-bold">{i18n["device.ram"]}</div>
                                     {props.device.ram.amountOfSticks * props.device.ram.size} GB
                                     ({props.device.ram.amountOfSticks}x{props.device.ram.size} GB; {props.device.ram.freq} Mhz
                                     CL{props.device.ram.latency})
@@ -127,7 +128,7 @@ function DeviceDetails(props) {
                             <ListGroup.Item as="li"
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
-                                    <div className="fw-bold">HDD</div>
+                                    <div className="fw-bold">{i18n["device.hdd"]}</div>
                                     {props.device.hdd ? <CheckCircleIcon width="24" height="24"/> :
                                         <XCircleIcon width="24" height="24"/>}
                                 </div>
@@ -136,7 +137,7 @@ function DeviceDetails(props) {
                             <ListGroup.Item as="li"
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
-                                    <div className="fw-bold">SSD</div>
+                                    <div className="fw-bold">{i18n["device.ssd"]}</div>
                                     {props.device.ssd ? <CheckCircleIcon width="24" height="24"/> :
                                         <XCircleIcon width="24" height="24"/>}
                                 </div>
@@ -145,7 +146,7 @@ function DeviceDetails(props) {
                             <ListGroup.Item as="li"
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
-                                    <div className="fw-bold">System</div>
+                                    <div className="fw-bold">{i18n["device.os"]}</div>
                                     {props.device.os.company.name} {props.device.os.name}
                                 </div>
                             </ListGroup.Item>

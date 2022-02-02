@@ -1,5 +1,5 @@
 import {Alert, Badge, Button, Container} from "react-bootstrap";
-import {API_URL} from "../../config/constant";
+import {API_URL} from "../../../../config/constant";
 import {Fragment} from "react";
 import {Link} from "react-router-dom";
 
