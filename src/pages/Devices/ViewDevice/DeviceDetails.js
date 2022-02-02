@@ -9,7 +9,7 @@ import {
     ListGroup,
     Row
 } from "react-bootstrap";
-import {Link, Navigate, useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import computer from "../../../assets/computer.svg";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/outline";
 import axios from "axios";
@@ -21,7 +21,6 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 
 function DeviceDetails(props) {
     const authCtx = useContext(AuthContext);
-    const params = useParams();
     const history = useNavigate();
 
     function DeleteDevice(id) {
@@ -32,10 +31,13 @@ function DeviceDetails(props) {
                 {
                     label: 'Yes',
                     onClick: () => {
-                        alert(`Task failed successfully!`);
-                        axios.delete(`${API_URL}/device/${id}/delete`).then((response) => {
+                        axios.delete(`${API_URL}/device/${id}/delete`, {
+                            headers: {
+                                Authorization: `${authCtx.token}`
+                            }
+                        }).then((response) => {
                             alert("Device deleted successfully!");
-                            setInterval(5000);
+                            setInterval(3000);
                             history('/me/devices');
                         }).catch((error) => {
                             if (error.response) {
