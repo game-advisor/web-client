@@ -1,9 +1,9 @@
-import {Fragment, useContext} from "react";
+import {useContext} from "react";
 import AuthContext from "../../store/AuthContext";
 import {Navigate} from "react-router-dom";
 
-import MainHeader from "../../components/Layout/Header/MainHeader";
 import {Container} from "react-bootstrap";
+import MainLayout from "../../components/Layout/MainLayout";
 
 function AllTags() {
     const authCtx = useContext(AuthContext);
@@ -11,10 +11,9 @@ function AllTags() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <Fragment>
-            <MainHeader />
+        <MainLayout>
             <Container>All tags placeholder</Container>
-        </Fragment>
+        </MainLayout>
     );
 }
 

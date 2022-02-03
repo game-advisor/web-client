@@ -1,14 +1,11 @@
-import {NavDropdown} from "react-bootstrap";
-import {Link} from "react-router-dom";
-
 export const i18n = {
     "navigation.home": 'Home',
-    "navigation.discover": 'Home',
-    "navigation.tags": 'Home',
-    "navigation.search": 'Home',
-    "navigation.favorites": 'Home',
-    "navigation.login": 'Home',
-    "navigation.register": 'Home',
+    "navigation.discover": 'Discover',
+    "navigation.tags": 'Explore',
+    "navigation.search": 'Find',
+    "navigation.favorites": 'Saved',
+    "navigation.login": 'Login',
+    "navigation.register": 'Register',
     "usermenu.profile": 'View profile',
     "usermenu.devices": 'Your devices',
     "usermenu.favorites": 'Your favorites',

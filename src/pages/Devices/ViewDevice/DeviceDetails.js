@@ -69,7 +69,7 @@ function DeviceDetails(props) {
                     <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                     <Breadcrumb.Item href="/me">Profile</Breadcrumb.Item>
                     <Breadcrumb.Item href="/me/devices">Devices</Breadcrumb.Item>
-                    <Breadcrumb.Item active>{props.device.shortName}</Breadcrumb.Item>
+                    <Breadcrumb.Item active>{props.shortName}</Breadcrumb.Item>
                 </Breadcrumb>
 
                 <Row>
@@ -77,17 +77,17 @@ function DeviceDetails(props) {
                         <Card>
                             <Card.Body className="text-center">
                                 <img
-                                    alt={props.device.shortName}
+                                    alt={props.shortName}
                                     src={computer}
                                     width="120"
                                     height="120"
                                     className="img-fluid"
                                 />
-                                <Card.Title>{props.device.shortName}</Card.Title>
+                                <Card.Title>{props.shortName}</Card.Title>
                                 <ButtonGroup>
                                     <Button as={Link} to={`edit`} variant="primary">Edit</Button>
                                     <Button variant="outline-danger"
-                                            onClick={() => DeleteDevice(props.device.deviceID)}>Delete</Button>
+                                            onClick={() => DeleteDevice(props.id)}>Delete</Button>
                                 </ButtonGroup>
 
                             </Card.Body>
@@ -99,29 +99,29 @@ function DeviceDetails(props) {
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
                                     <div className="fw-bold">{i18n["device.cpu"]}</div>
-                                    {props.device.cpu.company.name} {props.device.cpu.name} ({props.device.cpu.series} Series)
+                                    {props.cpu.company.name} {props.cpu.name} ({props.cpu.series} Series)
                                 </div>
                                 <Badge variant="primary" pill>
-                                    {props.device.cpu.score} points
+                                    {props.cpu.score} points
                                 </Badge>
                             </ListGroup.Item>
                             <ListGroup.Item as="li"
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
                                     <div className="fw-bold">{i18n["device.gpu"]}</div>
-                                    {props.device.gpu.company.name} {props.device.gpu.name} ({props.device.gpu.series} Series)
+                                    {props.gpu.company.name} {props.gpu.name} ({props.gpu.series} Series)
                                 </div>
                                 <Badge variant="primary" pill>
-                                    {props.device.gpu.score} points
+                                    {props.gpu.score} points
                                 </Badge>
                             </ListGroup.Item>
                             <ListGroup.Item as="li"
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
                                     <div className="fw-bold">{i18n["device.ram"]}</div>
-                                    {props.device.ram.amountOfSticks * props.device.ram.size} GB
-                                    ({props.device.ram.amountOfSticks}x{props.device.ram.size} GB; {props.device.ram.freq} Mhz
-                                    CL{props.device.ram.latency})
+                                    {props.ram.amountOfSticks * props.ram.size} GB
+                                    ({props.ram.amountOfSticks}x{props.ram.size} GB; {props.ram.freq} Mhz
+                                    CL{props.ram.latency})
                                 </div>
                             </ListGroup.Item>
 
@@ -129,7 +129,7 @@ function DeviceDetails(props) {
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
                                     <div className="fw-bold">{i18n["device.hdd"]}</div>
-                                    {props.device.hdd ? <CheckCircleIcon width="24" height="24"/> :
+                                    {props.hdd ? <CheckCircleIcon width="24" height="24"/> :
                                         <XCircleIcon width="24" height="24"/>}
                                 </div>
                             </ListGroup.Item>
@@ -138,7 +138,7 @@ function DeviceDetails(props) {
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
                                     <div className="fw-bold">{i18n["device.ssd"]}</div>
-                                    {props.device.ssd ? <CheckCircleIcon width="24" height="24"/> :
+                                    {props.ssd ? <CheckCircleIcon width="24" height="24"/> :
                                         <XCircleIcon width="24" height="24"/>}
                                 </div>
                             </ListGroup.Item>
@@ -147,7 +147,7 @@ function DeviceDetails(props) {
                                             className="d-flex justify-content-between align-items-start">
                                 <div className="ms-2 me-auto">
                                     <div className="fw-bold">{i18n["device.os"]}</div>
-                                    {props.device.os.company.name} {props.device.os.name}
+                                    {props.os.company.name} {props.os.name}
                                 </div>
                             </ListGroup.Item>
                         </ListGroup>

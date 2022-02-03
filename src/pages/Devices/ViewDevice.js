@@ -1,12 +1,12 @@
-import {useState, useEffect, useContext, Fragment} from 'react';
+import {useState, useEffect, useContext} from 'react';
 import {useParams} from "react-router-dom";
 
 import axios from "axios";
 import {API_URL} from "../../config/constant";
 import authContext from "../../store/AuthContext";
 
-import ProfileHeader from "../../components/Layout/Header/ProfileHeader";
-import LoadingSection from "../../components/Layout/LoadingSection";
+import ProfileLayout from "../../components/Layout/ProfileLayout";
+import LoadingSection from "../../components/Layout/LoadingLayout/LoadingSection";
 import DeviceDetails from "./ViewDevice/DeviceDetails";
 import {Alert, Container} from "react-bootstrap";
 
@@ -45,21 +45,27 @@ function ViewDevice() {
 
     if (isLoaded) {
         return (
-            <Fragment>
-                <ProfileHeader id={authCtx.details.userID} isPersonal="true"  />
+            <ProfileLayout id={authCtx.details.userID} isPersonal="true">
                 <Container>
                     {error ? <Alert variant="danger">{error}</Alert> : ''}
-                    {fetchedDevice !== {} ? <DeviceDetails device={fetchedDevice}/> : ''}
+                    {fetchedDevice !== {} ? <DeviceDetails
+                        id={fetchedDevice.deviceID}
+                        shortName={fetchedDevice.shortName}
+                        cpu={fetchedDevice.cpu}
+                        gpu={fetchedDevice.gpu}
+                        ram={fetchedDevice.ram}
+                        hdd={fetchedDevice.hdd}
+                        ssd={fetchedDevice.ssd}
+                        os={fetchedDevice.os}/> : ''}
                 </Container>
-            </Fragment>
+            </ProfileLayout>
         );
     }
 
     return (
-        <Fragment>
-            <ProfileHeader id={authCtx.details.userID} />
+        <ProfileLayout id={authCtx.details.userID} isPersonal="true">
             <LoadingSection error={error}/>
-        </Fragment>
+        </ProfileLayout>
     );
 }
 

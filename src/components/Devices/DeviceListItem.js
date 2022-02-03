@@ -54,7 +54,7 @@ function DeviceListItem(props) {
             <Row>
                 <Col md={3} className="d-flex justify-content-center align-content-center">
                     <img
-                        alt={props.shortname}
+                        alt={props.shortName}
                         src={computer}
                         width="60"
                         height="60"
@@ -63,7 +63,7 @@ function DeviceListItem(props) {
                 </Col>
                 <Col md={9}>
                     <Card.Body>
-                        <Card.Title>{props.shortname}</Card.Title>
+                        <Card.Title>{props.shortName}</Card.Title>
                         <Card.Text className="text-muted">{props.cpu} &bull; {props.gpu} &bull; {props.os}</Card.Text>
                         <ButtonGroup>
                             <Button as={Link} to={`${props.id}`} variant="primary">See details</Button>

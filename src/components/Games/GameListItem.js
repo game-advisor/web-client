@@ -1,5 +1,6 @@
 import {Button, Card} from "react-bootstrap";
 import {API_URL} from "../../config/constant";
+import {Link} from "react-router-dom";
 
 function GameListItem(props) {
     return (
@@ -9,7 +10,7 @@ function GameListItem(props) {
                 <Card.Title>{props.title}</Card.Title>
 
                 <Card.Text className="text-muted">{props.publisher} & {props.date}</Card.Text>
-                <Button variant="primary">See more</Button>
+                <Button as={Link} to={`/games/${props.id}`} variant="primary">See more</Button>
             </Card.Body>
         </Card>
     );

@@ -1,12 +1,12 @@
-import {Alert, Container} from "react-bootstrap";
+import {Alert} from "react-bootstrap";
 import {useContext, useEffect, useState, Fragment} from "react";
 import axios from "axios";
-import {API_URL} from "../../../config/constant";
-import authContext from "../../../store/AuthContext";
-import ProfileLayout from "./ProfileHeader/ProfileLayout";
-import LoadingHeader from "./LoadingHeader";
+import {API_URL} from "../../config/constant";
+import authContext from "../../store/AuthContext";
+import ProfileHeader from "./ProfileLayout/ProfileHeader";
+import LoadingHeader from "./LoadingLayout/LoadingHeader";
 
-function ProfileHeader(props) {
+function ProfileLayout(props) {
     const authCtx = useContext(authContext);
 
     const [isLoaded, setIsLoaded] = useState(false);
@@ -39,14 +39,23 @@ function ProfileHeader(props) {
     }, [authCtx, props.id]);
 
     if (isLoaded) {
+        if (error)
+            return (<Alert variant="danger mb-3">{error}</Alert>);
+
         return (
             <Fragment>
-                {error ? <Alert variant="danger mb-3">{error}</Alert> : <ProfileLayout user={userInfo} isPersonal={props.isPersonal} />}
+                <ProfileHeader user={userInfo} isPersonal={props.isPersonal}/>
+                {props.children}
             </Fragment>
         );
     }
 
-    return ( <LoadingHeader error={error} /> );
+    return (
+        <Fragment>
+            <LoadingHeader error={error}/>
+            {props.children}
+        </Fragment>
+    );
 }
 
-export default ProfileHeader;
+export default ProfileLayout;

@@ -1,9 +1,9 @@
-import {Fragment, useContext} from "react";
+import {useContext} from "react";
 import AuthContext from "../../store/AuthContext";
 import {useParams, Navigate} from "react-router-dom";
 
-import MainHeader from "../../components/Layout/Header/MainHeader";
 import {Container} from "react-bootstrap";
+import ProfileLayout from "../../components/Layout/ProfileLayout";
 
 function UserReviews() {
     const params = useParams();
@@ -12,10 +12,9 @@ function UserReviews() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <Fragment>
-            <MainHeader />
+        <ProfileLayout id={params.userId} isPersonal={true}>
             <Container>All user {params.userId} reviews placeholder</Container>
-        </Fragment>
+        </ProfileLayout>
     );
 }
 

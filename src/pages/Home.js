@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext, Fragment} from 'react';
+import {useState, useEffect, useContext} from 'react';
 import {Navigate} from "react-router-dom";
 
 import axios from "axios";
@@ -6,11 +6,11 @@ import {API_URL} from "../config/constant";
 import authContext from "../store/AuthContext";
 import {i18n} from "../i18n/en";
 
-import MainHeader from "../components/Layout/Header/MainHeader";
-import SectionContainer from "../components/Layout/SectionContainer";
-import LoadingSection from "../components/Layout/LoadingSection";
-import GameList from "../components/Games/GameList";
 import {Alert} from "react-bootstrap";
+import MainLayout from "../components/Layout/MainLayout";
+import SectionContainer from "../components/Layout/SectionContainer";
+import LoadingSection from "../components/Layout/LoadingLayout/LoadingSection";
+import GameList from "../components/Games/GameList";
 
 function Home() {
     const authCtx = useContext(authContext);
@@ -57,24 +57,22 @@ function Home() {
 
     if (isLoaded) {
         return (
-            <Fragment>
-                <MainHeader />
+            <MainLayout>
                 <SectionContainer name={i18n["games.sectionTitle"]} description={i18n["games.sectionDesc"]}
                                   withAction={false}>
                     {error ? <Alert variant="danger">{error}</Alert> : <GameList games={fetchedGames}/>}
                 </SectionContainer>
-            </Fragment>
+            </MainLayout>
         );
     }
 
     return (
-        <Fragment>
-            <MainHeader />
+        <MainLayout>
             <SectionContainer name={i18n["games.sectionTitle"]} description={i18n["games.sectionDesc"]}
                               withAction={false}>
                 <LoadingSection error={error}/>
             </SectionContainer>
-        </Fragment>
+        </MainLayout>
     );
 }
 

@@ -1,9 +1,9 @@
-import {Fragment, useContext} from "react";
+import {useContext} from "react";
 import AuthContext from "../../store/AuthContext";
 import {useParams, Navigate} from "react-router-dom";
 
-import MainHeader from "../../components/Layout/Header/MainHeader";
 import {Container} from "react-bootstrap";
+import MainLayout from "../../components/Layout/MainLayout";
 
 function ViewReview() {
     const params = useParams();
@@ -12,10 +12,9 @@ function ViewReview() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <Fragment>
-            <MainHeader />
+        <MainLayout>
             <Container>View review {params.reviewId} placeholder</Container>
-        </Fragment>
+        </MainLayout>
     );
 }
 

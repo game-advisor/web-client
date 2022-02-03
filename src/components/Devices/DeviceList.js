@@ -9,7 +9,7 @@ function DeviceList(props) {
                     <DeviceListItem
                         id={device.deviceID}
                         image={device.image}
-                        shortname={device.shortName}
+                        shortName={device.shortName}
                         cpu={`${device.cpu.company.name} ${device.cpu.series}`}
                         gpu={`${device.gpu.company.name} ${device.gpu.series}`}
                         os={`${device.os.company.name} ${device.os.name}`}

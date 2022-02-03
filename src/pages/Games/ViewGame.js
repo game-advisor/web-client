@@ -1,8 +1,8 @@
-import {Fragment, useContext} from "react";
+import {useContext} from "react";
 import AuthContext from "../../store/AuthContext";
 import {useParams, Navigate} from "react-router-dom";
 
-import MainHeader from "../../components/Layout/Header/MainHeader";
+import MainLayout from "../../components/Layout/MainLayout";
 import {Container} from "react-bootstrap";
 
 function ViewGame() {
@@ -12,10 +12,9 @@ function ViewGame() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <Fragment>
-            <MainHeader />
+        <MainLayout>
             <Container>View game {params.gameId} placeholder</Container>
-        </Fragment>
+        </MainLayout>
     );
 }
 

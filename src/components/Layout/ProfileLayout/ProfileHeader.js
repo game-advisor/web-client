@@ -1,9 +1,9 @@
-import {Alert, Badge, Button, Container} from "react-bootstrap";
-import {API_URL} from "../../../../config/constant";
+import {Button, Container} from "react-bootstrap";
+import {API_URL} from "../../../config/constant";
 import {Fragment} from "react";
 import {Link} from "react-router-dom";
 
-function ProfileLayout(props) {
+function ProfileHeader(props) {
     return (
         <Fragment>
             <Container fluid className="bg-dark text-white">
@@ -20,13 +20,13 @@ function ProfileLayout(props) {
                         <h1 className="fw-bold">{props.user.username}</h1>
                         <p className="lead">{props.user.roles === "ROLE_ADMIN" ? "Administrator" : "Contributor"}</p>
                     </div>
-                    {props.isPersonal === "true" ?
+                    {props.isPersonal ?
                         <div className="mb-3"><Button as={Link} to={"edit"} variant="outline-light" className="mb-2">Edit profile</Button></div> : ''}
                 </Container>
             </Container>
-            <Container fluid className="bg-secondary h-5 mb-3"></Container>
+            <Container fluid className="bg-secondary h-5 mb-3" />
         </Fragment>
     );
 }
 
-export default ProfileLayout;
+export default ProfileHeader;

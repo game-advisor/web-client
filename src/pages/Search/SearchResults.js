@@ -1,9 +1,9 @@
-import {Fragment, useContext} from "react";
+import {useContext} from "react";
 import AuthContext from "../../store/AuthContext";
 import {Navigate} from "react-router-dom";
 
-import MainHeader from "../../components/Layout/Header/MainHeader";
 import {Container} from "react-bootstrap";
+import MainLayout from "../../components/Layout/MainLayout";
 
 function SearchResults() {
     const authCtx = useContext(AuthContext);
@@ -11,10 +11,9 @@ function SearchResults() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <Fragment>
-            <MainHeader />
+        <MainLayout>
             <Container>Search results page placeholder</Container>
-        </Fragment>
+        </MainLayout>
     );
 }
 

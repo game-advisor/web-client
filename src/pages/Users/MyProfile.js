@@ -1,9 +1,9 @@
-import {Fragment, useContext} from "react";
+import {useContext} from "react";
 import AuthContext from "../../store/AuthContext";
 import {Navigate} from "react-router-dom";
 
 import {Container} from "react-bootstrap";
-import ProfileHeader from "../../components/Layout/Header/ProfileHeader";
+import ProfileLayout from "../../components/Layout/ProfileLayout";
 
 function MyProfile() {
     const authCtx = useContext(AuthContext);
@@ -11,10 +11,9 @@ function MyProfile() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <Fragment>
-            <ProfileHeader id={authCtx.details.userID} isPersonal="true"  />
+        <ProfileLayout id={authCtx.details.userID} isPersonal={true}>
             <Container>My profile placeholder</Container>
-        </Fragment>
+        </ProfileLayout>
     );
 }
 

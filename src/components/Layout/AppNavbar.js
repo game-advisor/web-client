@@ -5,10 +5,10 @@ import {i18n} from "../../i18n/en";
 
 import {Container, Nav, Navbar} from "react-bootstrap";
 import logo from "../../assets/logo.svg";
-import UserLinks from "./MainNavigation/UserLinks";
-import RegistrationLinks from "./MainNavigation/RegistrationLinks";
+import UserLinks from "./AppNavbar/UserLinks";
+import RegistrationLinks from "./AppNavbar/RegistrationLinks";
 
-function MainNavigation() {
+function AppNavbar() {
     const authCtx = useContext(AuthContext);
 
     return (
@@ -39,4 +39,4 @@ function MainNavigation() {
     );
 }
 
-export default MainNavigation;
+export default AppNavbar;

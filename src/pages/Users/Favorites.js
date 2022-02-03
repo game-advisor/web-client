@@ -1,9 +1,9 @@
-import {Fragment, useContext} from "react";
+import {useContext} from "react";
 import AuthContext from "../../store/AuthContext";
 import {Navigate} from "react-router-dom";
 
-import MainHeader from "../../components/Layout/Header/MainHeader";
 import {Container} from "react-bootstrap";
+import ProfileLayout from "../../components/Layout/ProfileLayout";
 
 function Favorites() {
     const authCtx = useContext(AuthContext);
@@ -11,10 +11,9 @@ function Favorites() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <Fragment>
-            <MainHeader />
+        <ProfileLayout id={authCtx.details.userID} isPersonal={true}>
             <Container>My favorites placeholder</Container>
-        </Fragment>
+        </ProfileLayout>
     );
 }
 
