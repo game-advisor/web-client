@@ -3,7 +3,7 @@ import {i18n} from "../../../i18n/en";
 
 import {Nav} from "react-bootstrap";
 
-function RegistrationLinks(props) {
+function RegistrationLinks() {
     return (
         <Nav className="ms-auto">
             <Nav.Link as={Link} to="/login">{i18n["navigation.login"]}</Nav.Link>

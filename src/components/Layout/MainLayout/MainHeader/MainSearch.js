@@ -1,6 +1,6 @@
 import {Button, Col, Form, Row} from "react-bootstrap";
 
-function MainSearch(props) {
+function MainSearch() {
     return (
         <Form>
             <Form.Group>

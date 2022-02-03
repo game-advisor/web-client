@@ -15,7 +15,7 @@ function MainSearch() {
                 <Nav.Link active as={Link} to="/discover">Suggested</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-                <Nav.Link eventKey="disabled" disabled></Nav.Link>
+                <Nav.Link eventKey="disabled" disabled />
             </Nav.Item>
             <Nav.Item>
                 <Nav.Link as={Link} to="/tags/console">Console</Nav.Link>
