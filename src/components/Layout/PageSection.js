@@ -1,7 +1,7 @@
 import {Fragment} from "react";
 import {Button, Container} from "react-bootstrap";
 
-function SectionContainer(props) {
+function PageSection(props) {
     function performAction() {
         props.onAction();
     }
@@ -20,4 +20,4 @@ function SectionContainer(props) {
     );
 }
 
-export default SectionContainer;
+export default PageSection;

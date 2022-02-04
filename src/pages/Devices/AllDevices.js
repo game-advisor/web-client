@@ -7,7 +7,7 @@ import authContext from "../../store/AuthContext";
 import {i18n} from "../../i18n/en";
 
 import ProfileLayout from "../../components/Layout/ProfileLayout";
-import SectionContainer from "../../components/Layout/SectionContainer";
+import PageSection from "../../components/Layout/PageSection";
 import LoadingSection from "../../components/Layout/LoadingLayout/LoadingSection";
 import DeviceList from "../../components/Devices/DeviceList";
 import {Alert} from "react-bootstrap";
@@ -56,22 +56,22 @@ function AllDevices() {
     if (isLoaded) {
         return (
             <ProfileLayout id={authCtx.details.userID} isPersonal="true">
-                <SectionContainer name={i18n["devices.sectionTitle"]} description={i18n["devices.sectionDesc"]}
-                                  withAction={true}
-                                  actionName={i18n["devices.actionAdd"]} onAction={() => history("/devices/add")}>
+                <PageSection name={i18n["devices.sectionTitle"]} description={i18n["devices.sectionDesc"]}
+                             withAction={true}
+                             actionName={i18n["devices.actionAdd"]} onAction={() => history("create")}>
                     {error ? <Alert variant="danger">{error}</Alert> : <DeviceList devices={fetchedDevices}/>}
-                </SectionContainer>
+                </PageSection>
             </ProfileLayout>
         );
     }
 
     return (
         <ProfileLayout id={authCtx.details.userID}>
-            <SectionContainer name={i18n["devices.sectionTitle"]} description={i18n["devices.sectionDesc"]}
-                              withAction={true}
-                              actionName={i18n["devices.actionAdd"]} onAction={() => history("/devices/add")}>
+            <PageSection name={i18n["devices.sectionTitle"]} description={i18n["devices.sectionDesc"]}
+                         withAction={true}
+                         actionName={i18n["devices.actionAdd"]} onAction={() => history("create")}>
                 <LoadingSection error={error}/>
-            </SectionContainer>
+            </PageSection>
         </ProfileLayout>
 );
 }

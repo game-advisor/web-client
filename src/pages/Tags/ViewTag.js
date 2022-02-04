@@ -7,7 +7,7 @@ import authContext from "../../store/AuthContext";
 import {i18n} from "../../i18n/en";
 
 import MainLayout from "../../components/Layout/MainLayout";
-import SectionContainer from "../../components/Layout/SectionContainer";
+import PageSection from "../../components/Layout/PageSection";
 import LoadingSection from "../../components/Layout/LoadingLayout/LoadingSection";
 import GameList from "../../components/Games/GameList";
 import {Alert} from "react-bootstrap";
@@ -56,20 +56,20 @@ function ViewTag() {
     if (isLoaded) {
         return (
             <MainLayout>
-                <SectionContainer name={i18n["games.sectionTitle"]} description={i18n["games.sectionDesc"]}
-                                  withAction={false}>
+                <PageSection name={i18n["games.sectionTitle"]} description={i18n["games.sectionDesc"]}
+                             withAction={false}>
                     {error ? <Alert variant="danger">{error}</Alert> : <GameList games={fetchedGames}/>}
-                </SectionContainer>
+                </PageSection>
             </MainLayout>
         );
     }
 
     return (
         <MainLayout>
-            <SectionContainer name={i18n["games.sectionTitle"]} description={i18n["games.sectionDesc"]}
-                              withAction={false}>
+            <PageSection name={i18n["games.sectionTitle"]} description={i18n["games.sectionDesc"]}
+                         withAction={false}>
                 <LoadingSection error={error}/>
-            </SectionContainer>
+            </PageSection>
         </MainLayout>
     );
 }
