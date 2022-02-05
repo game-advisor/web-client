@@ -1,9 +1,6 @@
 import {useState, useEffect, useContext} from 'react';
 import {Navigate} from "react-router-dom";
 
-import axios from "axios";
-import {API_URL} from "../../config/constant";
-import authContext from "../../store/AuthContext";
 import {i18n} from "../../i18n/en";
 
 import MainLayout from "../../components/Layout/MainLayout";
@@ -11,9 +8,12 @@ import PageSection from "../../components/Layout/PageSection";
 import LoadingSection from "../../components/Layout/LoadingLayout/LoadingSection";
 import GameList from "../../components/Games/GameList";
 import {Alert} from "react-bootstrap";
+import useAPI from "../../api/API";
+import authContext from "../../store/AuthContext";
 
-function AllDevices() {
+function AllGames() {
     const authCtx = useContext(authContext);
+    const api = useAPI();
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [fetchedGames, setFetchedGames] = useState([]);
@@ -23,13 +23,9 @@ function AllDevices() {
         setIsLoaded(false);
         setError(null);
 
-        axios.post(`${API_URL}/games/getByDatePublished`, {
+        api.post('/games/getByDatePublished', {
             "dateBegin": "1970-01-01",
             "dateEnd": (new Date()).toISOString().split('T')[0]
-        }, {
-            headers: {
-                Authorization: `${authCtx.token}`
-            }
         }).then((response) => {
             setIsLoaded(true);
             setFetchedGames(response.data);
@@ -76,4 +72,4 @@ function AllDevices() {
     );
 }
 
-export default AllDevices;
+export default AllGames;

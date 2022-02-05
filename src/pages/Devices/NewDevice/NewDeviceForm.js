@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
-import {Button, ButtonGroup, Col, FloatingLabel, Form, Row} from "react-bootstrap";
+import {Alert, Button, ButtonGroup, Col, FloatingLabel, Form, Row} from "react-bootstrap";
 import FormSection from "../../../components/Layout/FormSection";
 
 function NewDeviceForm(props) {
@@ -43,7 +43,11 @@ function NewDeviceForm(props) {
 
 // TODO: Add API-driven selects to change CPUIDs and GPUIDs
     return (
-        <Form className="mt-5" onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
+            {props.response ? <Alert variant="info mb-3">{props.response}</Alert> : ''}
+            {props.errors ? <Alert variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert> : ''}
+            <br className="mt-5" />
+
             <FormSection name="Short name" description="Choose short name to easily identify your device.">
                 <FloatingLabel className="mb-3" id="name" label="Short name">
                     <Form.Control
@@ -149,8 +153,7 @@ function NewDeviceForm(props) {
                 </Col>
             </Row>
         </Form>
-)
-    ;
+    );
 }
 
 export default NewDeviceForm;
