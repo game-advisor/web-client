@@ -3,50 +3,226 @@ import {useNavigate} from "react-router-dom";
 
 import {Alert, Button, ButtonGroup, Col, FloatingLabel, Form, Row} from "react-bootstrap";
 import FormSection from "../../../components/Layout/FormSection";
+import useAPI from "../../../api/API";
 
 function NewDeviceForm(props) {
     const [shortName, setShortName] = useState('');
 
-    const [cpu, setCPU] = useState('');
-    const [gpu, setGPU] = useState('');
+    const [cpu, setCPU] = useState({
+        id: 0,
+        manufacturer: '',
+        series: '',
+        model: '',
+    });
+    const [cpuSeries, setCPUSeries] = useState([]);
+    const [cpuModels, setCPUModels] = useState([]);
 
-    const [ramSticks, setRAMSticks] = useState('');
-    const [ramSize, setRAMSize] = useState('');
-    const [ramFreq, setRAMFreq] = useState('');
-    const [ramLatency, setRAMLatency] = useState('');
+    const [gpu, setGPU] = useState({
+        id: 0,
+        manufacturer: '',
+        series: '',
+        model: '',
+    });
+    const [gpuSeries, setGPUSeries] = useState([]);
+    const [gpuModels, setGPUModels] = useState([]);
+
+    const [ram, setRAM] = useState({
+        sticks: 0,
+        size: 0,
+        frequency: 0,
+        latency: 0
+    });
 
     const [hdd, setHDD] = useState(false);
     const [ssd, setSSD] = useState(false);
 
-    const [system, setSystem] = useState('');
+    const [system, setSystem] = useState({
+        id: 0,
+        developer: ''
+    });
+    const [systemVersions, setSystemVersions] = useState([]);
 
     const history = useNavigate();
+    const api = useAPI();
 
     function handleSubmit(e) {
         e.preventDefault();
 
         const device = {
             "shortName": shortName,
-            "cpuID": parseInt(cpu),
-            "gpuID": parseInt(gpu),
-            "amountOfSticks": parseInt(ramSticks),
-            "size": parseInt(ramSize),
-            "freq": parseInt(ramFreq),
-            "latency": parseInt(ramLatency),
+            "cpuID": cpu.id,
+            "gpuID": gpu.id,
+            "amountOfSticks": ram.sticks,
+            "size": ram.size,
+            "freq": ram.frequency,
+            "latency": ram.latency,
             "hdd": hdd,
             "ssd": ssd,
-            "osID": parseInt(system)
+            "osID": system.id
         };
 
         props.onSubmit(device);
+    }
+
+    function onCPUManufacturerChange(manufacturer) {
+        setCPU((prevState) => {
+            return {
+                ...prevState,
+                id: 0,
+                manufacturer: manufacturer,
+                series: '',
+                model: ''
+            }
+        });
+        setCPUSeries([]);
+        setCPUModels([]);
+
+        if (manufacturer === "")
+            return;
+
+        api.get(`/cpu/series/${manufacturer}`)
+            .then((response) => {
+                setCPUSeries(response.data);
+            })
+            .catch((error) => console.log(error))
+
+    }
+    function onCPUSeriesChange(series) {
+        setCPU((prevState) => {
+            return {
+                ...prevState,
+                id: 0,
+                series: series,
+                model: ''
+            }
+        });
+        setCPUModels([]);
+
+        if (series === "")
+            return;
+
+        api.get(`/cpu/${series}`)
+            .then((response) => {
+                setCPUModels(response.data);
+            })
+            .catch((error) => console.log(error))
+    }
+    function onCPUModelChange(model) {
+        setCPU((prevState) => {
+            return {
+                ...prevState,
+                model: model
+            }
+        });
+
+        if (model === "")
+            return;
+
+        api.get(`/cpu/${model}/modelInfo`)
+            .then((response) => {
+                setCPU((prevState) => {
+                    return {
+                        ...prevState,
+                        id: response.data.cpuID
+                    }
+                });
+            })
+            .catch((error) => console.log(error))
+    }
+
+    function onGPUManufacturerChange(manufacturer) {
+        setGPU((prevState) => {
+            return {
+                ...prevState,
+                id: 0,
+                manufacturer: manufacturer,
+                series: '',
+                model: ''
+            }
+        });
+        setGPUSeries([]);
+        setGPUModels([]);
+
+        if (manufacturer === "")
+            return;
+
+        api.get(`/gpu/series/${manufacturer}`)
+            .then((response) => {
+                setGPUSeries(response.data);
+            })
+            .catch((error) => console.log(error))
+
+    }
+    function onGPUSeriesChange(series) {
+        setGPU((prevState) => {
+            return {
+                ...prevState,
+                id: 0,
+                series: series,
+                model: ''
+            }
+        });
+        setGPUModels([]);
+
+        if (series === "")
+            return;
+
+        api.get(`/gpu/${series}`)
+            .then((response) => {
+                setGPUModels(response.data);
+            })
+            .catch((error) => console.log(error))
+    }
+    function onGPUModelChange(model) {
+        setGPU((prevState) => {
+            return {
+                ...prevState,
+                model: model
+            }
+        });
+
+        if (model === "")
+            return;
+
+        api.get(`/gpu/${model}/modelInfo`)
+            .then((response) => {
+                setGPU((prevState) => {
+                    return {
+                        ...prevState,
+                        id: response.data.gpuID
+                    }
+                });
+            })
+            .catch((error) => console.log(error))
+    }
+
+    function onOSDeveloperChange(developer) {
+        setSystem((prevState) => {
+            return {
+                ...prevState,
+                id: 0,
+                developer: developer
+            }
+        });
+        setSystemVersions([]);
+
+        if (developer === "")
+            return;
+
+        api.get(`/os/${developer}`)
+            .then((response) => {
+                setSystemVersions(response.data);
+            })
+            .catch((error) => console.log(error))
     }
 
 // TODO: Add API-driven selects to change CPUIDs and GPUIDs
     return (
         <Form onSubmit={handleSubmit}>
             {props.response ? <Alert variant="info mb-3">{props.response}</Alert> : ''}
-            {props.errors ? <Alert variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert> : ''}
-            <br className="mt-5" />
+            {props.errors ? <Alert
+                variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert> : ''}
+            <br className="mt-5"/>
 
             <FormSection name="Short name" description="Choose short name to easily identify your device.">
                 <FloatingLabel className="mb-3" id="name" label="Short name">
@@ -59,21 +235,67 @@ function NewDeviceForm(props) {
 
             <FormSection name="Processor"
                          description="Processor (CPU) is the primary component of a computer that processes data.">
-                <FloatingLabel className="mb-3" id="cpu" label="CPUID">
-                    <Form.Control
-                        type="number"
-                        value={cpu}
-                        onChange={(e) => setCPU(e.target.value)}/>
+                <Row>
+                    <Col xs>
+                        <FloatingLabel className="mb-3" id="cpuManufacturer" label="CPU Manufacturer">
+                            <Form.Select onChange={(e) => onCPUManufacturerChange(e.target.value)}>
+                                <option value="">Choose one</option>
+                                <option>Intel</option>
+                                <option>AMD</option>
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                    <Col xs>
+                        <FloatingLabel className="mb-3" id="cpuSeries" label="CPU Series">
+                            <Form.Select onChange={(e) => onCPUSeriesChange(e.target.value)}>
+                                <option value="">Choose one</option>
+                                {cpuSeries.map((option) => (
+                                    <option key={option.series}>{option.series}</option>
+                                ))}
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                </Row>
+                <FloatingLabel className="mb-3" id="cpuModel" label="CPU Model">
+                    <Form.Select onChange={(e) => onCPUModelChange(e.target.value)}>
+                        <option value="">Choose one</option>
+                        {cpuModels.map((option) => (
+                            <option key={option.name}>{option.name}</option>
+                        ))}
+                    </Form.Select>
                 </FloatingLabel>
             </FormSection>
 
             <FormSection name="Graphics card"
                          description="Graphics card (GPU) is a dedicated processor designed to process and display image.">
-                <FloatingLabel className="mb-3" id="gpu" label="GPUID">
-                    <Form.Control
-                        type="number"
-                        value={gpu}
-                        onChange={(e) => setGPU(e.target.value)}/>
+                <Row>
+                    <Col xs>
+                        <FloatingLabel className="mb-3" id="gpuManufacturer" label="GPU Manufacturer">
+                            <Form.Select onChange={(e) => onGPUManufacturerChange(e.target.value)}>
+                                <option value="">Choose one</option>
+                                <option>nVidia</option>
+                                <option>AMD</option>
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                    <Col xs>
+                        <FloatingLabel className="mb-3" id="gpuSeries" label="GPU Series">
+                            <Form.Select onChange={(e) => onGPUSeriesChange(e.target.value)}>
+                                <option value="">Choose one</option>
+                                {gpuSeries.map((option) => (
+                                    <option key={option.series}>{option.series}</option>
+                                ))}
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                </Row>
+                <FloatingLabel className="mb-3" id="gpuModel" label="GPU Model">
+                    <Form.Select onChange={(e) => onGPUModelChange(e.target.value)}>
+                        <option value="">Choose one</option>
+                        {gpuModels.map((option) => (
+                            <option key={option.name}>{option.name}</option>
+                        ))}
+                    </Form.Select>
                 </FloatingLabel>
             </FormSection>
 
@@ -84,16 +306,20 @@ function NewDeviceForm(props) {
                         <FloatingLabel className="mb-3" id="ramSticks" label="RAM Sticks">
                             <Form.Control
                                 type="number"
-                                value={ramSticks}
-                                onChange={(e) => setRAMSticks(e.target.value)}/>
+                                value={ram.sticks}
+                                onChange={(e) => setRAM(prevState => {
+                                    return {...prevState, sticks: parseInt(e.target.value)}
+                                })}/>
                         </FloatingLabel>
                     </Col>
                     <Col xs>
                         <FloatingLabel className="mb-3" id="ramSize" label="RAM Capacity (per stick; in GBs)">
                             <Form.Control
                                 type="number"
-                                value={ramSize}
-                                onChange={(e) => setRAMSize(e.target.value)}/>
+                                value={ram.size}
+                                onChange={(e) => setRAM(prevState => {
+                                    return {...prevState, size: parseInt(e.target.value)}
+                                })}/>
                         </FloatingLabel>
                     </Col>
                 </Row>
@@ -101,15 +327,19 @@ function NewDeviceForm(props) {
                 <FloatingLabel className="mb-3" id="ramFreq" label="RAM Frequency">
                     <Form.Control
                         type="number"
-                        value={ramFreq}
-                        onChange={(e) => setRAMFreq(e.target.value)}/>
+                        value={ram.frequency}
+                        onChange={(e) => setRAM(prevState => {
+                            return {...prevState, frequency: parseInt(e.target.value)}
+                        })}/>
                 </FloatingLabel>
 
                 <FloatingLabel className="mb-3" id="ramLatency" label="RAM Latency">
                     <Form.Control
                         type="number"
-                        value={ramLatency}
-                        onChange={(e) => setRAMLatency(e.target.value)}/>
+                        value={ram.latency}
+                        onChange={(e) => setRAM(prevState => {
+                            return {...prevState, latency: parseInt(e.target.value)}
+                        })}/>
                 </FloatingLabel>
             </FormSection>
 
@@ -135,12 +365,28 @@ function NewDeviceForm(props) {
 
             <FormSection name="System"
                          description="Operating system is software that communicates with the hardware and allows other programs to run.">
-                <FloatingLabel className="mb-3" id="os" label="OSID">
-                    <Form.Control
-                        type="number"
-                        value={system}
-                        onChange={(e) => setSystem(e.target.value)}/>
-                </FloatingLabel>
+                <Row>
+                    <Col xs>
+                        <FloatingLabel className="mb-3" id="osDeveloper" label="OS Developer">
+                            <Form.Select onChange={(e) => onOSDeveloperChange(e.target.value)}>
+                                <option value="">Choose one</option>
+                                <option>Microsoft</option>
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                    <Col xs>
+                        <FloatingLabel className="mb-3" id="osVersion" label="OS Version">
+                            <Form.Select onChange={(e) => setSystem(prevState => {
+                                             return {...prevState, id: parseInt(e.target.value)}
+                                         })}>
+                                <option value="">Choose one</option>
+                                {systemVersions.map((option) => (
+                                    <option key={option.osID} value={option.osID}>{option.name}</option>
+                                ))}
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Col>
+                </Row>
             </FormSection>
             <Row className="mb-3">
                 <hr/>

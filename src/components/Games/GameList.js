@@ -1,7 +1,14 @@
 import GameListItem from './GameListItem';
-import {Row} from "react-bootstrap";
+import {Alert, Row} from "react-bootstrap";
 
 function GameList(props) {
+    if (props.games.length === 0 || !props.games) {
+        if (props.errors)
+            return (<Alert variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert>);
+
+        return (<p className="mt-5 h2 text-center text-muted">No games found.</p>)
+    }
+
     return (
         <Row as="ul" className="list-unstyled">
             {props.games.map((game) => (

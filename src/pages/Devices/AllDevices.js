@@ -43,7 +43,6 @@ function AllDevices() {
                     else
                         setAppState({
                             loaded: true,
-                            devices: [],
                             errors: {
                                 code: error.response.data.code,
                                 message: `${error.response.data.message}. Try refresh the page.`
@@ -53,7 +52,6 @@ function AllDevices() {
                 else if (error.request)
                     setAppState({
                         loaded: true,
-                        devices: [],
                         errors: {
                             message: "Incorrect request. Try refresh the page."
                         }
@@ -62,7 +60,6 @@ function AllDevices() {
                 else
                     setAppState({
                         loaded: true,
-                        devices: [],
                         errors: {
                             message: "Unexpected error occured."
                         }

@@ -1,4 +1,4 @@
-import {Navigate, Route, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -31,12 +31,8 @@ import Settings from "./pages/Settings";
 import NotFound from "./errorpages/NotFound";
 
 import Layout from "./components/Layout";
-import {useContext} from "react";
-import authContext from "./store/AuthContext";
 
 function App() {
-    const authCtx = useContext(authContext);
-
     return (
         <Layout>
             <Routes>
@@ -120,8 +116,6 @@ function App() {
                 <Route path='settings' element={<Settings/>}/>
                 <Route path='*' element={<NotFound/>}/>
             </Routes>
-
-            {!(authCtx.getstatus()) ? <Navigate to="/login" replace/> : ''}
         </Layout>
     );
 }

@@ -18,17 +18,43 @@ function NewDevice() {
     const api = useAPI();
     const history = useNavigate();
 
-    function createDeviceHandler(deviceData) {
+    function validateDevice(deviceData) {
+        if (
+            deviceData.shortName === "" ||
+            deviceData.cpuID === 0 ||
+            deviceData.gpuID === 0 ||
+            deviceData.amountOfSticks <= 0 ||
+            deviceData.size <= 0 ||
+            deviceData.freq <= 0 ||
+            deviceData.latency <= 0 ||
+            (!deviceData.hdd && !deviceData.ssd) ||
+            deviceData.osID === 0
+        ) {
+            setAppState({
+                errors: {
+                    message: `You might miss some information about your device. Try again.`
+                }
+            });
+            return false;
+        }
+
+        return true;
+    }
+
+    function submitDevice(deviceData) {
         console.log(deviceData);
         setAppState({
-            alert: null
+            response: null
         });
+
+        if(!validateDevice(deviceData))
+            return;
 
         api.post('/device/add', deviceData)
             .then((response) => {
                 setAppState({response: response.data})
                 setInterval(3000);
-                history(-1);
+                history("/me/devices");
             })
             .catch((error) => {
                 if (error.response)
@@ -62,7 +88,7 @@ function NewDevice() {
         <ProfileLayout id={authCtx.details.userID} isPersonal={true}>
             <PageSection name="Add new device" description="Add your device using forms below"
                          withAction={false}>
-                <NewDeviceForm onSubmit={createDeviceHandler} response={appState.response} errors={appState.errors} />
+                <NewDeviceForm onSubmit={submitDevice} response={appState.response} errors={appState.errors}/>
             </PageSection>
         </ProfileLayout>
     );
