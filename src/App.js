@@ -48,7 +48,7 @@ function App() {
                 {/* Tag-related Routes */}
                 <Route path='tags'>
                     <Route path='' element={<AllTags/>}/>
-                    <Route path=':tagId' element={<ViewTag/>}/>
+                    <Route path=':tagName' element={<ViewTag/>}/>
 
                     <Route path='*' element={<NotFound/>}/>
                 </Route>

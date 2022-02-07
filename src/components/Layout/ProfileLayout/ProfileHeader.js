@@ -1,12 +1,24 @@
-import {Button, Container} from "react-bootstrap";
+import {Alert, Button, Container} from "react-bootstrap";
 import {API_URL} from "../../../config/constant";
 import {Fragment} from "react";
 import {Link} from "react-router-dom";
 
 function ProfileHeader(props) {
+    if (!props.user || props.user === {})
+        if (props.errors)
+            return (
+                <Container as="header" fluid className="bg-dark text-white">
+                    <Container className="py-5 d-flex align-items-end">
+                        <Alert variant="danger">
+                            {props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}
+                        </Alert>
+                    </Container>
+                </Container>
+            );
+
     return (
         <Fragment>
-            <Container fluid className="bg-dark text-white">
+            <Container as="header" fluid className="bg-dark text-white">
                 <Container className="pb-5 profile-header d-flex align-items-end">
                     <img
                         alt=""

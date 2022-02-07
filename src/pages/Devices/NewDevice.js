@@ -5,7 +5,7 @@ import AuthContext from "../../store/AuthContext";
 
 import ProfileLayout from "../../components/Layout/ProfileLayout";
 import PageSection from "../../components/Layout/PageSection";
-import NewDeviceForm from "./NewDevice/NewDeviceForm";
+import DeviceForm from "../../components/Devices/DeviceForm";
 import useAPI from "../../api/API";
 
 function NewDevice() {
@@ -85,10 +85,10 @@ function NewDevice() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <ProfileLayout id={authCtx.details.userID} isPersonal={true}>
+        <ProfileLayout isPersonal={true}>
             <PageSection name="Add new device" description="Add your device using forms below"
                          withAction={false}>
-                <NewDeviceForm onSubmit={submitDevice} response={appState.response} errors={appState.errors}/>
+                <DeviceForm onSubmit={submitDevice} response={appState.response} errors={appState.errors}/>
             </PageSection>
         </ProfileLayout>
     );

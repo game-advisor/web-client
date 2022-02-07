@@ -1,58 +1,65 @@
-import {Alert} from "react-bootstrap";
+/* eslint-disable react-hooks/exhaustive-deps */
 import {useContext, useEffect, useState, Fragment} from "react";
-import axios from "axios";
-import {API_URL} from "../../config/constant";
+import useAPI from "../../api/API";
 import authContext from "../../store/AuthContext";
+
 import ProfileHeader from "./ProfileLayout/ProfileHeader";
-import LoadingHeader from "./LoadingLayout/LoadingHeader";
+import LazyHeader from "../LazyHeader";
 
 function ProfileLayout(props) {
-    const authCtx = useContext(authContext);
+    const [appState, setAppState] = useState({
+        loaded: false,
+        user: {},
+        errors: null
+    })
 
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [userInfo, setUserInfo] = useState({});
-    const [error, setError] = useState(null);
+    const authCtx = useContext(authContext);
+    const api = useAPI();
+    const userID = props.isPersonal ? authCtx.details.userID : props.id;
+
+    const LazyProfileHeader = LazyHeader(ProfileHeader);
 
     useEffect(() => {
-        setIsLoaded(false);
-        setError(null);
+        setAppState({loaded: false});
 
-        axios.get(`${API_URL}/user/${props.id}`, {
-            headers: {
-                Authorization: `${authCtx.token}`
-            }
-        }).then((response) => {
-            setIsLoaded(true);
-            setUserInfo(response.data);
+        api.get(`/user/${userID}`)
+            .then((response) => {
+                setAppState({
+                    loaded: true,
+                    user: response.data
+                });
+            })
+            .catch((error) => {
+                if (error.response)
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            code: error.response.data.code,
+                            message: `${error.response.data.message}. Try refresh the page.`
+                        }
+                    });
 
-        }).catch((error) => {
-            if (error.response) {
-                setError(`[${error.response.data.code}] ${error.response.data.message}. Try refresh the page.`);
+                else if (error.request)
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            message: "Incorrect request. Try refresh the page."
+                        }
+                    });
 
-            } else if (error.request) {
-                setError("Incorrect request. Try refresh the page.");
-
-            } else {
-                setError("Unexpected error occured.");
-            }
-        });
-    }, [authCtx, props.id]);
-
-    if (isLoaded) {
-        if (error)
-            return (<Alert variant="danger mb-3">{error}</Alert>);
-
-        return (
-            <Fragment>
-                <ProfileHeader user={userInfo} isPersonal={props.isPersonal}/>
-                {props.children}
-            </Fragment>
-        );
-    }
+                else
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            message: "Unexpected error occured."
+                        }
+                    });
+            });
+    }, [userID]);
 
     return (
         <Fragment>
-            <LoadingHeader error={error}/>
+            <LazyProfileHeader isLoaded={appState.loaded} isPersonal={props.isPersonal} user={appState.user} errors={appState.errors} />
             {props.children}
         </Fragment>
     );

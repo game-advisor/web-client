@@ -5,7 +5,7 @@ import TagsCloud from "./MainHeader/TagsCloud";
 
 function MainHeader() {
     return (
-        <Container fluid className="bg-dark text-white mb-3">
+        <Container as="header" fluid className="bg-dark text-white mb-3">
             <Container className="py-5">
                 <h1 className="text-center">What game are you looking for?</h1>
                 <MainSearch />

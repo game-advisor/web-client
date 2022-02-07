@@ -1,70 +1,136 @@
-import {useState, useEffect, useContext} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import {useState, useEffect} from 'react';
 import {useParams} from "react-router-dom";
 
-import axios from "axios";
-import {API_URL} from "../../config/constant";
-import authContext from "../../store/AuthContext";
+import useAPI from "../../api/API";
+import {i18n} from "../../i18n/en";
 
+import {Alert} from "react-bootstrap";
 import ProfileLayout from "../../components/Layout/ProfileLayout";
-import LoadingSection from "../../components/Layout/LoadingLayout/LoadingSection";
-import DeviceDetails from "./ViewDevice/DeviceDetails";
-import {Alert, Container} from "react-bootstrap";
+import DeviceDetails from "../../components/Devices/DeviceDetails";
+import LazyComponent from "../../components/LazyComponent";
+
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 function ViewDevice() {
+    const [appState, setAppState] = useState({
+        loaded: false,
+        device: {},
+        errors: null
+    });
+
+    const [deleteState, setDeleteState] = useState({
+        completed: false,
+        success: null,
+        errors: null,
+    });
+
+    const api = useAPI();
     const params = useParams();
     const deviceID = params.deviceId;
-    const authCtx = useContext(authContext);
 
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [fetchedDevice, setFetchedDevice] = useState({});
-    const [error, setError] = useState(null);
+    const LazyDeviceDetails = LazyComponent(DeviceDetails)
 
-    useEffect(() => {
-        setIsLoaded(false);
-        setError(null);
+    function DeleteDevice(id) {
+        confirmAlert({
+            title: i18n["device.deleteTitle"],
+            message: i18n["device.deleteMessage"],
+            buttons: [
+                {
+                    label: i18n["device.deleteConfirm"],
+                    onClick: () => {
+                        setDeleteState({completed: false})
+                        api.delete(`/device/${id}/delete`)
+                            .then((response) => {
+                                setDeleteState({
+                                    completed: true,
+                                    success: {
+                                        message: i18n["device.deleteSuccess"]
+                                    }
+                                })
+                            })
+                            .catch((error) => {
+                                if (error.response)
+                                    setDeleteState({
+                                        loaded: true,
+                                        errors: {
+                                            code: error.response.data.code,
+                                            message: `${error.response.data.message}. Try refresh the page.`
+                                        }
+                                    });
 
-        axios.get(`${API_URL}/device/${deviceID}`, {
-            headers: {
-                Authorization: `${authCtx.token}`
-            }
-        }).then((response) => {
-            setFetchedDevice(response.data);
-            setIsLoaded(true);
-        }).catch((error) => {
-            if (error.response) {
-                setError(`[${error.response.data.code}] ${error.response.data.message}. Try refresh the page.`);
+                                else if (error.request)
+                                    setDeleteState({
+                                        loaded: true,
+                                        errors: {
+                                            message: "Incorrect request. Try refresh the page."
+                                        }
+                                    });
 
-            } else if (error.request) {
-                setError("Incorrect request. Try refresh the page.");
-
-            } else {
-                setError("Unexpected error occured.");
-            }
-        });
-    }, [deviceID, authCtx]);
-
-    if (isLoaded) {
-        return (
-            <ProfileLayout id={authCtx.details.userID} isPersonal="true">
-                <Container>
-                    {error ? <Alert variant="danger">{error}</Alert> : ''}
-                    {fetchedDevice !== {} ? <DeviceDetails
-                        id={fetchedDevice.deviceID}
-                        shortName={fetchedDevice.shortName}
-                        cpu={fetchedDevice.cpu}
-                        gpu={fetchedDevice.gpu}
-                        ram={fetchedDevice.ram}
-                        hdd={fetchedDevice.hdd}
-                        ssd={fetchedDevice.ssd}
-                        os={fetchedDevice.os}/> : ''}
-                </Container>
-            </ProfileLayout>
-        );
+                                else
+                                    setDeleteState({
+                                        loaded: true,
+                                        errors: {
+                                            message: "Unexpected error occured."
+                                        }
+                                    });
+                            });
+                    }
+                },
+                {
+                    label: i18n["device.deleteCancel"],
+                    onClick: () => {
+                    }
+                }
+            ]
+        })
     }
 
+    useEffect(() => {
+        setAppState({loaded: false});
+
+        api.get(`/device/${deviceID}`)
+            .then((response) => {
+                setAppState({
+                    loaded: true,
+                    device: response.data
+                });
+            })
+            .catch((error) => {
+                if (error.response)
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            code: error.response.data.code,
+                            message: `${error.response.data.message}. Try refresh the page.`
+                        }
+                    });
+
+                else if (error.request)
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            message: "Incorrect request. Try refresh the page."
+                        }
+                    });
+
+                else
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            message: "Unexpected error occured."
+                        }
+                    });
+            });
+    }, [deviceID, deleteState]);
+
     return (
-        <ProfileLayout id={authCtx.details.userID} isPersonal="true">
-            <LoadingSection error={error}/>
+        <ProfileLayout isPersonal={true}>
+            {deleteState.success ? <Alert variant="success">{deleteState.success.message}</Alert> : ''}
+            {deleteState.errors ? <Alert variant="danger">{deleteState.errors.code ? `[${deleteState.errors.code}] ${deleteState.errors.message}` : `${deleteState.errors.message}`}</Alert> : ''}
+
+            <LazyDeviceDetails isLoaded={appState.loaded} device={appState.device} errors={appState.errors} onDelete={DeleteDevice} />
         </ProfileLayout>
     );
 }

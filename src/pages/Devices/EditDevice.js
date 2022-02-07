@@ -12,7 +12,7 @@ function EditDevice() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <ProfileLayout id={authCtx.details.userID} isPersonal="true">
+        <ProfileLayout isPersonal={true}>
             <Container>Edit device {params.id} placeholder</Container>
         </ProfileLayout>
     );

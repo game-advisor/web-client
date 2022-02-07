@@ -1,0 +1,12 @@
+
+.profile-header {
+    transform: translateY(4rem);
+}
+
+.h-5 {
+    height: 3rem;
+}
+
+main {
+    flex: 1;
+}

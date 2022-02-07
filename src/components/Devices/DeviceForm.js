@@ -2,10 +2,10 @@ import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 import {Alert, Button, ButtonGroup, Col, FloatingLabel, Form, Row} from "react-bootstrap";
-import FormSection from "../../../components/Layout/FormSection";
-import useAPI from "../../../api/API";
+import FormSection from "../Layout/FormSection";
+import useAPI from "../../api/API";
 
-function NewDeviceForm(props) {
+function DeviceForm(props) {
     const [shortName, setShortName] = useState('');
 
     const [cpu, setCPU] = useState({
@@ -402,4 +402,4 @@ function NewDeviceForm(props) {
     );
 }
 
-export default NewDeviceForm;
+export default DeviceForm;
