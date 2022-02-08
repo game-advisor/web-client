@@ -1,8 +1,5 @@
 import {Route, Routes} from "react-router-dom";
 
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 import Home from "./pages/Home";
 import SearchPage from "./pages/Search/SearchPage";
 import SearchResults from "./pages/Search/SearchResults";

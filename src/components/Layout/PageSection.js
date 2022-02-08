@@ -1,4 +1,3 @@
-import {Fragment} from "react";
 import {Button, Container} from "react-bootstrap";
 
 function PageSection(props) {
@@ -7,16 +6,16 @@ function PageSection(props) {
     }
 
     return (
-        <Fragment>
-            <Container className="mb-3 d-flex justify-content-between">
-                <div>
+        <Container as="section">
+            <div className="mb-3 d-flex justify-content-between">
+                <div className="me-auto">
                     <h2>{props.name}</h2>
                     <p className="text-muted mb-0">{props.description}</p>
                 </div>
                 { props.withAction ? <Button variant="primary" onClick={performAction}>{props.actionName}</Button> : '' }
-            </Container>
-            <Container>{props.children}</Container>
-        </Fragment>
+            </div>
+            {props.children}
+        </Container>
     );
 }
 

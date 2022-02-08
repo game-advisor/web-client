@@ -1,0 +1,15 @@
+.avatar {
+    transform: translateY(7.5rem);
+    margin-top: -7.5rem;
+}
+
+.avatar img {
+    width: 10rem;
+    height: 10rem;
+}
+
+.subheader {
+    margin-top: .5rem !important;
+    margin-bottom: 0 !important;
+    margin-left: 13rem;
+}

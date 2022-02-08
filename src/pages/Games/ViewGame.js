@@ -2,7 +2,7 @@ import {useContext} from "react";
 import AuthContext from "../../store/AuthContext";
 import {useParams, Navigate} from "react-router-dom";
 
-import MainLayout from "../../components/Layout/MainLayout";
+import GameLayout from "../../components/Layout/GameLayout";
 import {Container} from "react-bootstrap";
 
 function ViewGame() {
@@ -12,9 +12,9 @@ function ViewGame() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <MainLayout>
+        <GameLayout id={params.gameId}>
             <Container>View game {params.gameId} placeholder</Container>
-        </MainLayout>
+        </GameLayout>
     );
 }
 

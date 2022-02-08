@@ -27,7 +27,7 @@ function AllGames() {
 
         api.post('/games/getByDatePublished', {
             "dateBegin": "1970-01-01",
-            "dateEnd": (new Date()).toISOString().split('T')[0]
+            "dataEnd": ""
         })
             .then((response) => {
                 setAppState({
