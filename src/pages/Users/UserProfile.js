@@ -3,7 +3,7 @@ import AuthContext from "../../store/AuthContext";
 import {Navigate, useParams} from "react-router-dom";
 
 import {Container} from "react-bootstrap";
-import ProfileLayout from "../../components/Layout/ProfileLayout";
+import ProfileLayout from "../../components/Profile/ProfileLayout";
 
 function UserProfile() {
     const params = useParams();

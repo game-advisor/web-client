@@ -3,13 +3,13 @@ import {Navigate, useNavigate} from "react-router-dom";
 
 import AuthContext from "../../store/AuthContext";
 
-import ProfileLayout from "../../components/Layout/ProfileLayout";
+import ProfileLayout from "../../components/Profile/ProfileLayout";
 import PageSection from "../../components/Layout/PageSection";
 import DeviceForm from "../../components/Devices/DeviceForm";
 import useAPI from "../../api/API";
 
 function NewDevice() {
-    const [appState, setAppState] = useState({
+    const [submitState, setSubmitState] = useState({
         response: null,
         errors: null
     });
@@ -30,7 +30,7 @@ function NewDevice() {
             (!deviceData.hdd && !deviceData.ssd) ||
             deviceData.osID === 0
         ) {
-            setAppState({
+            setSubmitState({
                 errors: {
                     message: `You might miss some information about your device. Try again.`
                 }
@@ -43,7 +43,7 @@ function NewDevice() {
 
     function submitDevice(deviceData) {
         console.log(deviceData);
-        setAppState({
+        setSubmitState({
             response: null
         });
 
@@ -52,13 +52,13 @@ function NewDevice() {
 
         api.post('/device/add', deviceData)
             .then((response) => {
-                setAppState({response: response.data})
+                setSubmitState({response: response.data})
                 setInterval(3000);
                 history("/me/devices");
             })
             .catch((error) => {
                 if (error.response)
-                    setAppState({
+                    setSubmitState({
                         errors: {
                             code: error.response.data.code,
                             message: `${error.response.data.message}. Try refresh the page.`
@@ -66,14 +66,14 @@ function NewDevice() {
                     });
 
                 else if (error.request)
-                    setAppState({
+                    setSubmitState({
                         errors: {
                             message: "Incorrect request. Try refresh the page."
                         }
                     });
 
                 else
-                    setAppState({
+                    setSubmitState({
                         errors: {
                             message: "Unexpected error occured."
                         }
@@ -88,7 +88,7 @@ function NewDevice() {
         <ProfileLayout isPersonal={true}>
             <PageSection name="Add new device" description="Add your device using forms below"
                          withAction={false}>
-                <DeviceForm onSubmit={submitDevice} response={appState.response} errors={appState.errors}/>
+                <DeviceForm onSubmit={submitDevice} submitResponse={submitState.response} submitErrors={submitState.errors}/>
             </PageSection>
         </ProfileLayout>
     );

@@ -4,8 +4,8 @@ import {Navigate, useNavigate} from "react-router-dom";
 import useAPI from "../../api/API";
 import AuthContext from "../../store/AuthContext";
 
-import ProfileLayout from "../../components/Layout/ProfileLayout";
-import EditProfileForm from "./EditProfile/EditProfileForm";
+import ProfileLayout from "../../components/Profile/ProfileLayout";
+import EditProfileForm from "../../components/Profile/EditProfileForm";
 
 function EditProfile() {
     const api = useAPI();

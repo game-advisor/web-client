@@ -3,10 +3,10 @@ import {useState, useEffect} from 'react';
 import {useParams} from "react-router-dom";
 
 import useAPI from "../../api/API";
-import {i18n} from "../../i18n/en";
+import i18n from "../../i18n/en.json"
 
 import {Alert} from "react-bootstrap";
-import ProfileLayout from "../../components/Layout/ProfileLayout";
+import ProfileLayout from "../../components/Profile/ProfileLayout";
 import DeviceDetails from "../../components/Devices/DeviceDetails";
 import LazyComponent from "../../components/LazyComponent";
 

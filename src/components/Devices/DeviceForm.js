@@ -1,46 +1,201 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
-import {Alert, Button, ButtonGroup, Col, FloatingLabel, Form, Row} from "react-bootstrap";
+import {Alert, Button, ButtonGroup, Col, Container, FloatingLabel, Form, Row} from "react-bootstrap";
 import FormSection from "../Layout/FormSection";
 import useAPI from "../../api/API";
 
 function DeviceForm(props) {
-    const [shortName, setShortName] = useState('');
+    const [shortName, setShortName] = useState(props.device.shortName ? props.device.shortName : '');
 
-    const [cpu, setCPU] = useState({
+    const [cpu, setCPU] = useState(props.device.cpu ? props.device.cpu : {
         id: 0,
-        manufacturer: '',
-        series: '',
-        model: '',
+        manufacturer: null,
+        series: null,
+        model: null,
     });
     const [cpuSeries, setCPUSeries] = useState([]);
     const [cpuModels, setCPUModels] = useState([]);
 
-    const [gpu, setGPU] = useState({
+    function onCPUManufacturerChange(manufacturer) {
+        setCPU((prevState) => {
+            return {
+                ...prevState,
+                id: 0,
+                manufacturer: manufacturer,
+                series: null,
+                model: null
+            }
+        });
+        setCPUSeries([]);
+        setCPUModels([]);
+
+        if (manufacturer !== null)
+            fetchCPUSeries(manufacturer);
+    }
+    function onCPUSeriesChange(series) {
+        setCPU((prevState) => {
+            return {
+                ...prevState,
+                id: 0,
+                series: series,
+                model: null
+            }
+        });
+        setCPUModels([]);
+
+        if (series !== null)
+            fetchCPUModels(series);
+    }
+    function onCPUModelChange(model) {
+        setCPU((prevState) => {
+            return {
+                ...prevState,
+                model: model
+            }
+        });
+
+        if (model === null)
+            return;
+
+        api.get(`/cpu/${model}/modelInfo`)
+            .then((response) => {
+                setCPU((prevState) => {
+                    return {
+                        ...prevState,
+                        id: response.data.cpuID
+                    }
+                });
+            })
+            .catch((error) => console.log(error))
+    }
+    function fetchCPUSeries(manufacturer) {
+        api.get(`/cpu/series/${manufacturer}`)
+            .then((response) => {
+                setCPUSeries(response.data);
+            })
+            .catch((error) => console.log(error))
+    }
+    function fetchCPUModels(series) {
+        api.get(`/cpu/${series}`)
+            .then((response) => {
+                setCPUModels(response.data);
+            })
+            .catch((error) => console.log(error))
+    }
+
+    const [gpu, setGPU] = useState(props.device.gpu ? props.device.gpu : {
         id: 0,
-        manufacturer: '',
-        series: '',
-        model: '',
+        manufacturer: null,
+        series: null,
+        model: null,
     });
     const [gpuSeries, setGPUSeries] = useState([]);
     const [gpuModels, setGPUModels] = useState([]);
 
-    const [ram, setRAM] = useState({
+    function onGPUManufacturerChange(manufacturer) {
+        setGPU((prevState) => {
+            return {
+                ...prevState,
+                id: 0,
+                manufacturer: manufacturer,
+                series: null,
+                model: null
+            }
+        });
+        setGPUSeries([]);
+        setGPUModels([]);
+
+        if (manufacturer !== null)
+            fetchGPUSeries(manufacturer);
+    }
+    function onGPUSeriesChange(series) {
+        setGPU((prevState) => {
+            return {
+                ...prevState,
+                id: 0,
+                series: series,
+                model: null
+            }
+        });
+        setGPUModels([]);
+
+        if (series !== null)
+            fetchGPUModels(series);
+    }
+    function onGPUModelChange(model) {
+        setGPU((prevState) => {
+            return {
+                ...prevState,
+                model: model
+            }
+        });
+
+        if (model === null)
+            return;
+
+        api.get(`/gpu/${model}/modelInfo`)
+            .then((response) => {
+                setGPU((prevState) => {
+                    return {
+                        ...prevState,
+                        id: response.data.gpuID
+                    }
+                });
+            })
+            .catch((error) => console.log(error))
+    }
+    function fetchGPUSeries(manufacturer) {
+        api.get(`/gpu/series/${manufacturer}`)
+            .then((response) => {
+                setGPUSeries(response.data);
+            })
+            .catch((error) => console.log(error))
+    }
+    function fetchGPUModels(series) {
+        api.get(`/gpu/${series}`)
+            .then((response) => {
+                setGPUModels(response.data);
+            })
+            .catch((error) => console.log(error))
+    }
+
+    const [ram, setRAM] = useState(props.device.ram ? props.device.ram : {
         sticks: 0,
         size: 0,
         frequency: 0,
         latency: 0
     });
 
-    const [hdd, setHDD] = useState(false);
-    const [ssd, setSSD] = useState(false);
+    const [hdd, setHDD] = useState(props.device.hdd ? props.device.hdd : false);
+    const [ssd, setSSD] = useState(props.device.ssd ? props.device.ssd : false);
 
-    const [system, setSystem] = useState({
+    const [system, setSystem] = useState(props.device.system ? props.device.system : {
         id: 0,
-        developer: ''
+        developer: null
     });
     const [systemVersions, setSystemVersions] = useState([]);
+
+    function onOSDeveloperChange(developer) {
+        setSystem((prevState) => {
+            return {
+                ...prevState,
+                id: 0,
+                developer: developer
+            }
+        });
+        setSystemVersions([]);
+
+        if (developer !== null)
+            fetchSystemVersions(developer);
+    }
+    function fetchSystemVersions(developer) {
+        api.get(`/os/${developer}`)
+            .then((response) => {
+                setSystemVersions(response.data);
+            })
+            .catch((error) => console.log(error))
+    }
 
     const history = useNavigate();
     const api = useAPI();
@@ -64,159 +219,22 @@ function DeviceForm(props) {
         props.onSubmit(device);
     }
 
-    function onCPUManufacturerChange(manufacturer) {
-        setCPU((prevState) => {
-            return {
-                ...prevState,
-                id: 0,
-                manufacturer: manufacturer,
-                series: '',
-                model: ''
-            }
-        });
-        setCPUSeries([]);
-        setCPUModels([]);
-
-        if (manufacturer === "")
-            return;
-
-        api.get(`/cpu/series/${manufacturer}`)
-            .then((response) => {
-                setCPUSeries(response.data);
-            })
-            .catch((error) => console.log(error))
-
-    }
-    function onCPUSeriesChange(series) {
-        setCPU((prevState) => {
-            return {
-                ...prevState,
-                id: 0,
-                series: series,
-                model: ''
-            }
-        });
-        setCPUModels([]);
-
-        if (series === "")
-            return;
-
-        api.get(`/cpu/${series}`)
-            .then((response) => {
-                setCPUModels(response.data);
-            })
-            .catch((error) => console.log(error))
-    }
-    function onCPUModelChange(model) {
-        setCPU((prevState) => {
-            return {
-                ...prevState,
-                model: model
-            }
-        });
-
-        if (model === "")
-            return;
-
-        api.get(`/cpu/${model}/modelInfo`)
-            .then((response) => {
-                setCPU((prevState) => {
-                    return {
-                        ...prevState,
-                        id: response.data.cpuID
-                    }
-                });
-            })
-            .catch((error) => console.log(error))
+    if (props.editMode) {
+        fetchCPUSeries(props.device.cpu.manufacturer);
+        fetchCPUModels(props.device.cpu.series);
+        fetchGPUSeries(props.device.gpu.manufacturer);
+        fetchGPUModels(props.device.gpu.series);
+        fetchSystemVersions(props.device.system.developer);
     }
 
-    function onGPUManufacturerChange(manufacturer) {
-        setGPU((prevState) => {
-            return {
-                ...prevState,
-                id: 0,
-                manufacturer: manufacturer,
-                series: '',
-                model: ''
-            }
-        });
-        setGPUSeries([]);
-        setGPUModels([]);
+    if (props.loadErrors)
+        return (
+            <Container as="section">
+                <Alert
+                    variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert>
+            </Container>
+        );
 
-        if (manufacturer === "")
-            return;
-
-        api.get(`/gpu/series/${manufacturer}`)
-            .then((response) => {
-                setGPUSeries(response.data);
-            })
-            .catch((error) => console.log(error))
-
-    }
-    function onGPUSeriesChange(series) {
-        setGPU((prevState) => {
-            return {
-                ...prevState,
-                id: 0,
-                series: series,
-                model: ''
-            }
-        });
-        setGPUModels([]);
-
-        if (series === "")
-            return;
-
-        api.get(`/gpu/${series}`)
-            .then((response) => {
-                setGPUModels(response.data);
-            })
-            .catch((error) => console.log(error))
-    }
-    function onGPUModelChange(model) {
-        setGPU((prevState) => {
-            return {
-                ...prevState,
-                model: model
-            }
-        });
-
-        if (model === "")
-            return;
-
-        api.get(`/gpu/${model}/modelInfo`)
-            .then((response) => {
-                setGPU((prevState) => {
-                    return {
-                        ...prevState,
-                        id: response.data.gpuID
-                    }
-                });
-            })
-            .catch((error) => console.log(error))
-    }
-
-    function onOSDeveloperChange(developer) {
-        setSystem((prevState) => {
-            return {
-                ...prevState,
-                id: 0,
-                developer: developer
-            }
-        });
-        setSystemVersions([]);
-
-        if (developer === "")
-            return;
-
-        api.get(`/os/${developer}`)
-            .then((response) => {
-                setSystemVersions(response.data);
-            })
-            .catch((error) => console.log(error))
-    }
-
-// TODO: Add API-driven selects to change CPUIDs and GPUIDs
     return (
         <Form onSubmit={handleSubmit}>
             {props.response ? <Alert variant="info mb-3">{props.response}</Alert> : ''}
@@ -238,8 +256,8 @@ function DeviceForm(props) {
                 <Row>
                     <Col xs>
                         <FloatingLabel className="mb-3" id="cpuManufacturer" label="CPU Manufacturer">
-                            <Form.Select onChange={(e) => onCPUManufacturerChange(e.target.value)}>
-                                <option value="">Choose one</option>
+                            <Form.Select value={cpu.manufacturer} onChange={(e) => onCPUManufacturerChange(e.target.value)}>
+                                <option value={null}>Choose one</option>
                                 <option>Intel</option>
                                 <option>AMD</option>
                             </Form.Select>
@@ -247,18 +265,18 @@ function DeviceForm(props) {
                     </Col>
                     <Col xs>
                         <FloatingLabel className="mb-3" id="cpuSeries" label="CPU Series">
-                            <Form.Select onChange={(e) => onCPUSeriesChange(e.target.value)}>
-                                <option value="">Choose one</option>
+                            <Form.Select value={cpu.series} onChange={(e) => onCPUSeriesChange(e.target.value)}>
+                                <option value={null}>Choose one</option>
                                 {cpuSeries.map((option) => (
-                                    <option key={option.series}>{option.series}</option>
+                                    option.series ? <option key={option.series}>{option.series}</option> : <option key=" ">Other</option>
                                 ))}
                             </Form.Select>
                         </FloatingLabel>
                     </Col>
                 </Row>
                 <FloatingLabel className="mb-3" id="cpuModel" label="CPU Model">
-                    <Form.Select onChange={(e) => onCPUModelChange(e.target.value)}>
-                        <option value="">Choose one</option>
+                    <Form.Select value={cpu.model} onChange={(e) => onCPUModelChange(e.target.value)}>
+                        <option value={null}>Choose one</option>
                         {cpuModels.map((option) => (
                             <option key={option.name}>{option.name}</option>
                         ))}
@@ -271,8 +289,8 @@ function DeviceForm(props) {
                 <Row>
                     <Col xs>
                         <FloatingLabel className="mb-3" id="gpuManufacturer" label="GPU Manufacturer">
-                            <Form.Select onChange={(e) => onGPUManufacturerChange(e.target.value)}>
-                                <option value="">Choose one</option>
+                            <Form.Select value={gpu.manufacturer} onChange={(e) => onGPUManufacturerChange(e.target.value)}>
+                                <option value={null}>Choose one</option>
                                 <option>nVidia</option>
                                 <option>AMD</option>
                             </Form.Select>
@@ -280,18 +298,18 @@ function DeviceForm(props) {
                     </Col>
                     <Col xs>
                         <FloatingLabel className="mb-3" id="gpuSeries" label="GPU Series">
-                            <Form.Select onChange={(e) => onGPUSeriesChange(e.target.value)}>
-                                <option value="">Choose one</option>
+                            <Form.Select value={gpu.series} onChange={(e) => onGPUSeriesChange(e.target.value)}>
+                                <option value={null}>Choose one</option>
                                 {gpuSeries.map((option) => (
-                                    <option key={option.series}>{option.series}</option>
+                                    option.series ? <option key={option.series}>{option.series}</option> : <option key=" ">Other</option>
                                 ))}
                             </Form.Select>
                         </FloatingLabel>
                     </Col>
                 </Row>
                 <FloatingLabel className="mb-3" id="gpuModel" label="GPU Model">
-                    <Form.Select onChange={(e) => onGPUModelChange(e.target.value)}>
-                        <option value="">Choose one</option>
+                    <Form.Select value={gpu.model} onChange={(e) => onGPUModelChange(e.target.value)}>
+                        <option value={null}>Choose one</option>
                         {gpuModels.map((option) => (
                             <option key={option.name}>{option.name}</option>
                         ))}
@@ -368,18 +386,18 @@ function DeviceForm(props) {
                 <Row>
                     <Col xs>
                         <FloatingLabel className="mb-3" id="osDeveloper" label="OS Developer">
-                            <Form.Select onChange={(e) => onOSDeveloperChange(e.target.value)}>
-                                <option value="">Choose one</option>
+                            <Form.Select value={system.developer} onChange={(e) => onOSDeveloperChange(e.target.value)}>
+                                <option value={null}>Choose one</option>
                                 <option>Microsoft</option>
                             </Form.Select>
                         </FloatingLabel>
                     </Col>
                     <Col xs>
                         <FloatingLabel className="mb-3" id="osVersion" label="OS Version">
-                            <Form.Select onChange={(e) => setSystem(prevState => {
-                                             return {...prevState, id: parseInt(e.target.value)}
-                                         })}>
-                                <option value="">Choose one</option>
+                            <Form.Select value={system.id} onChange={(e) => setSystem(prevState => {
+                                return {...prevState, id: parseInt(e.target.value)}
+                            })}>
+                                <option value={null}>Choose one</option>
                                 {systemVersions.map((option) => (
                                     <option key={option.osID} value={option.osID}>{option.name}</option>
                                 ))}

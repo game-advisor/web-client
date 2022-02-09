@@ -25,7 +25,7 @@ import ViewDevice from "./pages/Devices/ViewDevice";
 import EditDevice from "./pages/Devices/EditDevice";
 import Settings from "./pages/Settings";
 
-import NotFound from "./errorpages/NotFound";
+import NotFound from "./errors/NotFound";
 
 import Layout from "./components/Layout";
 

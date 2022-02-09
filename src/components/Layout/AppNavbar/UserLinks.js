@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {i18n} from "../../../i18n/en";
+import i18n from "../../../i18n/en.json";
 
 import {NavDropdown} from "react-bootstrap";
 import { useContext } from "react";

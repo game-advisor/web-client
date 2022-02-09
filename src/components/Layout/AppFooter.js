@@ -1,7 +1,7 @@
 import {Container, Nav, Navbar} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import logo from "../../assets/logo.svg";
-import {i18n} from "../../i18n/en";
+import i18n from "../../i18n/en.json"
 
 function AppFooter() {
     return (

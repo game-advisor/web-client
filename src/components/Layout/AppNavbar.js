@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import {Link} from "react-router-dom";
 import AuthContext from "../../store/AuthContext";
-import {i18n} from "../../i18n/en";
+import i18n from "../../i18n/en.json"
 
 import {Container, Nav, Navbar} from "react-bootstrap";
 import logo from "../../assets/logo.svg";

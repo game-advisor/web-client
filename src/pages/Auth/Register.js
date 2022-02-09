@@ -1,5 +1,5 @@
-import AuthLayout from "../../components/Layout/AuthLayout";
-import RegisterForm from "./Register/RegisterForm";
+import AuthLayout from "../../components/Auth/AuthLayout";
+import RegisterForm from "../../components/Auth/RegisterForm";
 
 import axios from "axios";
 import {useNavigate} from "react-router-dom";

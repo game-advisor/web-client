@@ -3,7 +3,7 @@ import AuthContext from "../../store/AuthContext";
 import {Navigate} from "react-router-dom";
 
 import {Container} from "react-bootstrap";
-import ProfileLayout from "../../components/Layout/ProfileLayout";
+import ProfileLayout from "../../components/Profile/ProfileLayout";
 
 function Favorites() {
     const authCtx = useContext(AuthContext);

@@ -2,7 +2,7 @@ import {useContext} from "react";
 import AuthContext from "../../store/AuthContext";
 import {useParams, Navigate} from "react-router-dom";
 
-import GameLayout from "../../components/Layout/GameLayout";
+import GameLayout from "../../components/Games/GameLayout";
 import {Container} from "react-bootstrap";
 
 function ViewGame() {

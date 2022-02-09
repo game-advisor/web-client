@@ -4,9 +4,9 @@ import {Navigate, useNavigate} from "react-router-dom";
 
 import useAPI from "../../api/API";
 import authContext from "../../store/AuthContext";
-import {i18n} from "../../i18n/en";
+import i18n from "../../i18n/en.json"
 
-import ProfileLayout from "../../components/Layout/ProfileLayout";
+import ProfileLayout from "../../components/Profile/ProfileLayout";
 import PageSection from "../../components/Layout/PageSection";
 import DeviceList from "../../components/Devices/DeviceList";
 import LazyComponent from "../../components/LazyComponent";
