@@ -64,8 +64,7 @@ function EditDevice() {
             api.put(`/device/${deviceID}/edit`, deviceData)
             .then((response) => {
                 setSubmitState({response: response.data})
-                setInterval(3000);
-                history("/me/devices");
+                history(`/me/devices/${deviceID}`);
             })
             .catch((error) => {
                 if (error.response)
@@ -161,7 +160,7 @@ function EditDevice() {
 
     return (
         <ProfileLayout isPersonal={true}>
-            <PageSection name="Add new device" description="Add your device using forms below"
+            <PageSection name="Edit device" description="Manage your device using forms below"
                          withAction={false}>
                 <LazyDeviceForm isLoaded={appState.loaded} loadErrors={appState.errors} submitResponse={submitState.response} submitErrors={submitState.errors}
                 editMode={true} device={appState.device}  onSubmit={submitDevice}/>

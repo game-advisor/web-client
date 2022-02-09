@@ -53,8 +53,7 @@ function NewDevice() {
         api.post('/device/add', deviceData)
             .then((response) => {
                 setSubmitState({response: response.data})
-                setInterval(3000);
-                history("/me/devices");
+                history(`/me/devices`);
             })
             .catch((error) => {
                 if (error.response)

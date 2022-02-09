@@ -6,9 +6,9 @@ import FormSection from "../Layout/FormSection";
 import useAPI from "../../api/API";
 
 function DeviceForm(props) {
-    const [shortName, setShortName] = useState(props.device.shortName ? props.device.shortName : '');
+    const [shortName, setShortName] = useState(props.editMode ? props.device.shortName : "");
 
-    const [cpu, setCPU] = useState(props.device.cpu ? props.device.cpu : {
+    const [cpu, setCPU] = useState(props.editMode ? props.device.cpu : {
         id: 0,
         manufacturer: "",
         series: "",
@@ -84,7 +84,7 @@ function DeviceForm(props) {
             .catch((error) => console.log(error))
     }
 
-    const [gpu, setGPU] = useState(props.device.gpu ? props.device.gpu : {
+    const [gpu, setGPU] = useState(props.editMode ? props.device.gpu : {
         id: 0,
         manufacturer: "",
         series: "",
@@ -160,17 +160,17 @@ function DeviceForm(props) {
             .catch((error) => console.log(error))
     }
 
-    const [ram, setRAM] = useState(props.device.ram ? props.device.ram : {
+    const [ram, setRAM] = useState(props.editMode ? props.device.ram : {
         sticks: 0,
         size: 0,
         frequency: 0,
         latency: 0
     });
 
-    const [hdd, setHDD] = useState(props.device.hdd ? props.device.hdd : false);
-    const [ssd, setSSD] = useState(props.device.ssd ? props.device.ssd : false);
+    const [hdd, setHDD] = useState(props.editMode ? props.device.hdd : false);
+    const [ssd, setSSD] = useState(props.editMode ? props.device.ssd : false);
 
-    const [system, setSystem] = useState(props.device.system ? props.device.system : {
+    const [system, setSystem] = useState(props.editMode ? props.device.system : {
         id: 0,
         developer: ""
     });
