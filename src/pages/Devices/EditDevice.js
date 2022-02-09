@@ -61,7 +61,7 @@ function EditDevice() {
         if(!validateDevice(deviceData))
             return;
 
-        api.post('/device/add', deviceData)
+            api.put(`/device/${deviceID}/edit`, deviceData)
             .then((response) => {
                 setSubmitState({response: response.data})
                 setInterval(3000);

@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 import {Alert, Button, ButtonGroup, Col, Container, FloatingLabel, Form, Row} from "react-bootstrap";
@@ -10,9 +10,9 @@ function DeviceForm(props) {
 
     const [cpu, setCPU] = useState(props.device.cpu ? props.device.cpu : {
         id: 0,
-        manufacturer: null,
-        series: null,
-        model: null,
+        manufacturer: "",
+        series: "",
+        model: "",
     });
     const [cpuSeries, setCPUSeries] = useState([]);
     const [cpuModels, setCPUModels] = useState([]);
@@ -23,14 +23,14 @@ function DeviceForm(props) {
                 ...prevState,
                 id: 0,
                 manufacturer: manufacturer,
-                series: null,
-                model: null
+                series: "",
+                model: ""
             }
         });
         setCPUSeries([]);
         setCPUModels([]);
 
-        if (manufacturer !== null)
+        if (manufacturer !== "")
             fetchCPUSeries(manufacturer);
     }
     function onCPUSeriesChange(series) {
@@ -39,12 +39,12 @@ function DeviceForm(props) {
                 ...prevState,
                 id: 0,
                 series: series,
-                model: null
+                model: ""
             }
         });
         setCPUModels([]);
 
-        if (series !== null)
+        if (series !== "")
             fetchCPUModels(series);
     }
     function onCPUModelChange(model) {
@@ -55,7 +55,7 @@ function DeviceForm(props) {
             }
         });
 
-        if (model === null)
+        if (model === "")
             return;
 
         api.get(`/cpu/${model}/modelInfo`)
@@ -86,9 +86,9 @@ function DeviceForm(props) {
 
     const [gpu, setGPU] = useState(props.device.gpu ? props.device.gpu : {
         id: 0,
-        manufacturer: null,
-        series: null,
-        model: null,
+        manufacturer: "",
+        series: "",
+        model: "",
     });
     const [gpuSeries, setGPUSeries] = useState([]);
     const [gpuModels, setGPUModels] = useState([]);
@@ -99,14 +99,14 @@ function DeviceForm(props) {
                 ...prevState,
                 id: 0,
                 manufacturer: manufacturer,
-                series: null,
-                model: null
+                series: "",
+                model: ""
             }
         });
         setGPUSeries([]);
         setGPUModels([]);
 
-        if (manufacturer !== null)
+        if (manufacturer !== "")
             fetchGPUSeries(manufacturer);
     }
     function onGPUSeriesChange(series) {
@@ -115,12 +115,12 @@ function DeviceForm(props) {
                 ...prevState,
                 id: 0,
                 series: series,
-                model: null
+                model: ""
             }
         });
         setGPUModels([]);
 
-        if (series !== null)
+        if (series !== "")
             fetchGPUModels(series);
     }
     function onGPUModelChange(model) {
@@ -131,7 +131,7 @@ function DeviceForm(props) {
             }
         });
 
-        if (model === null)
+        if (model === "")
             return;
 
         api.get(`/gpu/${model}/modelInfo`)
@@ -172,7 +172,7 @@ function DeviceForm(props) {
 
     const [system, setSystem] = useState(props.device.system ? props.device.system : {
         id: 0,
-        developer: null
+        developer: ""
     });
     const [systemVersions, setSystemVersions] = useState([]);
 
@@ -186,7 +186,7 @@ function DeviceForm(props) {
         });
         setSystemVersions([]);
 
-        if (developer !== null)
+        if (developer !== "")
             fetchSystemVersions(developer);
     }
     function fetchSystemVersions(developer) {
@@ -219,13 +219,15 @@ function DeviceForm(props) {
         props.onSubmit(device);
     }
 
-    if (props.editMode) {
-        fetchCPUSeries(props.device.cpu.manufacturer);
-        fetchCPUModels(props.device.cpu.series);
-        fetchGPUSeries(props.device.gpu.manufacturer);
-        fetchGPUModels(props.device.gpu.series);
-        fetchSystemVersions(props.device.system.developer);
-    }
+    useEffect(() => {
+        if (props.editMode) {
+            fetchCPUSeries(cpu.manufacturer);
+            fetchCPUModels(cpu.series);
+            fetchGPUSeries(gpu.manufacturer);
+            fetchGPUModels(gpu.series);
+            fetchSystemVersions(system.developer);
+        }
+    }, [props.editMode, props.device]);
 
     if (props.loadErrors)
         return (
@@ -257,7 +259,7 @@ function DeviceForm(props) {
                     <Col xs>
                         <FloatingLabel className="mb-3" id="cpuManufacturer" label="CPU Manufacturer">
                             <Form.Select value={cpu.manufacturer} onChange={(e) => onCPUManufacturerChange(e.target.value)}>
-                                <option value={null}>Choose one</option>
+                                <option value="">Choose one</option>
                                 <option>Intel</option>
                                 <option>AMD</option>
                             </Form.Select>
@@ -266,7 +268,7 @@ function DeviceForm(props) {
                     <Col xs>
                         <FloatingLabel className="mb-3" id="cpuSeries" label="CPU Series">
                             <Form.Select value={cpu.series} onChange={(e) => onCPUSeriesChange(e.target.value)}>
-                                <option value={null}>Choose one</option>
+                                <option value="">Choose one</option>
                                 {cpuSeries.map((option) => (
                                     option.series ? <option key={option.series}>{option.series}</option> : <option key=" ">Other</option>
                                 ))}
@@ -276,7 +278,7 @@ function DeviceForm(props) {
                 </Row>
                 <FloatingLabel className="mb-3" id="cpuModel" label="CPU Model">
                     <Form.Select value={cpu.model} onChange={(e) => onCPUModelChange(e.target.value)}>
-                        <option value={null}>Choose one</option>
+                        <option value="">Choose one</option>
                         {cpuModels.map((option) => (
                             <option key={option.name}>{option.name}</option>
                         ))}
@@ -290,7 +292,7 @@ function DeviceForm(props) {
                     <Col xs>
                         <FloatingLabel className="mb-3" id="gpuManufacturer" label="GPU Manufacturer">
                             <Form.Select value={gpu.manufacturer} onChange={(e) => onGPUManufacturerChange(e.target.value)}>
-                                <option value={null}>Choose one</option>
+                                <option value="">Choose one</option>
                                 <option>nVidia</option>
                                 <option>AMD</option>
                             </Form.Select>
@@ -299,7 +301,7 @@ function DeviceForm(props) {
                     <Col xs>
                         <FloatingLabel className="mb-3" id="gpuSeries" label="GPU Series">
                             <Form.Select value={gpu.series} onChange={(e) => onGPUSeriesChange(e.target.value)}>
-                                <option value={null}>Choose one</option>
+                                <option value="">Choose one</option>
                                 {gpuSeries.map((option) => (
                                     option.series ? <option key={option.series}>{option.series}</option> : <option key=" ">Other</option>
                                 ))}
@@ -309,7 +311,7 @@ function DeviceForm(props) {
                 </Row>
                 <FloatingLabel className="mb-3" id="gpuModel" label="GPU Model">
                     <Form.Select value={gpu.model} onChange={(e) => onGPUModelChange(e.target.value)}>
-                        <option value={null}>Choose one</option>
+                        <option value="">Choose one</option>
                         {gpuModels.map((option) => (
                             <option key={option.name}>{option.name}</option>
                         ))}
@@ -387,7 +389,7 @@ function DeviceForm(props) {
                     <Col xs>
                         <FloatingLabel className="mb-3" id="osDeveloper" label="OS Developer">
                             <Form.Select value={system.developer} onChange={(e) => onOSDeveloperChange(e.target.value)}>
-                                <option value={null}>Choose one</option>
+                                <option value="">Choose one</option>
                                 <option>Microsoft</option>
                             </Form.Select>
                         </FloatingLabel>
@@ -397,7 +399,7 @@ function DeviceForm(props) {
                             <Form.Select value={system.id} onChange={(e) => setSystem(prevState => {
                                 return {...prevState, id: parseInt(e.target.value)}
                             })}>
-                                <option value={null}>Choose one</option>
+                                <option value="">Choose one</option>
                                 {systemVersions.map((option) => (
                                     <option key={option.osID} value={option.osID}>{option.name}</option>
                                 ))}
