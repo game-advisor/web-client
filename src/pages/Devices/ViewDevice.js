@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useState, useEffect} from 'react';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 import useAPI from "../../api/API";
 import i18n from "../../i18n/en.json"
@@ -27,6 +27,7 @@ function ViewDevice() {
     });
 
     const api = useAPI();
+    const history = useNavigate();
     const params = useParams();
     const deviceID = params.deviceId;
 
@@ -48,7 +49,8 @@ function ViewDevice() {
                                     success: {
                                         message: i18n["device.deleteSuccess"]
                                     }
-                                })
+                                });
+                                history(`/me/devices`);
                             })
                             .catch((error) => {
                                 if (error.response)

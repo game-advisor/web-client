@@ -1,4 +1,4 @@
-import {Alert, Button, Row} from "react-bootstrap";
+import {Alert, Button} from "react-bootstrap";
 
 import {Link} from "react-router-dom";
 
@@ -12,15 +12,13 @@ function TagList(props) {
     }
 
     return (
-        <Row>
-            <ul className="list-unstyled d-flex justify-content-start">
-                {props.tags.map((tag) => (
-                    <li className="me-2">
-                        <Button as={Link} to={`${tag.name}`} variant="secondary" size="lg">{tag.name}</Button>
-                    </li>
-                ))}
-            </ul>
-        </Row>
+        <ul className="list-unstyled d-flex justify-content-start mb-0">
+            {props.tags.map((tag) => (
+                <li className="me-2">
+                    <Button as={Link} to={`${tag.name}`} variant={props.variant} size={props.size}>{tag.name}</Button>
+                </li>
+            ))}
+        </ul>
     );
 }
 

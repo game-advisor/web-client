@@ -1,31 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useState, useEffect, useContext} from 'react';
-import {Navigate} from "react-router-dom";
+import {useState, useEffect, Fragment} from 'react';
+import useAPI from "../../../api/API";
+import TagList from "../../Tags/TagList";
 
-import useAPI from "../../api/API";
-import authContext from "../../store/AuthContext";
-import i18n from "../../i18n/en.json"
 
-import MainLayout from "../../components/Layout/MainLayout";
-import PageSection from "../../components/Layout/PageSection";
-import TagList from "../../components/Tags/TagList";
-import LazyComponent from "../../components/LazyComponent";
-
-function AllTags() {
+function GameTags(props) {
     const [appState, setAppState] = useState({
         loaded: false,
-        games: [],
+        tags: [],
         errors: null
     })
 
-    const authCtx = useContext(authContext);
     const api = useAPI();
-    const LazyTagList = LazyComponent(TagList);
 
     useEffect(() => {
         setAppState({loaded: false});
 
-        api.get('tags')
+        api.get(`tags/${props.id}`)
             .then((response) => {
                 setAppState({
                     loaded: true,
@@ -64,20 +55,13 @@ function AllTags() {
                         }
                     });
             });
-    }, []);
-
-    if (authCtx.getstatus() === false)
-        return <Navigate to="/login" replace/>
+    }, [props.id]);
 
     return (
-        <MainLayout>
-            <PageSection name={i18n["tags.sectionTitle"]} description={i18n["tags.sectionDesc"]}
-                         withAction={false}>
-                <LazyTagList isLoaded={appState.loaded} tags={appState.tags} errors={appState.errors}
-                             variant="secondary" size="lg"/>
-            </PageSection>
-        </MainLayout>
+        <Fragment>
+            {appState.loaded ? <TagList tags={appState.tags} errors={appState.errors} variant="outline-dark" size="sm" /> : ''}
+        </Fragment>
     );
 }
 
-export default AllTags;
+export default GameTags;

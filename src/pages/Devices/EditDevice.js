@@ -32,7 +32,6 @@ function EditDevice() {
 
     function validateDevice(deviceData) {
         if (
-            deviceData.shortName === "" ||
             deviceData.cpuID === 0 ||
             deviceData.gpuID === 0 ||
             deviceData.amountOfSticks <= 0 ||
@@ -53,7 +52,6 @@ function EditDevice() {
         return true;
     }
     function submitDevice(deviceData) {
-        console.log(deviceData);
         setSubmitState({
             response: null
         });
@@ -63,7 +61,7 @@ function EditDevice() {
 
             api.put(`/device/${deviceID}/edit`, deviceData)
             .then((response) => {
-                setSubmitState({response: response.data})
+                setSubmitState({response: response.data});
                 history(`/me/devices/${deviceID}`);
             })
             .catch((error) => {

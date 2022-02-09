@@ -42,7 +42,6 @@ function NewDevice() {
     }
 
     function submitDevice(deviceData) {
-        console.log(deviceData);
         setSubmitState({
             response: null
         });

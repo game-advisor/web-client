@@ -11,7 +11,8 @@ function GameLayout(props) {
         loaded: false,
         game: {},
         errors: null
-    })
+    });
+    const [reviews, setReviews] = useState(0)
 
     const api = useAPI();
     const LazyGameHeader = LazyHeader(GameHeader);
@@ -25,6 +26,10 @@ function GameLayout(props) {
                     loaded: true,
                     game: response.data
                 });
+
+                api.get(`/game/${props.id}/review/count`)
+                    .then((response) => setReviews(response.data))
+                    .catch((err) => console.log(err));
             })
             .catch((error) => {
                 if (error.response)
@@ -56,7 +61,7 @@ function GameLayout(props) {
 
     return (
         <Fragment>
-            <LazyGameHeader isLoaded={appState.loaded} game={appState.game} errors={appState.errors} />
+            <LazyGameHeader isLoaded={appState.loaded} game={appState.game} reviews={reviews} errors={appState.errors}/>
             <Container as="section">
                 {props.children}
             </Container>

@@ -1,8 +1,20 @@
+$primary: hotpink;
+
 #root {
   display: flex;
   flex-flow: column nowrap;
   height: auto;
   min-height: 100vh;
 }
+
+.card-img-top {
+  height: auto;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  filter: grayscale(0);
+  transition: filter .3s ease-in-out;
+}
+
+.card-img-top:hover { filter: grayscale(.7) }
 
 @import '~bootstrap/scss/bootstrap.scss';
