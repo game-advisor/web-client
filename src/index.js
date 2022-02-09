@@ -5,8 +5,7 @@ import App from './App';
 import {BrowserRouter} from "react-router-dom";
 import {AuthContextProvider} from "./store/AuthContext";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.css';
+import './index.scss';
 
 ReactDOM.render(
     <AuthContextProvider>

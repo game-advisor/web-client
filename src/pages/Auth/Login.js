@@ -1,7 +1,6 @@
 import AuthLayout from "../../components/Layout/AuthLayout";
 import LoginForm from "./Login/LoginForm";
 
-import {API_URL} from "../../config/constant";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
@@ -12,7 +11,7 @@ function Login() {
     const authCtx = useContext(AuthContext);
 
     function loginHandler(userData) {
-        axios.post(API_URL + '/user/login', userData)
+        axios.post(process.env.REACT_APP_API_URL + '/user/login', userData)
             .then(
                 res => {
                     authCtx.authorize(res.data.token);

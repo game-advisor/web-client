@@ -1,8 +1,7 @@
 import {Alert, Button, Container} from "react-bootstrap";
-import {API_URL} from "../../../config/constant";
 import {Fragment} from "react";
 import {Link} from "react-router-dom";
-import styles from './ProfileHeader.module.css'
+import styles from './ProfileHeader.module.scss'
 function ProfileHeader(props) {
     if (!props.user || props.user === {})
         if (props.errors)
@@ -23,7 +22,7 @@ function ProfileHeader(props) {
                     <div className={`${styles.avatar} shadow-sm p-3 mb-5 bg-body rounded`}>
                         <img
                             alt=""
-                            src={`${API_URL}/user/${props.user.userID}/avatar`}
+                            src={`${process.env.REACT_APP_API_URL}/user/${props.user.userID}/avatar`}
                             width="160"
                             height="160"
                             className="user-avatar d-inline-block align-top"

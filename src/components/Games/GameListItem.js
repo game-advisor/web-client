@@ -1,11 +1,10 @@
 import {Button, Card} from "react-bootstrap";
-import {API_URL} from "../../config/constant";
 import {Link} from "react-router-dom";
 
 function GameListItem(props) {
     return (
         <Card>
-            <Card.Img variant="top" src={`${API_URL}/game/${props.id}/thumbnail`} alt={props.title} />
+            <Card.Img variant="top" src={`${process.env.REACT_APP_API_URL}/game/${props.id}/thumbnail`} alt={props.title} />
             <Card.Body>
                 <Card.Title>{props.title}</Card.Title>
 

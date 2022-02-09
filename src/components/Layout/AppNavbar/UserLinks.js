@@ -4,7 +4,6 @@ import {i18n} from "../../../i18n/en";
 import {NavDropdown} from "react-bootstrap";
 import { useContext } from "react";
 import AuthContext from "../../../store/AuthContext";
-import {API_URL} from "../../../config/constant";
 
 function UserLinks() {
     const authCtx = useContext(AuthContext);
@@ -13,7 +12,7 @@ function UserLinks() {
         <NavDropdown className="ms-auto" title={
             <img
                 alt=""
-                src={`${API_URL}/user/${authCtx.details.userID}/avatar`}
+                src={`${process.env.REACT_APP_API_URL}/user/${authCtx.details.userID}/avatar`}
                 width="30"
                 height="30"
                 className="d-inline-block align-top"

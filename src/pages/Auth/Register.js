@@ -1,7 +1,6 @@
 import AuthLayout from "../../components/Layout/AuthLayout";
 import RegisterForm from "./Register/RegisterForm";
 
-import {API_URL} from "../../config/constant";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
@@ -10,7 +9,7 @@ function Register() {
 
     function registerHandler(userData) {
         axios.post(
-            API_URL + '/user/register',
+            process.env.REACT_APP_API_URL + '/user/register',
             userData
         ).then(
             res => {

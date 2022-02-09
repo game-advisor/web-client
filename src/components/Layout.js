@@ -2,7 +2,7 @@ import AppNavbar from './Layout/AppNavbar';
 import {Fragment} from "react";
 import AppFooter from "./Layout/AppFooter";
 
-import styles from './Layout.module.css'
+import styles from './Layout.module.scss'
 
 function Layout(props) {
     return (
