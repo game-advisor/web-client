@@ -203,8 +203,12 @@ function DeviceForm(props) {
     function handleSubmit(e) {
         e.preventDefault();
 
+        let requestShortName = shortName;
+        if(props.editMode)
+            requestShortName = (props.device.shortName !== shortName) ? shortName : "";
+
         const device = {
-            "shortName": shortName,
+            "shortName": requestShortName,
             "cpuID": cpu.id,
             "gpuID": gpu.id,
             "amountOfSticks": ram.sticks,
