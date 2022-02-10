@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useEffect, useState, Fragment} from "react";
+
 import useAPI from "../../api/API";
 
+import {Container} from "react-bootstrap";
 import GameHeader from "./GameLayout/GameHeader";
 import LazyHeader from "../LazyHeader";
-import {Container} from "react-bootstrap";
 
 function GameLayout(props) {
     const [appState, setAppState] = useState({
