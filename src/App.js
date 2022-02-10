@@ -28,6 +28,7 @@ import Settings from "./pages/Settings";
 import NotFound from "./errors/NotFound";
 
 import Layout from "./components/Layout";
+import ViewPublisher from "./pages/Tags/ViewPublisher";
 
 function App() {
     return (
@@ -49,6 +50,8 @@ function App() {
 
                     <Route path='*' element={<NotFound/>}/>
                 </Route>
+
+                <Route path='publisher/:publisherName' element={<ViewPublisher/>}/>
 
                 {/* Game-related Routes */}
                 <Route path='games'>

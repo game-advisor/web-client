@@ -2,25 +2,25 @@ import {Alert, Button} from "react-bootstrap";
 
 import {Link} from "react-router-dom";
 
-function TagList(props) {
-    if (!props.tags) {
+function PublisherList(props) {
+    if (!props.publishers) {
         if (props.errors)
             return (<Alert
                 variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert>);
     }
-    else if (props.tags.length === 0) {
+    else if (props.publishers.length === 0) {
         if (props.errors)
             return (<Alert
                 variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert>);
 
-        return (<p className="mt-5 h2 text-center text-muted">No tags found.</p>)
+        return (<p className="mt-5 h2 text-center text-muted">No publishers found.</p>)
     }
 
     return (
         <ul className={`${props.listClass} list-unstyled mb-0`}>
-            {props.tags.map((tag) => (
+            {props.publishers.map((publisher) => (
                 <li className="me-2">
-                    <Button as={Link} to={`/tags/${tag.name}`} variant={props.variant} size={props.size} className="w-100">{tag.name}</Button>
+                    <Button as={Link} to={`/publisher/${publisher.name}`} variant={props.variant} size={props.size} className="w-100">{publisher.name}</Button>
                 </li>
             ))}
             {props.children}
@@ -28,4 +28,4 @@ function TagList(props) {
     );
 }
 
-export default TagList;
+export default PublisherList;

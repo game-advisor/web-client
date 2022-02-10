@@ -1,8 +1,8 @@
 import {useContext} from "react";
 import AuthContext from "../../store/AuthContext";
-import {Navigate} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 
-import {Container} from "react-bootstrap";
+import {Breadcrumb, Container} from "react-bootstrap";
 import ProfileLayout from "../../components/Profile/ProfileLayout";
 
 function Favorites() {
@@ -12,6 +12,14 @@ function Favorites() {
 
     return (
         <ProfileLayout id={authCtx.details.userID} isPersonal={true}>
+            <Container>
+                <Breadcrumb>
+                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
+                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/me"}}>Profile</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Favorities</Breadcrumb.Item>
+                </Breadcrumb>
+            </Container>
+
             <Container>My favorites placeholder</Container>
         </ProfileLayout>
     );

@@ -1,42 +1,125 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import {useState, useEffect} from 'react';
 import {Link} from "react-router-dom";
 
-import {Nav} from "react-bootstrap";
+import useAPI from "../../../../api/API";
 
-function MainSearch() {
+import {Button} from "react-bootstrap";
+import LazyComponent from "../../../LazyComponent";
+import MixedList from "../../../Tags/MixedList";
+import styles from "../MainHeader.module.scss";
+
+function TagsCloud() {
+    const [appState, setAppState] = useState({
+        loaded: false,
+        tags: [],
+        companies: [],
+        errors: null
+    })
+
+    const api = useAPI();
+    const LazyMixedList = LazyComponent(MixedList);
+
+    useEffect(() => {
+        setAppState({loaded: false});
+
+        api.get('tags')
+            .then((response) => {
+                setAppState({
+                    loaded: false,
+                    tags: response.data.sort(() => 0.5 - Math.random()).slice(0, 5),
+                    companies: []
+                });
+
+                console.log(response.data);
+
+                api.get('company/getGameCompanies')
+                    .then((response) => {
+                        setAppState((prevState) => {
+                            return {
+                                ...prevState,
+                                loaded: true,
+                                companies: response.data.sort(() => 0.5 - Math.random()).slice(0, 3)
+                            }
+                        });
+                        console.log(response.data);
+                    })
+                    .catch((error) => {
+                        if (error.response)
+                            if (error.response.data.code === 404)
+                                setAppState((prevState) => {
+                                    return {
+                                        ...prevState,
+                                        loaded: true,
+                                        companies: []
+                                    }
+                                });
+                            else
+                                setAppState({
+                                    loaded: true,
+                                    errors: {
+                                        code: error.response.data.code,
+                                        message: `${error.response.data.message}. Try refresh the page.`
+                                    }
+                                });
+
+                        else if (error.request)
+                            setAppState({
+                                loaded: true,
+                                errors: {
+                                    message: "Incorrect request. Try refresh the page."
+                                }
+                            });
+
+                        else
+                            setAppState({
+                                loaded: true,
+                                errors: {
+                                    message: "Unexpected error occured."
+                                }
+                            });
+                    });
+            })
+            .catch((error) => {
+                if (error.response)
+                    if (error.response.data.code === 404)
+                        setAppState({
+                            loaded: true,
+                            tags: []
+                        });
+                    else
+                        setAppState({
+                            loaded: true,
+                            errors: {
+                                code: error.response.data.code,
+                                message: `${error.response.data.message}. Try refresh the page.`
+                            }
+                        });
+
+                else if (error.request)
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            message: "Incorrect request. Try refresh the page."
+                        }
+                    });
+
+                else
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            message: "Unexpected error occured."
+                        }
+                    });
+            });
+    }, []);
+
     return (
-        <Nav fill variant="pills">
-            <Nav.Item>
-                <Nav.Link as={Link} to="/explore/newest">Newest</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link as={Link} to="/explore/hottest">Hottest</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link active as={Link} to="/discover">Suggested</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link eventKey="disabled" disabled />
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link as={Link} to="/tags/console">Console</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link as={Link} to="/tags/arpg">Action RPG</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link as={Link} to="/tags/codemasters">Codemasters</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link as={Link} to="/tags/ubisoft">Ubisoft</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link as={Link} to="/tags/battlefield">Battlefield</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link as={Link} to="/tags">More tags</Nav.Link>
-            </Nav.Item>
-        </Nav>
+        <LazyMixedList isLoaded={appState.loaded} tags={appState.tags}  publishers={appState.companies} errors={appState.errors}
+                         variant="outline-light" size="md" listClass={`${styles.tags} d-flex`}>
+            <li><Button as={Link} to={`/tags`} variant="outline-light" size="md" className="w-100">More tags...</Button></li>
+        </LazyMixedList>
     );
 }
 
-export default MainSearch;
+export default TagsCloud;

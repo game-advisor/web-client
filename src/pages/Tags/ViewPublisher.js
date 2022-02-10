@@ -8,11 +8,11 @@ import i18n from "../../i18n/en.json"
 
 import MainLayout from "../../components/Layout/MainLayout";
 import PageSection from "../../components/Layout/PageSection";
-import GameList from "../../components/Tags/GameList";
+import GameList from "../../components/Games/GameList";
 import LazyComponent from "../../components/LazyComponent";
 import {Breadcrumb, Container} from "react-bootstrap";
 
-function ViewTag() {
+function ViewPublisher() {
     const [appState, setAppState] = useState({
         loaded: false,
         games: [],
@@ -26,13 +26,13 @@ function ViewTag() {
 
     useEffect(() => {
         setAppState({loaded: false});
-
-        api.get(`/game/getByTagsAndCompany/0?tags=${params.tagName}`)
+        api.get(`games/${params.publisherName}`)
             .then((response) => {
                 setAppState({
                     loaded: true,
-                    games: response.data
+                    games: response.data[0].gameList
                 });
+                console.log(response.data[0].gameList);
             })
             .catch((error) => {
                 if (error.response)
@@ -76,12 +76,12 @@ function ViewTag() {
             <Container>
                 <Breadcrumb>
                     <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
-                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/tags"}}>Tags</Breadcrumb.Item>
-                    <Breadcrumb.Item active>{params.tagName}</Breadcrumb.Item>
+                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/tags"}}>Publishers</Breadcrumb.Item>
+                    <Breadcrumb.Item active>{params.publisherName}</Breadcrumb.Item>
                 </Breadcrumb>
             </Container>
 
-            <PageSection name={i18n["tag.sectionTitle"] + params.tagName} description={i18n["tag.sectionDesc"]}
+            <PageSection name={i18n["publisher.sectionTitle"] + params.publisherName} description={i18n["publisher.sectionDesc"]}
                          withAction={false}>
                 <LazyGameList isLoaded={appState.loaded} games={appState.games} errors={appState.errors}/>
             </PageSection>
@@ -89,4 +89,4 @@ function ViewTag() {
     );
 }
 
-export default ViewTag;
+export default ViewPublisher;

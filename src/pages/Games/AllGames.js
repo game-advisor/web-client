@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useState, useEffect, useContext} from 'react';
-import {Navigate} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 
 import useAPI from "../../api/API";
 import authContext from "../../store/AuthContext";
@@ -10,6 +10,7 @@ import MainLayout from "../../components/Layout/MainLayout";
 import PageSection from "../../components/Layout/PageSection";
 import GameList from "../../components/Games/GameList";
 import LazyComponent from "../../components/LazyComponent";
+import {Breadcrumb, Container} from "react-bootstrap";
 
 function AllGames() {
     const [appState, setAppState] = useState({
@@ -74,6 +75,13 @@ function AllGames() {
 
     return (
         <MainLayout>
+            <Container>
+                <Breadcrumb>
+                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Games</Breadcrumb.Item>
+                </Breadcrumb>
+            </Container>
+
             <PageSection name={i18n["games.sectionTitle"]} description={i18n["games.sectionDesc"]}
                          withAction={false}>
                 <LazyGameList isLoaded={appState.loaded} games={appState.games} errors={appState.errors}/>

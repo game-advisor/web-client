@@ -6,7 +6,7 @@ function PageSection(props) {
     }
 
     return (
-        <Container as="section">
+        <Container as="section" className="mb-5">
             <div className="mb-3 d-flex justify-content-between">
                 <div className="me-auto">
                     <h2>{props.name}</h2>

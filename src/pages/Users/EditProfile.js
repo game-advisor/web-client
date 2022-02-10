@@ -1,11 +1,13 @@
 import {useContext} from "react";
-import {Navigate, useNavigate} from "react-router-dom";
+import {Link, Navigate, useNavigate} from "react-router-dom";
 
 import useAPI from "../../api/API";
 import AuthContext from "../../store/AuthContext";
 
+import {Breadcrumb, Container} from "react-bootstrap";
 import ProfileLayout from "../../components/Profile/ProfileLayout";
 import EditProfileForm from "../../components/Profile/EditProfileForm";
+
 
 function EditProfile() {
     const api = useAPI();
@@ -24,6 +26,13 @@ function EditProfile() {
 
     return (
         <ProfileLayout isPersonal={true}>
+            <Container>
+                <Breadcrumb>
+                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
+                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/me"}}>Profile</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Edit profile</Breadcrumb.Item>
+                </Breadcrumb>
+            </Container>
             <EditProfileForm onEdit={editHandler}/>
         </ProfileLayout>
     );

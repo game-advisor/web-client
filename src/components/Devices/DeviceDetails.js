@@ -22,6 +22,13 @@ function DeviceDetails(props) {
         if (props.errors)
             return (
                 <Container as="section">
+                    <Breadcrumb>
+                        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
+                        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/me"}}>Profile</Breadcrumb.Item>
+                        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/me/devices"}}>Devices</Breadcrumb.Item>
+                        <Breadcrumb.Item active>Unknown</Breadcrumb.Item>
+                    </Breadcrumb>
+
                     <Alert
                         variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert>
                 </Container>

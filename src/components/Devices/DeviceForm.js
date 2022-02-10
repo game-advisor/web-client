@@ -417,7 +417,7 @@ function DeviceForm(props) {
                 <Col md={4}/>
                 <Col md={8}>
                     <ButtonGroup>
-                        <Button variant="primary" type="submit">Add device</Button>
+                        <Button variant="primary" type="submit">Submit changes</Button>
                         <Button variant="outline-secondary" onClick={() => history(-1)}>Nevermind</Button>
                     </ButtonGroup>
                 </Col>

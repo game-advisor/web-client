@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useState, useEffect, useContext} from 'react';
-import {Navigate, useNavigate} from "react-router-dom";
+import {Link, Navigate, useNavigate} from "react-router-dom";
 
 import useAPI from "../../api/API";
 import authContext from "../../store/AuthContext";
@@ -11,7 +11,7 @@ import PageSection from "../../components/Layout/PageSection";
 import DeviceList from "../../components/Devices/DeviceList";
 import LazyComponent from "../../components/LazyComponent";
 import {confirmAlert} from "react-confirm-alert";
-import {Alert} from "react-bootstrap";
+import {Alert, Breadcrumb, Container} from "react-bootstrap";
 
 function AllDevices() {
     const [appState, setAppState] = useState({
@@ -135,6 +135,14 @@ function AllDevices() {
 
     return (
         <ProfileLayout isPersonal={true}>
+            <Container>
+                <Breadcrumb>
+                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
+                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/me"}}>Profile</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Devices</Breadcrumb.Item>
+                </Breadcrumb>
+            </Container>
+
             <PageSection name={i18n["devices.sectionTitle"]} description={i18n["devices.sectionDesc"]}
                          withAction={true}
                          actionName={i18n["devices.actionAdd"]} onAction={() => history("create")}>

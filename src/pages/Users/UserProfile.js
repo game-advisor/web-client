@@ -14,7 +14,7 @@ function UserProfile() {
 
     return (
         <ProfileLayout id={params.userId} isPersonal={false}>
-            <Container>My profile placeholder</Container>
+            <Container>{params.userId}'s profile placeholder</Container>
         </ProfileLayout>
     );
 }
