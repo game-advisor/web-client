@@ -3,9 +3,10 @@ import {useEffect, useState, Fragment} from "react";
 
 import useAPI from "../../api/API";
 
-import {Container} from "react-bootstrap";
+import {Breadcrumb, Container} from "react-bootstrap";
 import GameHeader from "./GameLayout/GameHeader";
 import LazyHeader from "../LazyHeader";
+import {Link} from "react-router-dom";
 
 function GameLayout(props) {
     const [appState, setAppState] = useState({
@@ -64,6 +65,20 @@ function GameLayout(props) {
         <Fragment>
             <LazyGameHeader isLoaded={appState.loaded} game={appState.game} reviews={reviews} errors={appState.errors}/>
             <Container as="section">
+                {(appState.loaded && appState.game) ?
+                    <Breadcrumb>
+                        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
+                        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/games"}}>Games</Breadcrumb.Item>
+                    {props.subpage ? <Fragment>
+                        <Breadcrumb.Item linkAs={Link} linkProps={{to: `/games/${props.id}`}}>{appState.game.name}</Breadcrumb.Item>
+                        <Breadcrumb.Item active>{props.subpage}</Breadcrumb.Item>
+                    </Fragment>
+
+                        : <Breadcrumb.Item active>{appState.game.name}</Breadcrumb.Item>
+                    }
+                    </Breadcrumb>
+                    : ''}
+
                 {props.children}
             </Container>
         </Fragment>

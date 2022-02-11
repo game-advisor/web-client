@@ -1,20 +1,77 @@
-import {useContext} from "react";
-import AuthContext from "../../store/AuthContext";
-import {useParams, Navigate} from "react-router-dom";
+import {useContext, useEffect, useState} from "react";
+import {useParams, Navigate, useNavigate} from "react-router-dom";
 
-import MainLayout from "../../components/Layout/MainLayout";
-import {Container} from "react-bootstrap";
+import AuthContext from "../../store/AuthContext";
+import useAPI from "../../api/API";
+
+import GameLayout from "../../components/Games/GameLayout";
+import PageSection from "../../components/Layout/PageSection";
+import LazyComponent from "../../components/LazyComponent";
+import ReviewList from "../../components/Reviews/ReviewList";
 
 function GameReviews() {
     const params = useParams();
+    const history = useNavigate();
     const authCtx = useContext(AuthContext);
-    if(authCtx.getstatus() === false)
+
+    const [appState, setAppState] = useState({
+        loaded: false,
+        reviews: [],
+        errors: null
+    });
+
+    const api = useAPI();
+    const LazyReviewList = LazyComponent(ReviewList);
+
+    useEffect(() => {
+        setAppState({loaded: false});
+
+        api.get(`/game/${params.gameId}/review`)
+            .then((response) => {
+                setAppState({
+                    loaded: true,
+                    reviews: response.data
+                });
+            })
+            .catch((error) => {
+                if (error.response)
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            code: error.response.data.code,
+                            message: `${error.response.data.message}. Try refresh the page.`
+                        }
+                    });
+
+                else if (error.request)
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            message: "Incorrect request. Try refresh the page."
+                        }
+                    });
+
+                else
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            message: "Unexpected error occured."
+                        }
+                    });
+            });
+    }, [params.gameId]);
+
+    if (authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>;
 
     return (
-        <MainLayout>
-            <Container>All game {params.gameId} reviews placeholder</Container>
-        </MainLayout>
+        <GameLayout id={params.gameId} subpage="Reviews">
+            <PageSection name="All reviews" description="All reviews"
+                         withAction={true}
+                         actionName="Add new review" onAction={() => history("create")}>
+                <LazyReviewList isLoaded={appState.loaded} reviews={appState.reviews} errors={appState.errors} />
+            </PageSection>
+        </GameLayout>
     );
 }
 
