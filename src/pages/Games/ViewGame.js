@@ -5,7 +5,7 @@ import {useParams, Navigate, useNavigate} from "react-router-dom";
 import AuthContext from "../../store/AuthContext";
 import useAPI from "../../api/API";
 
-import {Button, Col, Container, Row} from "react-bootstrap";
+import {Button, Col, Row} from "react-bootstrap";
 import GameLayout from "../../components/Games/GameLayout";
 import PageSection from "../../components/Layout/PageSection";
 import LazyComponent from "../../components/LazyComponent";
@@ -80,7 +80,7 @@ function ViewGame() {
                     </PageSection>
                 </Col>
                 <Col md="3">
-                    <Container>View game {params.gameId} placeholder</Container>
+                    Game requirements placeholder
                 </Col>
             </Row>
 

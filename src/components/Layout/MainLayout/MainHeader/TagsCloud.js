@@ -31,8 +31,6 @@ function TagsCloud() {
                     companies: []
                 });
 
-                console.log(response.data);
-
                 api.get('company/getGameCompanies')
                     .then((response) => {
                         setAppState((prevState) => {
@@ -42,7 +40,6 @@ function TagsCloud() {
                                 companies: response.data.sort(() => 0.5 - Math.random()).slice(0, 3)
                             }
                         });
-                        console.log(response.data);
                     })
                     .catch((error) => {
                         if (error.response)

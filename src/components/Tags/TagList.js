@@ -19,7 +19,7 @@ function TagList(props) {
     return (
         <ul className={`${props.listClass} list-unstyled mb-0`}>
             {props.tags.map((tag) => (
-                <li className="me-2">
+                <li key={tag.name} className="me-2">
                     <Button as={Link} to={`/tags/${tag.name}`} variant={props.variant} size={props.size} className="w-100">{tag.name}</Button>
                 </li>
             ))}

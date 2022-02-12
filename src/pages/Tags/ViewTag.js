@@ -8,7 +8,7 @@ import i18n from "../../i18n/en.json"
 
 import MainLayout from "../../components/Layout/MainLayout";
 import PageSection from "../../components/Layout/PageSection";
-import GameList from "../../components/Tags/GameList";
+import {NestedGameList as GameList} from "../../components/Games/GameList";
 import LazyComponent from "../../components/LazyComponent";
 import {Breadcrumb, Container} from "react-bootstrap";
 

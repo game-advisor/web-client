@@ -19,7 +19,7 @@ function PublisherList(props) {
     return (
         <ul className={`${props.listClass} list-unstyled mb-0`}>
             {props.publishers.map((publisher) => (
-                <li className="me-2">
+                <li key={publisher.name} className="me-2">
                     <Button as={Link} to={`/publisher/${publisher.name}`} variant={props.variant} size={props.size} className="w-100">{publisher.name}</Button>
                 </li>
             ))}
