@@ -63,7 +63,7 @@ function ReviewListItem(props) {
                 className="user-avatar rounded shadow me-2"
             />
             <Card body className="flex-fill">
-                <Card.Title>{(appState.loaded && appState.user) ? <Link to={`/users/${appState.user.userID}`} className="text-reset text-decoration-none">{appState.user.username}</Link> : ''}</Card.Title>
+                <Card.Title>{(appState.loaded && appState.user) ? <Link to={`/users/${props.author}`} className="text-reset text-decoration-none">{appState.user.username}</Link> : ''}</Card.Title>
                 <Card.Subtitle className="mb-2"><FormattedDate value={props.date} day="2-digit" month="short" year="numeric" /></Card.Subtitle>
                 <Card.Text>{props.content}</Card.Text>
                 <hr/>

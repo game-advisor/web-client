@@ -22,7 +22,7 @@ function Login() {
     }
 
     return (
-        <AuthLayout formTitle="Sign in to your account">
+        <AuthLayout formTitle="Sign in to your account" location="/login">
             <LoginForm onLogin={loginHandler}/>
         </AuthLayout>
     );

@@ -59,7 +59,7 @@ function ProfileLayout(props) {
 
     return (
         <Fragment>
-            <LazyProfileHeader isLoaded={appState.loaded} isPersonal={props.isPersonal} user={appState.user} errors={appState.errors} />
+            <LazyProfileHeader isLoaded={appState.loaded} isPersonal={props.isPersonal} id={userID} user={appState.user} errors={appState.errors} />
             {props.children}
         </Fragment>
     );
