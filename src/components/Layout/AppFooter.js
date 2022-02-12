@@ -5,8 +5,8 @@ import i18n from "../../i18n/en.json"
 
 function AppFooter() {
     return (
-        <Container as="footer" fluid className="bg-light mt-5">
-            <Navbar bg="light" variant="light" expand className="mt-2 p-0">
+        <Container as="footer" fluid className="mt-5">
+            <Navbar variant="light" expand className="mt-2 p-0">
                 <Container>
 
                 <Navbar.Brand as={Link} to="/">

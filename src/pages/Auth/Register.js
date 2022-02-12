@@ -1,40 +1,18 @@
 import {useState} from "react";
-
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
 
+import {Container} from "react-bootstrap";
 import AuthLayout from "../../components/Auth/AuthLayout";
 import RegisterForm from "../../components/Auth/RegisterForm";
-
 
 function Register() {
     const [submitErrors, setSubmitErrors] = useState(null);
 
     const history = useNavigate();
 
-    function validateUser(userData) {
-        if (userData.username === "" || userData.email === "" || userData.password === "" || userData.retypedPassword === "") {
-            setSubmitErrors({
-                message: `You didn't fill all necessary inputs. Try again.`
-            });
-            return false;
-        }
-
-        if (userData.password !== userData.retypedPassword) {
-            setSubmitErrors({
-                message: `Your passwords doesn't match`
-            });
-            return false;
-        }
-
-        return true;
-    }
-
     function registerUser(userData) {
         setSubmitErrors(null);
-
-        if (!validateUser(userData))
-            return;
 
         axios.post(process.env.REACT_APP_API_URL + '/user/register', {
             "username": userData.username,
@@ -64,8 +42,13 @@ function Register() {
     }
 
     return (
-        <AuthLayout title="Create new account" location="/register">
-            <RegisterForm onRegister={registerUser} errors={submitErrors}/>
+        <AuthLayout location="/register">
+            <Container className="px-0 mb-3">
+                <h2>Join GameAdvisor today!</h2>
+                <p className="text-muted mb-0">Already have an account? <Link to={`/login`}>Sign in</Link></p>
+            </Container>
+
+            <RegisterForm onRegister={registerUser} submitErrors={submitErrors}/>
         </AuthLayout>
     );
 }

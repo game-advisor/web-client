@@ -16,7 +16,6 @@ function AuthLayout(props) {
                     </Nav>
                 </Card.Header>
                 <Card.Body>
-                    <Card.Title>{props.formTitle}</Card.Title>
                     {props.children}
                 </Card.Body>
             </Card>
