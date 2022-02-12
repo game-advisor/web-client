@@ -10,6 +10,7 @@ import GameLayout from "../../components/Games/GameLayout";
 import PageSection from "../../components/Layout/PageSection";
 import LazyComponent from "../../components/LazyComponent";
 import ReviewList from "../../components/Reviews/ReviewList";
+import GameRequirements from "../../components/Games/GameRequirements";
 
 function ViewGame() {
     const params = useParams();
@@ -70,7 +71,7 @@ function ViewGame() {
         <GameLayout id={params.gameId}>
             <Row>
                 <Col md="9">
-                    <PageSection name="Reviews" description="All reviews">
+                    <PageSection name="Highlighted reviews" description="Randomly selected list of this game's reviews on our site">
                         <LazyReviewList isLoaded={appState.loaded} reviews={appState.reviews} errors={appState.errors} />
                         <div className="d-grid gap-2">
                             <Button variant="outline-secondary" size="lg" onClick={() => history("reviews")}>
@@ -80,7 +81,9 @@ function ViewGame() {
                     </PageSection>
                 </Col>
                 <Col md="3">
-                    Game requirements placeholder
+                    <PageSection name="Compatible devices" description="Check if your devices can run this game!">
+                        <GameRequirements id={params.gameId} />
+                    </PageSection>
                 </Col>
             </Row>
 
