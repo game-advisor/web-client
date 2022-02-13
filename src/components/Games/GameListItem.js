@@ -1,5 +1,6 @@
 import {Button, Card} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import GameTags from "./GameLayout/GameTags";
 
 function GameListItem(props) {
     return (
@@ -8,9 +9,16 @@ function GameListItem(props) {
             <Card.Body>
                 <Card.Title>{props.title}</Card.Title>
 
-                <Card.Text className="text-muted">{props.publisher} & {props.date}</Card.Text>
-                <Button as={Link} to={`/games/${props.id}`} variant="primary">See more</Button>
+                <Card.Subtitle className="text-muted mb-3">{props.publisher} &bull; {props.date}</Card.Subtitle>
+                <Card.Text>
+                    <GameTags id={props.id} variant="outline-secondary" />
+                </Card.Text>
+
+
             </Card.Body>
+            <Card.Footer>
+                <Button as={Link} to={`/games/${props.id}`} variant="primary" className="d-grid">See more</Button>
+            </Card.Footer>
         </Card>
     );
 }

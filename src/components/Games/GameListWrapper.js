@@ -1,7 +1,7 @@
 import GameListItem from './GameListItem';
 import {Alert, Row} from "react-bootstrap";
 
-function GameList(props) {
+function GameListWrapper(props) {
     if (!props.games || props.games.length === 0) {
         if (props.errors)
             return (<Alert
@@ -32,7 +32,7 @@ function NestedGameList(props) {
             return (<Alert
                 variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert>);
 
-        return (<p className="mt-5 h2 text-center text-muted">No games found.</p>)
+        return (<p className="my-5 h2 text-center text-muted">No games found.</p>)
     }
 
     return (
@@ -52,6 +52,6 @@ function NestedGameList(props) {
 }
 
 export {
-    GameList,
+    GameListWrapper,
     NestedGameList
 };

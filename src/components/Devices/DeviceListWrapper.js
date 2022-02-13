@@ -1,7 +1,7 @@
 import {Alert, Row} from "react-bootstrap";
 import DeviceListItem from './DeviceListItem';
 
-function DeviceList(props) {
+function DeviceListWrapper(props) {
     if (props.devices.length === 0 || !props.devices) {
         if (props.errors)
             return (<Alert variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert>);
@@ -12,7 +12,7 @@ function DeviceList(props) {
     return (
         <Row as="ul" className="list-unstyled">
             {props.devices.map((device) => (
-                <li key={device.deviceID} className="col-xs-12 col-md-6 col-lg-4">
+                <li key={device.deviceID} className="col-xs-12 col-sm-6 col-md-4">
                     <DeviceListItem device={device} onDelete={props.onDelete} />
                 </li>
 
@@ -21,4 +21,4 @@ function DeviceList(props) {
     );
 }
 
-export default DeviceList;
+export default DeviceListWrapper;

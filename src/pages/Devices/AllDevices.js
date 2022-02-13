@@ -8,10 +8,10 @@ import i18n from "../../i18n/en.json"
 
 import ProfileLayout from "../../components/Profile/ProfileLayout";
 import PageSection from "../../components/Layout/PageSection";
-import DeviceList from "../../components/Devices/DeviceList";
+import DeviceListWrapper from "../../components/Devices/DeviceListWrapper";
 import LazyComponent from "../../components/LazyComponent";
 import {confirmAlert} from "react-confirm-alert";
-import {Alert, Breadcrumb, Container} from "react-bootstrap";
+import {Alert, Breadcrumb} from "react-bootstrap";
 
 function AllDevices() {
     const [appState, setAppState] = useState({
@@ -29,7 +29,7 @@ function AllDevices() {
     const authCtx = useContext(authContext);
     const api = useAPI();
     const history = useNavigate();
-    const LazyDeviceList = LazyComponent(DeviceList);
+    const LazyDeviceList = LazyComponent(DeviceListWrapper);
 
     function DeleteDevice(id) {
         confirmAlert({
@@ -129,27 +129,28 @@ function AllDevices() {
                     });
             });
     }, []);
-
     if (authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>
 
+
     return (
         <ProfileLayout isPersonal={true}>
-            <Container>
-                <Breadcrumb>
-                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
-                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/me"}}>Profile</Breadcrumb.Item>
-                    <Breadcrumb.Item active>Devices</Breadcrumb.Item>
-                </Breadcrumb>
-            </Container>
+            <Breadcrumb className="container g-0">
+                <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
+                <Breadcrumb.Item linkAs={Link} linkProps={{to: "/me"}}>Profile</Breadcrumb.Item>
+                <Breadcrumb.Item active>Devices</Breadcrumb.Item>
+            </Breadcrumb>
 
             <PageSection name={i18n["devices.sectionTitle"]} description={i18n["devices.sectionDesc"]}
                          withAction={true}
                          actionName={i18n["devices.actionAdd"]} onAction={() => history("create")}>
-                {deleteState.success ? <Alert variant="success" onClose={() => history('/me/devices')} dismissible>{deleteState.success.message}</Alert> : ''}
-                {deleteState.errors ? <Alert variant="danger">{deleteState.errors.code ? `[${deleteState.errors.code}] ${deleteState.errors.message}` : `${deleteState.errors.message}`}</Alert> : ''}
+                {deleteState.success ? <Alert variant="success" onClose={() => history('/me/devices')}
+                                              dismissible>{deleteState.success.message}</Alert> : ''}
+                {deleteState.errors ? <Alert
+                    variant="danger">{deleteState.errors.code ? `[${deleteState.errors.code}] ${deleteState.errors.message}` : `${deleteState.errors.message}`}</Alert> : ''}
 
-                <LazyDeviceList isLoaded={appState.loaded} devices={appState.devices} errors={appState.errors} onDelete={DeleteDevice}/>
+                <LazyDeviceList isLoaded={appState.loaded} devices={appState.devices} errors={appState.errors}
+                                onDelete={DeleteDevice}/>
             </PageSection>
         </ProfileLayout>
     );

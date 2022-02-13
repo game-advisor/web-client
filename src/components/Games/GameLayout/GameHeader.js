@@ -41,7 +41,7 @@ function GameHeader(props) {
             <Container fluid className="bg-light mb-3">
                 <Container className="pt-2 pb-5 d-flex align-items-end">
                     <p className={`${styles.subheader} lead me-auto`}>{props.reviews} reviews &bull; {props.game.company.name} &bull; {props.game.publishDate}</p>
-                    <GameTags id={props.game.gameID} />
+                    <GameTags id={props.game.gameID} variant="outline-dark" />
                 </Container>
             </Container>
         </Fragment>

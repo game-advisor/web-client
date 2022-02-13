@@ -35,13 +35,19 @@ function GameReviews() {
             })
             .catch((error) => {
                 if (error.response)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            code: error.response.data.code,
-                            message: `${error.response.data.message}. Try refresh the page.`
-                        }
-                    });
+                    if (error.response.data.code === 404)
+                        setAppState({
+                            loaded: true,
+                            reviews: []
+                        });
+                    else
+                        setAppState({
+                            loaded: true,
+                            errors: {
+                                code: error.response.data.code,
+                                message: `${error.response.data.message}. Try refresh the page.`
+                            }
+                        });
 
                 else if (error.request)
                     setAppState({

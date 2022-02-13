@@ -1,13 +1,13 @@
 import {useEffect, useState} from "react";
 
-import useAPI from "../../../api/API";
-import i18n from "../../../i18n/en.json";
+import useAPI from "../../api/API";
+import i18n from "../../i18n/en.json";
 
 import {Accordion, Badge, Col, ListGroup, Row} from "react-bootstrap";
-import computer from "../../../assets/computer.svg";
+import computer from "../../assets/computer.svg";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/outline";
 
-function GameRequirementsListItem(props) {
+function CompatibilityListItem(props) {
     const [appState, setAppState] = useState({
         loaded: false,
         tags: [],
@@ -142,4 +142,4 @@ function GameRequirementsListItem(props) {
     );
 }
 
-export default GameRequirementsListItem;
+export default CompatibilityListItem;

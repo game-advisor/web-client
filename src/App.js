@@ -1,8 +1,7 @@
 import {Route, Routes} from "react-router-dom";
 
 import Home from "./pages/Home";
-import SearchPage from "./pages/Search/SearchPage";
-import SearchResults from "./pages/Search/SearchResults";
+import Search from "./pages/Search";
 import AllTags from "./pages/Tags/AllTags";
 import ViewTag from "./pages/Tags/ViewTag";
 import AllGames from "./pages/Games/AllGames";
@@ -37,8 +36,8 @@ function App() {
                 {/* Main Routes */}
                 <Route path='' element={<Home/>}/>
                 <Route path='search'>
-                    <Route path='' element={<SearchPage/>}/>
-                    <Route path=':query' element={<SearchResults/>}/>
+                    <Route path='' element={<Search/>}/>
+                    <Route path=':query' element={<Search/>}/>
 
                     <Route path='*' element={<NotFound/>}/>
                 </Route>

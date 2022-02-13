@@ -1,7 +1,7 @@
 import {Alert, Row} from "react-bootstrap";
-import GameRequirementsListItem from './GameRequirementsListItem';
+import CompatibilityListItem from './CompatibilityListItem';
 
-function GameRequirementsList(props) {
+function CompatibilityListWrapper(props) {
     if (props.devices.length === 0 || !props.devices) {
         if (props.errors)
             return (<Alert variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert>);
@@ -13,7 +13,7 @@ function GameRequirementsList(props) {
         <Row as="ul" className="list-unstyled">
             {props.devices.map((device) => (
                 <li key={device.deviceID}>
-                    <GameRequirementsListItem device={device} game={props.id} />
+                    <CompatibilityListItem device={device} game={props.id} />
                 </li>
 
             ))}
@@ -21,4 +21,4 @@ function GameRequirementsList(props) {
     );
 }
 
-export default GameRequirementsList;
+export default CompatibilityListWrapper;

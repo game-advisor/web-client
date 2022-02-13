@@ -27,7 +27,7 @@ function TagsCloud() {
             .then((response) => {
                 setAppState({
                     loaded: false,
-                    tags: response.data.sort(() => 0.5 - Math.random()).slice(0, 5),
+                    tags: response.data.sort(() => 0.5 - Math.random()).slice(0, 3),
                     companies: []
                 });
 
@@ -37,21 +37,12 @@ function TagsCloud() {
                             return {
                                 ...prevState,
                                 loaded: true,
-                                companies: response.data.sort(() => 0.5 - Math.random()).slice(0, 3)
+                                companies: response.data.sort(() => 0.5 - Math.random()).slice(0, 2)
                             }
                         });
                     })
                     .catch((error) => {
                         if (error.response)
-                            if (error.response.data.code === 404)
-                                setAppState((prevState) => {
-                                    return {
-                                        ...prevState,
-                                        loaded: true,
-                                        companies: []
-                                    }
-                                });
-                            else
                                 setAppState({
                                     loaded: true,
                                     errors: {
@@ -113,8 +104,8 @@ function TagsCloud() {
 
     return (
         <LazyMixedList isLoaded={appState.loaded} tags={appState.tags}  publishers={appState.companies} errors={appState.errors}
-                         variant="outline-light" size="md" listClass={`${styles.tags} d-flex`}>
-            <li><Button as={Link} to={`/tags`} variant="outline-light" size="md" className="w-100">More tags...</Button></li>
+                         variant="outline-light" size="md" listClass={`${styles.tags} d-flex align-items-stretch flex-wrap`}>
+            <li className="d-grid mb-2"><Button as={Link} to={`/tags`} variant="outline-light" size="md" className="w-100">More tags...</Button></li>
         </LazyMixedList>
     );
 }

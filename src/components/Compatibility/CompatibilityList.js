@@ -3,10 +3,10 @@ import {useState, useEffect} from 'react';
 
 import useAPI from "../../api/API";
 
-import GameRequirementsList from "./GameRequirements/GameRequirementsList"
+import CompatibilityListWrapper from "./CompatibilityListWrapper"
 import LazyComponent from "../../components/LazyComponent";
 
-function GameRequirements(props) {
+function CompatibilityList(props) {
     const [appState, setAppState] = useState({
         loaded: false,
         devices: [],
@@ -14,7 +14,7 @@ function GameRequirements(props) {
     });
 
     const api = useAPI();
-    const LazyGameRequirementsList = LazyComponent(GameRequirementsList);
+    const LazyCompatibilityList = LazyComponent(CompatibilityListWrapper);
 
     useEffect(() => {
         setAppState({loaded: false});
@@ -61,8 +61,8 @@ function GameRequirements(props) {
     }, []);
 
     return (
-        <LazyGameRequirementsList isLoaded={appState.loaded} devices={appState.devices} game={props.id} errors={appState.errors} />
+        <LazyCompatibilityList isLoaded={appState.loaded} devices={appState.devices} game={props.id} errors={appState.errors} />
     );
 }
 
-export default GameRequirements;
+export default CompatibilityList;

@@ -10,7 +10,7 @@ import GameLayout from "../../components/Games/GameLayout";
 import PageSection from "../../components/Layout/PageSection";
 import LazyComponent from "../../components/LazyComponent";
 import ReviewList from "../../components/Reviews/ReviewList";
-import GameRequirements from "../../components/Games/GameRequirements";
+import CompatibilityList from "../../components/Compatibility/CompatibilityList";
 
 function ViewGame() {
     const params = useParams();
@@ -38,13 +38,19 @@ function ViewGame() {
             })
             .catch((error) => {
                 if (error.response)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            code: error.response.data.code,
-                            message: `${error.response.data.message}. Try refresh the page.`
-                        }
-                    });
+                    if (error.response.data.code === 404)
+                        setAppState({
+                            loaded: true,
+                            reviews: []
+                        });
+                    else
+                        setAppState({
+                            loaded: true,
+                            errors: {
+                                code: error.response.data.code,
+                                message: `${error.response.data.message}. Try refresh the page.`
+                            }
+                        });
 
                 else if (error.request)
                     setAppState({
@@ -70,7 +76,7 @@ function ViewGame() {
     return (
         <GameLayout id={params.gameId}>
             <Row>
-                <Col md="9">
+                <Col md="8">
                     <PageSection name="Highlighted reviews" description="Randomly selected list of this game's reviews on our site">
                         <LazyReviewList isLoaded={appState.loaded} reviews={appState.reviews} errors={appState.errors} />
                         <div className="d-grid gap-2">
@@ -80,9 +86,9 @@ function ViewGame() {
                         </div>
                     </PageSection>
                 </Col>
-                <Col md="3">
+                <Col md="4">
                     <PageSection name="Compatible devices" description="Check if your devices can run this game!">
-                        <GameRequirements id={params.gameId} />
+                        <CompatibilityList id={params.gameId} />
                     </PageSection>
                 </Col>
             </Row>
