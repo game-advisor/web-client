@@ -1,74 +1,88 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useState, useEffect, useContext} from 'react';
-import {Link, Navigate, useParams} from "react-router-dom";
+import {useState, useContext} from 'react';
+import {Link, Navigate} from "react-router-dom";
 
 import useAPI from "../api/API";
 import authContext from "../store/AuthContext";
 
+import {Accordion, Breadcrumb, Container} from "react-bootstrap";
 import FilterLayout from "../components/Layout/FilterLayout";
-import PageSection from "../components/Layout/PageSection";
-import {GameListWrapper} from "../components/Games/GameListWrapper";
-import LazyComponent from "../components/LazyComponent";
-import {Breadcrumb, Container} from "react-bootstrap";
 import FilterForm from "../components/Filters/FilterForm";
+import {NestedGameListWrapper as GameListWrapper} from "../components/Games/GameListWrapper";
+import LazyComponent from "../components/LazyComponent";
 
 function AdvancedSearch() {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         games: [],
         errors: null
-    })
+    });
 
-    const params = useParams();
     const authCtx = useContext(authContext);
     const api = useAPI();
     const LazyGameList = LazyComponent(GameListWrapper);
 
-    useEffect(() => {
-        if(params.query) {
-            setAppState({loaded: false});
+    function handleSubmit(values, allTags, allPublishers) {
+        const tags = [];
+        const publishers = [];
 
-            api.get(`/game/${params.query}`)
-                .then((response) => {
-                    setAppState({
-                        loaded: true,
-                        games: response.data
-                    });
-                })
-                .catch((error) => {
-                    if (error.response)
-                        if (error.response.data.code === 404)
-                            setAppState({
-                                loaded: true,
-                                games: []
-                            });
-                        else
-                            setAppState({
-                                loaded: true,
-                                errors: {
-                                    code: error.response.data.code,
-                                    message: `${error.response.data.message}. Try refresh the page.`
-                                }
-                            });
+        allTags.forEach((element) => tags.push(element.name));
+        allPublishers.forEach((element) => publishers.push(element.companyID));
 
-                    else if (error.request)
+        const data = {
+            selectedTags: values.tags.join(','),
+            selectedPublishers: values.publishers.join(','),
+            allTags: tags.join(','),
+            allPublishers: publishers.join(',')
+        };
+
+        const filters = {
+            tags: (data.selectedTags) !== "" ? data.selectedTags : data.allTags,
+            publishers: (data.selectedPublishers) !== "" ? data.selectedPublishers : data.allPublishers,
+        }
+
+        setAppState({loaded: false});
+
+        api.get(`/game/getByCompaniesAndTags/?companiesIDs=${filters.publishers}&tags=${filters.tags}`)
+            .then((response) => {
+                setAppState({
+                    loaded: true,
+                    games: response.data
+                });
+            })
+            .catch((error) => {
+                if (error.response)
+                    if (error.response.data.code === 404)
                         setAppState({
                             loaded: true,
-                            errors: {
-                                message: "Incorrect request. Try refresh the page."
-                            }
+                            games: []
                         });
-
                     else
                         setAppState({
                             loaded: true,
                             errors: {
-                                message: "Unexpected error occured."
+                                code: error.response.data.code,
+                                message: `${error.response.data.message}. Try refresh the page.`
                             }
                         });
-                });
-        }
-    }, [params.query]);
+
+                else if (error.request)
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            message: "Incorrect request. Try refresh the page."
+                        }
+                    });
+
+                else
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            message: "Unexpected error occured."
+                        }
+                    });
+            });
+    }
 
     if (authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>
@@ -78,21 +92,26 @@ function AdvancedSearch() {
             <Container className="g-0">
                 <Breadcrumb>
                     <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
-                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "games"}}>Games</Breadcrumb.Item>
-                    <Breadcrumb.Item active>Filter</Breadcrumb.Item>
+                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/search"}}>Search</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Search by filters (advanced)</Breadcrumb.Item>
                 </Breadcrumb>
             </Container>
 
-            <Container className="g-0">
-                <FilterForm />
+            <Container className="bg-light g-0 mb-3">
+                <Accordion>
+                    <Accordion.Header>Filters</Accordion.Header>
+                    <Accordion.Body>
+                        <FilterForm onSubmit={handleSubmit}/>
+                    </Accordion.Body>
+                </Accordion>
             </Container>
-            {params.query ?
-            <PageSection name={`All games matching with: ${params.query}`} description="A list of all games matching with your query"
-                         withAction={false}>
-                <LazyGameList isLoaded={appState.loaded} games={appState.games} errors={appState.errors}/>
-            </PageSection> : ''}
+
+            <Container className="g-0">
+            <LazyGameList isLoaded={appState.loaded} games={appState.games} errors={appState.errors}/>
+            </Container>
         </FilterLayout>
-    );
+    )
+        ;
 }
 
 export default AdvancedSearch;

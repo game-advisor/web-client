@@ -1,10 +1,16 @@
-import {Alert, Button, Col, FloatingLabel, Form, Row} from "react-bootstrap";
 import {useEffect, useState} from "react";
+
 import useAPI from "../../api/API";
+import * as formik from "formik";
+
+import {Button, ButtonGroup, Form, Row} from "react-bootstrap";
 
 function FilterForm(props) {
     const [availableTags, setAvailableTags] = useState([]);
     const [availablePublishers, setAvailablePublishers] = useState([]);
+
+    const {Formik} = formik;
+    const api = useAPI();
 
     function fetchPublishers() {
         api.get('/company/getGameCompanies')
@@ -24,46 +30,58 @@ function FilterForm(props) {
             .catch((error) => console.log(error))
     }
 
-    const api = useAPI();
-
     useEffect(() => {
         fetchTags();
         fetchPublishers();
     }, []);
 
-
-    function handleSubmit() {
-
-    }
-
     return (
-        <Form onSubmit={handleSubmit}>
-            {props.response ? <Alert variant="info mb-3">{props.response}</Alert> : ''}
-            {props.errors ? <Alert
-                variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert> : ''}
-
-            <Row className="g-2">
-                <Col xs>
-                    <FloatingLabel id="tags" label="Tags">
-                        <Form.Control as="select" multiple>
-                            <option value="">Choose one</option>
-                            {availableTags.map((option) => (<option key={option.name}>{option.name}</option>))}
-                        </Form.Control>
-                    </FloatingLabel>
-                </Col>
-                <Col xs>
-                    <FloatingLabel id="publishers" label="Publishers">
-                        <Form.Select multiple>
-                            <option value="">Choose one</option>
-                            {availablePublishers.map((option) => (<option key={option.companyID}>{option.name}</option>))}
-                        </Form.Select>
-                    </FloatingLabel>
-                </Col>
-                <Col className="d-grid ms-2">
-                    <Button variant="primary" type="submit">Filter</Button>
-                </Col>
-            </Row>
-        </Form>
+        <Formik
+            onSubmit={(values) => props.onSubmit(values, availableTags, availablePublishers)}
+            initialValues={{
+                tags: [],
+                publishers: [],
+            }}
+        >
+            {({
+                  handleSubmit,
+                  handleChange
+              }) => (
+                <Form noValidate onSubmit={handleSubmit}>
+                    <Form.Group controlId="tags" className="mb-3">
+                        <h5 className="mb-3">Tags</h5>
+                        <Row className="row-cols-3 row-cols-lg-6 g-2">
+                            {availableTags.map((tag) => (
+                                <Form.Switch
+                                             id="tags"
+                                             label={`${tag.name}`}
+                                             value={`${tag.name}`}
+                                             onChange={handleChange}/>
+                            ))}
+                        </Row>
+                    </Form.Group>
+                    <Form.Group controlId="tags" className="mb-3">
+                        <h5 className="mb-3">Tags</h5>
+                        <Row className="row-cols-3 row-cols-lg-6 g-2">
+                            {availablePublishers.map((publisher) => (
+                                <Form.Switch
+                                             id="publishers"
+                                             label={`${publisher.name}`}
+                                             value={`${publisher.companyID}`}
+                                             onChange={handleChange}/>
+                            ))}
+                        </Row>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <hr/>
+                        <ButtonGroup>
+                            <Button variant="primary" type="submit">Apply filters</Button>
+                            <Button variant="outline-secondary" type="reset">Clear all filters</Button>
+                        </ButtonGroup>
+                    </Form.Group>
+                </Form>
+            )}
+        </Formik>
     );
 }
 
