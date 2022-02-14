@@ -59,7 +59,7 @@ function GameTags(props) {
 
     return (
         <Fragment>
-            {appState.loaded ? <TagList tags={appState.tags} errors={appState.errors} variant={props.variant} size="sm" listClass="d-flex"/> : ''}
+            {appState.loaded ? <TagList tags={appState.tags} errors={appState.errors} variant={props.variant} size="sm" listClass={props.className}/> : ''}
         </Fragment>
     );
 }

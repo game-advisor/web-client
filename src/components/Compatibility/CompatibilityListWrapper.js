@@ -10,10 +10,10 @@ function CompatibilityListWrapper(props) {
     }
 
     return (
-        <Row as="ul" className="list-unstyled">
+        <Row as="ul" className="list-unstyled g-2">
             {props.devices.map((device) => (
                 <li key={device.deviceID}>
-                    <CompatibilityListItem device={device} game={props.id} />
+                    <CompatibilityListItem device={device} gameId={props.gameId} />
                 </li>
 
             ))}

@@ -7,7 +7,7 @@ import authContext from "../store/AuthContext";
 
 import MainLayout from "../components/Layout/MainLayout";
 import PageSection from "../components/Layout/PageSection";
-import {GameList} from "../components/Games/GameListWrapper";
+import {GameListWrapper} from "../components/Games/GameListWrapper";
 import LazyComponent from "../components/LazyComponent";
 import {Breadcrumb, Container} from "react-bootstrap";
 
@@ -21,7 +21,7 @@ function Search() {
     const params = useParams();
     const authCtx = useContext(authContext);
     const api = useAPI();
-    const LazyGameList = LazyComponent(GameList);
+    const LazyGameList = LazyComponent(GameListWrapper);
 
     useEffect(() => {
         if(params.query) {

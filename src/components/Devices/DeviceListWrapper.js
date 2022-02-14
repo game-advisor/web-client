@@ -1,4 +1,4 @@
-import {Alert, Row} from "react-bootstrap";
+import {Alert, Col, Row} from "react-bootstrap";
 import DeviceListItem from './DeviceListItem';
 
 function DeviceListWrapper(props) {
@@ -10,11 +10,11 @@ function DeviceListWrapper(props) {
     }
 
     return (
-        <Row as="ul" className="list-unstyled">
+        <Row as="ul" className="list-unstyled g-2">
             {props.devices.map((device) => (
-                <li key={device.deviceID} className="col-xs-12 col-sm-6 col-md-4">
+                <Col as="li" key={device.deviceID} md={6} lg={4}>
                     <DeviceListItem device={device} onDelete={props.onDelete} />
-                </li>
+                </Col>
 
             ))}
         </Row>

@@ -18,7 +18,6 @@ function CompatibilityList(props) {
 
     useEffect(() => {
         setAppState({loaded: false});
-
         api.get('/device/user')
             .then((response) => {
                 setAppState({
@@ -61,7 +60,7 @@ function CompatibilityList(props) {
     }, []);
 
     return (
-        <LazyCompatibilityList isLoaded={appState.loaded} devices={appState.devices} game={props.id} errors={appState.errors} />
+        <LazyCompatibilityList isLoaded={appState.loaded} devices={appState.devices} gameId={props.gameId} errors={appState.errors} />
     );
 }
 

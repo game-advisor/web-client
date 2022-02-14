@@ -274,7 +274,7 @@ function DeviceForm(props) {
                             <Form.Select value={cpu.series} onChange={(e) => onCPUSeriesChange(e.target.value)}>
                                 <option value="">Choose one</option>
                                 {cpuSeries.map((option) => (
-                                    option.series ? <option key={option.series}>{option.series}</option> : <option key=" ">Other</option>
+                                    option.series ? <option key={option.series}>{option.series}</option> : <option key="Other" value="%20">Other</option>
                                 ))}
                             </Form.Select>
                         </FloatingLabel>
@@ -307,7 +307,7 @@ function DeviceForm(props) {
                             <Form.Select value={gpu.series} onChange={(e) => onGPUSeriesChange(e.target.value)}>
                                 <option value="">Choose one</option>
                                 {gpuSeries.map((option) => (
-                                    option.series ? <option key={option.series}>{option.series}</option> : <option key=" ">Other</option>
+                                    option.series ? <option key={option.series}>{option.series}</option> : <option key="Other" value="%20">Other</option>
                                 ))}
                             </Form.Select>
                         </FloatingLabel>

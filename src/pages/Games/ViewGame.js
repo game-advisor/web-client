@@ -76,7 +76,7 @@ function ViewGame() {
     return (
         <GameLayout id={params.gameId}>
             <Row>
-                <Col md="8">
+                <Col lg={8}>
                     <PageSection name="Highlighted reviews" description="Randomly selected list of this game's reviews on our site">
                         <LazyReviewList isLoaded={appState.loaded} reviews={appState.reviews} errors={appState.errors} />
                         <div className="d-grid gap-2">
@@ -86,9 +86,9 @@ function ViewGame() {
                         </div>
                     </PageSection>
                 </Col>
-                <Col md="4">
+                <Col lg={4}>
                     <PageSection name="Compatible devices" description="Check if your devices can run this game!">
-                        <CompatibilityList id={params.gameId} />
+                        <CompatibilityList gameId={params.gameId} />
                     </PageSection>
                 </Col>
             </Row>

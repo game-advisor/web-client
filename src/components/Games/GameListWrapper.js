@@ -1,5 +1,5 @@
 import GameListItem from './GameListItem';
-import {Alert, Row} from "react-bootstrap";
+import {Alert, Col, Row} from "react-bootstrap";
 
 function GameListWrapper(props) {
     if (!props.games || props.games.length === 0) {
@@ -13,14 +13,14 @@ function GameListWrapper(props) {
     return (
         <Row as="ul" className="list-unstyled">
             {props.games.map((game) => (
-                <li key={game.gameID} className="col-xs-12 col-md-6 col-lg-4">
+                <Col as="li" key={game.gameID} md={6} lg={4}>
                     <GameListItem
                         id={game.gameID}
                         title={game.name}
                         publisher={game.company.name}
                         date={game.publishDate}
                     />
-                </li>
+                </Col>
             ))}
         </Row>
     );
@@ -36,16 +36,16 @@ function NestedGameList(props) {
     }
 
     return (
-        <Row as="ul" className="list-unstyled">
+        <Row as="ul" className="list-unstyled g-2">
             {props.games.map((game) => (
-                <li key={game.game.gameID} className="col-xs-12 col-md-6 col-lg-4">
+                <Col as="li" key={game.game.gameID} md={6} lg={4}>
                     <GameListItem
                         id={game.game.gameID}
                         title={game.game.name}
                         publisher={game.game.company.name}
                         date={game.game.publishDate}
                     />
-                </li>
+                </Col>
             ))}
         </Row>
     );

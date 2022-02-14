@@ -15,6 +15,7 @@ import {
 } from "react-bootstrap";
 import computer from "../../assets/computer.svg";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/outline";
+import PageSection from "../Layout/PageSection";
 
 
 function DeviceDetails(props) {
@@ -35,7 +36,7 @@ function DeviceDetails(props) {
             );
 
     return (
-        <Container as="section">
+        <Container as="section" className="g-0">
             <Breadcrumb>
                 <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
                 <Breadcrumb.Item linkAs={Link} linkProps={{to: "/me"}}>Profile</Breadcrumb.Item>
@@ -43,28 +44,24 @@ function DeviceDetails(props) {
                 <Breadcrumb.Item active>{props.device.shortName}</Breadcrumb.Item>
             </Breadcrumb>
 
-            <Row className="mt-3">
-                <Col md={4}>
-                    <Card>
-                        <Card.Body className="text-center">
-                            <img
-                                alt={props.device.shortName}
-                                src={computer}
-                                width="120"
-                                height="120"
-                                className="img-fluid"
-                            />
-                            <Card.Title>{props.device.shortName}</Card.Title>
-                            <ButtonGroup>
-                                <Button as={Link} to={`edit`} variant="primary">Edit</Button>
-                                <Button variant="outline-danger"
-                                        onClick={() => props.onDelete(props.device.deviceID)}>Delete</Button>
-                            </ButtonGroup>
-
-                        </Card.Body>
-                    </Card>
+            <Row>
+                <Col lg={4} className="text-center order-lg-2 mb-5">
+                    <img
+                        alt={props.device.shortName}
+                        src={computer}
+                        width="120"
+                        height="120"
+                        className="img-fluid"
+                    />
+                    <Card.Title>{props.device.shortName}</Card.Title>
+                    <ButtonGroup>
+                        <Button as={Link} to={`edit`} variant="primary">Edit</Button>
+                        <Button variant="outline-danger"
+                                onClick={() => props.onDelete(props.device.deviceID)}>Delete</Button>
+                    </ButtonGroup>
                 </Col>
-                <Col md={8}>
+                <Col lg={8}>
+                    <PageSection name={`${props.device.shortName}'s specifications`} description="A list of parts installed in this device">
                     <ListGroup as="ol" numbered>
                         <ListGroup.Item as="li"
                                         className="d-flex justify-content-between align-items-start">
@@ -122,7 +119,9 @@ function DeviceDetails(props) {
                             </div>
                         </ListGroup.Item>
                     </ListGroup>
+                    </PageSection>
                 </Col>
+
             </Row>
         </Container>
     );

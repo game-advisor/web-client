@@ -1,7 +1,7 @@
 import {Fragment} from "react";
 import {Link} from "react-router-dom";
 
-import {Alert, Button, Container} from "react-bootstrap";
+import {Alert, Button, Col, Container, Row} from "react-bootstrap";
 import GameTags from "./GameTags";
 import styles from "./GameHeader.module.scss";
 
@@ -34,14 +34,19 @@ function GameHeader(props) {
 
                     <div className={`${styles.header} ms-3`}>
                         <h1 className="fw-bold me-auto">{props.game.name}</h1>
-                        <div><Button as={Link} to={"edit"} variant="outline-light" className="mb-2">Follow</Button></div>
+                        <div><Button as={Link} to={"edit"} variant="outline-light" className="mb-2">Follow</Button>
+                        </div>
                     </div>
                 </Container>
             </Container>
             <Container fluid className="bg-light mb-3">
-                <Container className="pt-2 pb-5 d-flex align-items-end">
-                    <p className={`${styles.subheader} lead me-auto`}>{props.reviews} reviews &bull; {props.game.company.name} &bull; {props.game.publishDate}</p>
-                    <GameTags id={props.game.gameID} variant="outline-dark" />
+                <Container className="pt-2 pb-5">
+                    <Row className={`${styles.subheader} g-0 align-items-start`}>
+                        <Col
+                            className="lead me-auto">{props.reviews} reviews &bull; {props.game.company.name} &bull; {props.game.publishDate}</Col>
+                        <GameTags id={props.game.gameID} variant="outline-dark"
+                            className="col d-flex flex-wrap justify-content-end"/>
+                    </Row>
                 </Container>
             </Container>
         </Fragment>

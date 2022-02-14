@@ -5,7 +5,7 @@ import computer from "../../assets/computer.svg";
 function DeviceListItem(props) {
     return (
         <Card>
-            <Row>
+            <Row className="g-2">
                 <Col md={3} className="d-flex justify-content-center align-content-center">
                     <img
                         alt={props.device.shortName}
@@ -24,7 +24,7 @@ function DeviceListItem(props) {
                             {props.device.os.company.name} {props.device.os.name}
                         </Card.Text>
                         <ButtonGroup>
-                            <Button as={Link} to={`${props.device.deviceID}`} variant="primary">See details</Button>
+                            <Button as={Link} to={`${props.device.deviceID}`} variant="primary">Show</Button>
                             <Button as={Link} to={`${props.device.deviceID}/edit`} variant="outline-secondary">Edit</Button>
                             <Button variant="outline-danger" onClick={() => props.onDelete(props.device.deviceID)}>Delete</Button>
                         </ButtonGroup>

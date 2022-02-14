@@ -11,7 +11,7 @@ function GameListItem(props) {
 
                 <Card.Subtitle className="text-muted mb-3">{props.publisher} &bull; {props.date}</Card.Subtitle>
                 <Card.Text>
-                    <GameTags id={props.id} variant="outline-secondary" />
+                    <GameTags id={props.id} variant="outline-secondary" className="d-flex flex-wrap" />
                 </Card.Text>
 
 

@@ -132,13 +132,13 @@ function AllTags() {
             <PageSection name={i18n["tags.sectionTitle"]} description={i18n["tags.sectionDesc"]}
                          withAction={false}>
                 <LazyTagList isLoaded={appState.loaded} tags={appState.tags} errors={appState.errors}
-                             variant="secondary" size="lg" listClass="d-flex justify-content-start"/>
+                             variant="secondary" size="lg" listClass="d-flex flex-wrap justify-content-start"/>
             </PageSection>
 
             <PageSection name={i18n["publishers.sectionTitle"]} description={i18n["publishers.sectionDesc"]}
                          withAction={false}>
                 <LazyPublisherList isLoaded={appState.loaded} publishers={appState.companies} errors={appState.errors}
-                             variant="secondary" size="lg" listClass="d-flex justify-content-start"/>
+                             variant="secondary" size="lg" listClass="d-flex flex-wrap justify-content-start"/>
             </PageSection>
         </MainLayout>
     );

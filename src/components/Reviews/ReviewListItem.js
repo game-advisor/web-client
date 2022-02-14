@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 
 import useAPI from "../../api/API";
 
-import {FormattedDate} from "react-intl";
+import {FormattedDate, FormattedTime} from "react-intl";
 import {Card, Col, ProgressBar, Row} from "react-bootstrap";
 
 function ReviewListItem(props) {
@@ -65,7 +65,7 @@ function ReviewListItem(props) {
             />
             <Card body className="flex-fill">
                 <Card.Title>{(appState.loaded && appState.user) ? <Link to={`/users/${props.author}`} className="text-reset text-decoration-none">{appState.user.username}</Link> : ''}</Card.Title>
-                <Card.Subtitle className="mb-2"><FormattedDate value={props.date} day="2-digit" month="short" year="numeric" /></Card.Subtitle>
+                <Card.Subtitle className="mb-2"><FormattedDate value={props.date} day="2-digit" month="short" year="numeric"/> <FormattedTime value={props.date} hour="numeric" minute="numeric" /></Card.Subtitle>
                 <Card.Text><ReactMarkdown>{props.content}</ReactMarkdown></Card.Text>
                 <hr/>
                 <Row className="row-cols-2">
