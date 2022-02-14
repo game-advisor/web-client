@@ -4,6 +4,7 @@ import {useParams, Navigate, useNavigate} from "react-router-dom";
 import AuthContext from "../../store/AuthContext";
 import useAPI from "../../api/API";
 
+import {BreadcrumbItem} from "react-bootstrap";
 import GameLayout from "../../components/Games/GameLayout";
 import PageSection from "../../components/Layout/PageSection";
 import LazyComponent from "../../components/LazyComponent";
@@ -71,7 +72,7 @@ function GameReviews() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <GameLayout id={params.gameId} subpage="Reviews">
+        <GameLayout id={params.gameId} subpages={<BreadcrumbItem active>Reviews</BreadcrumbItem>}>
             <PageSection name="All reviews" description="All reviews"
                          withAction={true}
                          actionName="Add new review" onAction={() => history("create")}>

@@ -78,7 +78,7 @@ function App() {
                 {/* Contributor-related Routes */}
                 <Route path='users/:userId'>
                     <Route path='' element={<UserProfile/>}/>
-                    <Route path='reviews' element={<UserReviews/>}/>
+                    <Route path='reviews' element={<UserReviews isPersonal={false}/>}/>
 
                     <Route path='*' element={<NotFound/>}/>
                 </Route>
@@ -91,6 +91,7 @@ function App() {
                 {/* Users-related Routes */}
                 <Route path='me'>
                     <Route path='' element={<MyProfile/>}/>
+                    <Route path='reviews' element={<UserReviews isPersonal={true}/>}/>
                     <Route path='favorites' element={<Favorites/>}/>
 
                     <Route path='edit' element={<EditProfile/>}/>
@@ -100,7 +101,7 @@ function App() {
                         <Route path='' element={<AllDevices/>}/>
                         <Route path='create' element={<NewDevice/>}/>
                         <Route path=':deviceId'>
-                            <Route path='' element={<ViewDevice/>}/>
+                            <Route path='' element={<ViewDevice isPersonal={true}/>}/>
                             <Route path='edit' element={<EditDevice/>}/>
 
                             <Route path='*' element={<NotFound/>}/>

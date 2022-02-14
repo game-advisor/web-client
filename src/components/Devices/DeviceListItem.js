@@ -23,11 +23,11 @@ function DeviceListItem(props) {
                             {props.device.gpu.company.name} {props.device.gpu.series} &bull;
                             {props.device.os.company.name} {props.device.os.name}
                         </Card.Text>
-                        <ButtonGroup>
-                            <Button as={Link} to={`${props.device.deviceID}`} variant="primary">Show</Button>
-                            <Button as={Link} to={`${props.device.deviceID}/edit`} variant="outline-secondary">Edit</Button>
+                        {props.isPersonal ? <ButtonGroup>
+                            <Button as={Link} to={`/me/devices/${props.device.deviceID}`} variant="primary">Show</Button>
+                            <Button as={Link} to={`/me/devices/${props.device.deviceID}/edit`} variant="outline-secondary">Edit</Button>
                             <Button variant="outline-danger" onClick={() => props.onDelete(props.device.deviceID)}>Delete</Button>
-                        </ButtonGroup>
+                        </ButtonGroup> : ''}
                     </Card.Body>
                 </Col>
             </Row>

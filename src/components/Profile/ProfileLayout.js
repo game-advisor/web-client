@@ -5,6 +5,8 @@ import authContext from "../../store/AuthContext";
 
 import ProfileHeader from "./ProfileLayout/ProfileHeader";
 import LazyHeader from "../LazyHeader";
+import {Breadcrumb, Container} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 function ProfileLayout(props) {
     const [appState, setAppState] = useState({
@@ -60,7 +62,21 @@ function ProfileLayout(props) {
     return (
         <Fragment>
             <LazyProfileHeader isLoaded={appState.loaded} isPersonal={props.isPersonal} id={userID} user={appState.user} errors={appState.errors} />
-            {props.children}
+            <Container as="section">
+                {(props.isPersonal || (appState.loaded && appState.user)) ?
+                    <Breadcrumb>
+                        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
+                        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/users"}}>Users</Breadcrumb.Item>
+                        {props.isPersonal ?
+                            <Breadcrumb.Item linkAs={Link} linkProps={{to: `/me`}}>My profile</Breadcrumb.Item> :
+                            <Breadcrumb.Item linkAs={Link} linkProps={{to: `/users/${userID}`}}>{appState.user.username}</Breadcrumb.Item>
+                        }
+                        {props.subpages ? props.subpages : ''}
+                    </Breadcrumb>
+                    : ''}
+
+                {props.children}
+            </Container>
         </Fragment>
     );
 }

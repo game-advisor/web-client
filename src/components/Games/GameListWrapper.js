@@ -26,7 +26,7 @@ function GameListWrapper(props) {
     );
 }
 
-function NestedGameList(props) {
+function NestedGameListWrapper(props) {
     if (!props.games || props.games.length === 0) {
         if (props.errors)
             return (<Alert
@@ -53,5 +53,5 @@ function NestedGameList(props) {
 
 export {
     GameListWrapper,
-    NestedGameList
+    NestedGameListWrapper
 };

@@ -1,13 +1,15 @@
-import {useContext, useState} from "react";
+import {Fragment, useContext, useState} from "react";
 import {Link, Navigate, useNavigate} from "react-router-dom";
 
+import useAPI from "../../api/API";
 import AuthContext from "../../store/AuthContext";
 
+import { BreadcrumbItem } from "react-bootstrap";
 import ProfileLayout from "../../components/Profile/ProfileLayout";
 import PageSection from "../../components/Layout/PageSection";
 import DeviceForm from "../../components/Devices/DeviceForm";
-import useAPI from "../../api/API";
-import {Breadcrumb, Container} from "react-bootstrap";
+
+
 
 function NewDevice() {
     const [submitState, setSubmitState] = useState({
@@ -84,15 +86,11 @@ function NewDevice() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <ProfileLayout isPersonal={true}>
-            <Container>
-                <Breadcrumb>
-                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
-                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/me"}}>Profile</Breadcrumb.Item>
-                    <Breadcrumb.Item linkAs={Link} linkProps={{to: "/me/devices"}}>Devices</Breadcrumb.Item>
-                    <Breadcrumb.Item active>New device</Breadcrumb.Item>
-                </Breadcrumb>
-            </Container>
+        <ProfileLayout isPersonal={true}
+                       subpages={<Fragment>
+                           <BreadcrumbItem linkAs={Link} linkProps={{to: "/me/devices"}}>Devices</BreadcrumbItem>
+                           <BreadcrumbItem active>New device</BreadcrumbItem>
+                       </Fragment>}>
 
             <PageSection name="Add new device" description="Add your device using forms below"
                          withAction={false}>

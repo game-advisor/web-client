@@ -1,5 +1,5 @@
-import {useContext, useEffect, useState} from "react";
-import {Navigate, useNavigate, useParams} from "react-router-dom";
+import {Fragment, useContext, useEffect, useState} from "react";
+import {Link, Navigate, useNavigate, useParams} from "react-router-dom";
 
 import AuthContext from "../../store/AuthContext";
 
@@ -8,6 +8,7 @@ import PageSection from "../../components/Layout/PageSection";
 import DeviceForm from "../../components/Devices/DeviceForm";
 import useAPI from "../../api/API";
 import LazyComponent from "../../components/LazyComponent";
+import {BreadcrumbItem} from "react-bootstrap";
 
 function EditDevice() {
     const [appState, setAppState] = useState({
@@ -97,6 +98,7 @@ function EditDevice() {
                 setAppState({
                     loaded: true,
                     device: {
+                        deviceID: response.data.deviceID,
                         shortName: response.data.shortName,
                         cpu: {
                             id: response.data.cpu.cpuID,
@@ -157,7 +159,12 @@ function EditDevice() {
         return <Navigate to="/login" replace/>;
 
     return (
-        <ProfileLayout isPersonal={true}>
+        <ProfileLayout isPersonal={true}
+                       subpages={<Fragment>
+                           <BreadcrumbItem linkAs={Link} linkProps={{to: "/me/devices"}}>Devices</BreadcrumbItem>
+                           {(appState.loaded && appState.device) ? <BreadcrumbItem linkAs={Link} linkProps={{to: `/me/devices/${appState.device.deviceID}`}}>{appState.device.shortName}</BreadcrumbItem> : ""}
+                           <BreadcrumbItem active>Edit device</BreadcrumbItem>
+                       </Fragment>}>
             <PageSection name="Edit device" description="Manage your device using forms below"
                          withAction={false}>
                 <LazyDeviceForm isLoaded={appState.loaded} loadErrors={appState.errors} submitResponse={submitState.response} submitErrors={submitState.errors}

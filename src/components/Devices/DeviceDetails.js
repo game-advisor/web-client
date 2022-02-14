@@ -36,32 +36,25 @@ function DeviceDetails(props) {
             );
 
     return (
-        <Container as="section" className="g-0">
-            <Breadcrumb>
-                <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
-                <Breadcrumb.Item linkAs={Link} linkProps={{to: "/me"}}>Profile</Breadcrumb.Item>
-                <Breadcrumb.Item linkAs={Link} linkProps={{to: "/me/devices"}}>Devices</Breadcrumb.Item>
-                <Breadcrumb.Item active>{props.device.shortName}</Breadcrumb.Item>
-            </Breadcrumb>
-
-            <Row>
-                <Col lg={4} className="text-center order-lg-2 mb-5">
-                    <img
-                        alt={props.device.shortName}
-                        src={computer}
-                        width="120"
-                        height="120"
-                        className="img-fluid"
-                    />
-                    <Card.Title>{props.device.shortName}</Card.Title>
-                    <ButtonGroup>
-                        <Button as={Link} to={`edit`} variant="primary">Edit</Button>
-                        <Button variant="outline-danger"
-                                onClick={() => props.onDelete(props.device.deviceID)}>Delete</Button>
-                    </ButtonGroup>
-                </Col>
-                <Col lg={8}>
-                    <PageSection name={`${props.device.shortName}'s specifications`} description="A list of parts installed in this device">
+        <Row>
+            <Col lg={4} className="text-center order-lg-2 mb-5">
+                <img
+                    alt={props.device.shortName}
+                    src={computer}
+                    width="120"
+                    height="120"
+                    className="img-fluid"
+                />
+                <Card.Title>{props.device.shortName}</Card.Title>
+                <ButtonGroup>
+                    <Button as={Link} to={`edit`} variant="primary">Edit</Button>
+                    <Button variant="outline-danger"
+                            onClick={() => props.onDelete(props.device.deviceID)}>Delete</Button>
+                </ButtonGroup>
+            </Col>
+            <Col lg={8}>
+                <PageSection name={`${props.device.shortName}'s specifications`}
+                             description="A list of parts installed in this device">
                     <ListGroup as="ol" numbered>
                         <ListGroup.Item as="li"
                                         className="d-flex justify-content-between align-items-start">
@@ -119,11 +112,10 @@ function DeviceDetails(props) {
                             </div>
                         </ListGroup.Item>
                     </ListGroup>
-                    </PageSection>
-                </Col>
+                </PageSection>
+            </Col>
 
-            </Row>
-        </Container>
+        </Row>
     );
 }
 

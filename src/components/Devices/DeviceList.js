@@ -1,22 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useState, useEffect, Fragment} from 'react';
-import {Link, useNavigate, useParams} from "react-router-dom";
 
 import useAPI from "../../api/API";
-import i18n from "../../i18n/en.json"
 
-import {Alert, BreadcrumbItem} from "react-bootstrap";
-import ProfileLayout from "../../components/Profile/ProfileLayout";
-import DeviceDetails from "../../components/Devices/DeviceDetails";
+import DeviceListWrapper from "./DeviceListWrapper"
 import LazyComponent from "../../components/LazyComponent";
-
 import {confirmAlert} from "react-confirm-alert";
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import i18n from "../../i18n/en.json";
+import {Alert} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
 
-function ViewDevice() {
+function DeviceList(props) {
     const [appState, setAppState] = useState({
         loaded: false,
-        device: {},
+        devices: [],
         errors: null
     });
 
@@ -28,10 +25,7 @@ function ViewDevice() {
 
     const api = useAPI();
     const history = useNavigate();
-    const params = useParams();
-    const deviceID = params.deviceId;
-
-    const LazyDeviceDetails = LazyComponent(DeviceDetails)
+    const LazyDeviceList = LazyComponent(DeviceListWrapper);
 
     function DeleteDevice(id) {
         confirmAlert({
@@ -49,8 +43,7 @@ function ViewDevice() {
                                     success: {
                                         message: i18n["device.deleteSuccess"]
                                     }
-                                });
-                                history(`/me/devices`);
+                                })
                             })
                             .catch((error) => {
                                 if (error.response)
@@ -92,22 +85,37 @@ function ViewDevice() {
     useEffect(() => {
         setAppState({loaded: false});
 
-        api.get(`/device/${deviceID}`)
+        const endpoint = props.isPersonal ? `/device/user` : `/device/user/${props.userId}?pageNumber=0&pageSize=3&sortBy=deviceID`;
+
+        api.get(endpoint)
             .then((response) => {
-                setAppState({
-                    loaded: true,
-                    device: response.data
-                });
+                if(props.isPersonal)
+                    setAppState({
+                        loaded: true,
+                        devices: response.data
+                    });
+
+                else
+                    setAppState({
+                        loaded: true,
+                        devices: response.data.content
+                    });
             })
             .catch((error) => {
                 if (error.response)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            code: error.response.data.code,
-                            message: `${error.response.data.message}. Try refresh the page.`
-                        }
-                    });
+                    if (error.response.data.code === 404)
+                        setAppState({
+                            loaded: true,
+                            devices: []
+                        });
+                    else
+                        setAppState({
+                            loaded: true,
+                            errors: {
+                                code: error.response.data.code,
+                                message: `${error.response.data.message}. Try refresh the page.`
+                            }
+                        });
 
                 else if (error.request)
                     setAppState({
@@ -125,22 +133,19 @@ function ViewDevice() {
                         }
                     });
             });
-    }, [deviceID, deleteState]);
+    }, [props.isPersonal, props.userId]);
 
     return (
-        <ProfileLayout isPersonal={true}
-                       subpages={<Fragment>
-                           <BreadcrumbItem linkAs={Link} linkProps={{to: "/me/devices"}}>Devices</BreadcrumbItem>
-                           <BreadcrumbItem active>{appState.loaded ? appState.device.shortName : "Unknown"}</BreadcrumbItem>
-                       </Fragment>}>
-            {deleteState.success ? <Alert variant="success">{deleteState.success.message}</Alert> : ''}
+        <Fragment>
+            {deleteState.success ? <Alert variant="success" onClose={() => history('/me/devices')}
+                                          dismissible>{deleteState.success.message}</Alert> : ''}
             {deleteState.errors ? <Alert
                 variant="danger">{deleteState.errors.code ? `[${deleteState.errors.code}] ${deleteState.errors.message}` : `${deleteState.errors.message}`}</Alert> : ''}
 
-            <LazyDeviceDetails isLoaded={appState.loaded} device={appState.device} errors={appState.errors}
-                               onDelete={DeleteDevice}/>
-        </ProfileLayout>
+            <LazyDeviceList isLoaded={appState.loaded} devices={appState.devices} isPersonal={props.isPersonal}
+                            errors={appState.errors} onDelete={DeleteDevice} flow={props.flow} />
+        </Fragment>
     );
 }
 
-export default ViewDevice;
+export default DeviceList;

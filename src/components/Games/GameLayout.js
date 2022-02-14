@@ -69,9 +69,9 @@ function GameLayout(props) {
                     <Breadcrumb>
                         <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
                         <Breadcrumb.Item linkAs={Link} linkProps={{to: "/games"}}>Games</Breadcrumb.Item>
-                    {props.subpage ? <Fragment>
+                    {props.subpages ? <Fragment>
                         <Breadcrumb.Item linkAs={Link} linkProps={{to: `/games/${props.id}`}}>{appState.game.name}</Breadcrumb.Item>
-                        <Breadcrumb.Item active>{props.subpage}</Breadcrumb.Item>
+                        {props.subpages}
                     </Fragment>
 
                         : <Breadcrumb.Item active>{appState.game.name}</Breadcrumb.Item>
