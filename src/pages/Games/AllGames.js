@@ -11,6 +11,7 @@ import PageSection from "../../components/Layout/PageSection";
 import {GameListWrapper} from "../../components/Games/GameListWrapper";
 import LazyComponent from "../../components/LazyComponent";
 import {Breadcrumb, Container} from "react-bootstrap";
+import FavoritesContext from "../../store/FavoritesContext";
 
 function AllGames() {
     const [appState, setAppState] = useState({
@@ -20,11 +21,13 @@ function AllGames() {
     })
 
     const authCtx = useContext(authContext);
+    const favCtx = useContext(FavoritesContext);
     const api = useAPI();
     const LazyGameList = LazyComponent(GameListWrapper);
 
     useEffect(() => {
         setAppState({loaded: false});
+        const token = authCtx.token;
 
         api.post('/games/getByDatePublished', {
             "dateBegin": "1970-01-01",
@@ -68,6 +71,8 @@ function AllGames() {
                         }
                     });
             });
+
+        favCtx.loadGames(token);
     }, []);
 
     if (authCtx.getstatus() === false)
@@ -75,7 +80,7 @@ function AllGames() {
 
     return (
         <MainLayout>
-            <Container>
+            <Container className="g-0">
                 <Breadcrumb>
                     <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
                     <Breadcrumb.Item active>Games</Breadcrumb.Item>

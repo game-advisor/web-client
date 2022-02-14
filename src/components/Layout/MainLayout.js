@@ -1,11 +1,11 @@
 import {Fragment} from "react";
 
-import MainHeader from "./MainLayout/MainHeader";
+import BrowseHeader from "./MainLayout/BrowseHeader";
 
 function MainLayout(props) {
     return (
         <Fragment>
-            <MainHeader />
+            <BrowseHeader />
             {props.children}
         </Fragment>
     );

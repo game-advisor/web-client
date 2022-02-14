@@ -7,9 +7,7 @@ import ViewTag from "./pages/Tags/ViewTag";
 import AllGames from "./pages/Games/AllGames";
 import ViewGame from "./pages/Games/ViewGame";
 import GameReviews from "./pages/Games/GameReviews";
-import NewReview from "./pages/Reviews/NewReview";
-import ViewReview from "./pages/Reviews/ViewReview";
-import EditReview from "./pages/Reviews/EditReview";
+import NewReview from "./pages/Games/NewReview";
 import UserProfile from "./pages/Users/UserProfile";
 import UserReviews from "./pages/Users/UserReviews";
 import Login from "./pages/Auth/Login";
@@ -22,12 +20,12 @@ import AllDevices from "./pages/Devices/AllDevices";
 import NewDevice from "./pages/Devices/NewDevice";
 import ViewDevice from "./pages/Devices/ViewDevice";
 import EditDevice from "./pages/Devices/EditDevice";
-import Settings from "./pages/Settings";
 
 import NotFound from "./errors/NotFound";
 
 import Layout from "./components/Layout";
 import ViewPublisher from "./pages/Tags/ViewPublisher";
+import AdvancedSearch from "./pages/AdvancedSearch";
 
 function App() {
     return (
@@ -37,6 +35,7 @@ function App() {
                 <Route path='' element={<Home/>}/>
                 <Route path='search'>
                     <Route path='' element={<Search/>}/>
+                    <Route path='advanced' element={<AdvancedSearch/>}/>
                     <Route path=':query' element={<Search/>}/>
 
                     <Route path='*' element={<NotFound/>}/>
@@ -60,12 +59,6 @@ function App() {
                         <Route path='reviews'>
                             <Route path='' element={<GameReviews/>}/>
                             <Route path='create' element={<NewReview/>}/>
-                            <Route path=':reviewId'>
-                                <Route path='' element={<ViewReview/>}/>
-                                <Route path='edit' element={<EditReview/>}/>
-
-                                <Route path='*' element={<NotFound/>}/>
-                            </Route>
 
                             <Route path='*' element={<NotFound/>}/>
                         </Route>
@@ -113,7 +106,6 @@ function App() {
                     <Route path='*' element={<NotFound/>}/>
                 </Route>
 
-                <Route path='settings' element={<Settings/>}/>
                 <Route path='*' element={<NotFound/>}/>
             </Routes>
         </Layout>

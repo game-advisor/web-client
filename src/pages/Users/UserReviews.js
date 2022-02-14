@@ -24,7 +24,7 @@ function UserReviews(props) {
     useEffect(() => {
         setAppState({loaded: false});
 
-        const endpoint = props.isPersonal ? `/user/reviews/get` : ``;
+        const endpoint = props.isPersonal ? `/user/current/reviews/get` : `/user/${params.userId}/reviews/get`;
         api.get(endpoint)
             .then((response) => {
                 setAppState({
@@ -64,7 +64,7 @@ function UserReviews(props) {
                         }
                     });
             });
-    }, []);
+    }, [props.isPersonal, params.userId]);
 
     return (
         <ProfileLayout id={params.userId} isPersonal={props.isPersonal}

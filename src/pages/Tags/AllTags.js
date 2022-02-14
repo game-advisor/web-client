@@ -12,6 +12,7 @@ import TagList from "../../components/Tags/TagList";
 import LazyComponent from "../../components/LazyComponent";
 import {Breadcrumb, Container} from "react-bootstrap";
 import PublisherList from "../../components/Tags/PublisherList";
+import FavoritesContext from "../../store/FavoritesContext";
 
 function AllTags() {
     const [appState, setAppState] = useState({
@@ -22,12 +23,14 @@ function AllTags() {
     })
 
     const authCtx = useContext(authContext);
+    const favCtx = useContext(FavoritesContext);
     const api = useAPI();
     const LazyTagList = LazyComponent(TagList);
     const LazyPublisherList = LazyComponent(PublisherList);
 
     useEffect(() => {
         setAppState({loaded: false});
+        const token = authCtx.token;
 
         api.get(`/tags`)
             .then((response) => {
@@ -115,6 +118,8 @@ function AllTags() {
                         }
                     });
             });
+
+        favCtx.loadTags(token);
     }, []);
 
     if (authCtx.getstatus() === false)
@@ -122,7 +127,7 @@ function AllTags() {
 
     return (
         <MainLayout>
-            <Container>
+            <Container className="g-0">
                 <Breadcrumb>
                     <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
                     <Breadcrumb.Item active>Tags</Breadcrumb.Item>
@@ -131,14 +136,14 @@ function AllTags() {
 
             <PageSection name={i18n["tags.sectionTitle"]} description={i18n["tags.sectionDesc"]}
                          withAction={false}>
-                <LazyTagList isLoaded={appState.loaded} tags={appState.tags} errors={appState.errors}
+                <LazyTagList isLoaded={appState.loaded} tags={appState.tags} errors={appState.errors} isFavorible={true}
                              variant="secondary" size="lg" listClass="d-flex flex-wrap justify-content-start"/>
             </PageSection>
 
             <PageSection name={i18n["publishers.sectionTitle"]} description={i18n["publishers.sectionDesc"]}
                          withAction={false}>
                 <LazyPublisherList isLoaded={appState.loaded} publishers={appState.companies} errors={appState.errors}
-                             variant="secondary" size="lg" listClass="d-flex flex-wrap justify-content-start"/>
+                                   variant="secondary" size="lg" listClass="d-flex flex-wrap justify-content-start"/>
             </PageSection>
         </MainLayout>
     );

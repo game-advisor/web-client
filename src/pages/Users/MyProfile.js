@@ -25,7 +25,7 @@ function MyProfile() {
     useEffect(() => {
         setAppState({loaded: false});
 
-        api.get(`/user/reviews/get`)
+        api.get(`/user/current/reviews/get`)
             .then((response) => {
                 setAppState({
                     loaded: true,

@@ -66,7 +66,7 @@ function ProfileLayout(props) {
                 {(props.isPersonal || (appState.loaded && appState.user)) ?
                     <Breadcrumb>
                         <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
-                        <Breadcrumb.Item linkAs={Link} linkProps={{to: "/users"}}>Users</Breadcrumb.Item>
+                        <Breadcrumb.Item>Users</Breadcrumb.Item>
                         {props.isPersonal ?
                             <Breadcrumb.Item linkAs={Link} linkProps={{to: `/me`}}>My profile</Breadcrumb.Item> :
                             <Breadcrumb.Item linkAs={Link} linkProps={{to: `/users/${userID}`}}>{appState.user.username}</Breadcrumb.Item>

@@ -73,7 +73,7 @@ function ViewPublisher() {
 
     return (
         <MainLayout>
-            <Container>
+            <Container className="g-0">
                 <Breadcrumb>
                     <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
                     <Breadcrumb.Item linkAs={Link} linkProps={{to: "/tags"}}>Publishers</Breadcrumb.Item>

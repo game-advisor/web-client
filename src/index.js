@@ -8,14 +8,17 @@ import {AuthContextProvider} from "./store/AuthContext";
 
 import './index.scss';
 import {IntlProvider} from "react-intl";
+import {FavoritesContextProvider} from "./store/FavoritesContext";
 
 ReactDOM.render(
     <IntlProvider locale="en">
-        <AuthContextProvider>
-            <BrowserRouter>
-                <App/>
-            </BrowserRouter>
-        </AuthContextProvider>
+        <FavoritesContextProvider>
+            <AuthContextProvider>
+                <BrowserRouter>
+                    <App/>
+                </BrowserRouter>
+            </AuthContextProvider>
+        </FavoritesContextProvider>
     </IntlProvider>,
     document.getElementById('root')
 );

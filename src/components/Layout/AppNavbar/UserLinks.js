@@ -23,7 +23,6 @@ function UserLinks() {
             <NavDropdown.Item as={Link} to="me/favorites">{i18n["usermenu.favorites"]}</NavDropdown.Item>
             <NavDropdown.Divider/>
             <NavDropdown.Item as={Link} to="me/edit">{i18n["usermenu.edit"]}</NavDropdown.Item>
-            <NavDropdown.Item as={Link} to="settings">{i18n["usermenu.settings"]}</NavDropdown.Item>
             <NavDropdown.Item as={Link} to="logout">{i18n["usermenu.logout"]}</NavDropdown.Item>
         </NavDropdown>
     );

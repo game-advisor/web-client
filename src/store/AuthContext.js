@@ -1,13 +1,20 @@
-import { createContext, useState } from "react";
+import {createContext, useState} from "react";
 import jwt from "jwt-decode";
 
 const AuthContext = createContext({
     isLoggedIn: false,
     token: null,
     details: {},
-    authorize: (token) => {},
-    deauthorize: () => {},
-    getstatus: () => {},
+    favGames: null,
+    totalFavGames: 0,
+    favTags: null,
+    totalFavTags: 0,
+    authorize: (token) => {
+    },
+    deauthorize: () => {
+    },
+    getstatus: () => {
+    },
 });
 
 export function AuthContextProvider(props) {
@@ -25,14 +32,14 @@ export function AuthContextProvider(props) {
     };
 
     function statusHandler() {
-        if(this.isLoggedIn)
+        if (this.isLoggedIn)
             return true;
 
         const savedToken = localStorage.getItem("api_token");
-        if(savedToken !== null) {
+        if (savedToken !== null) {
             const savedTokenDetails = jwt(savedToken);
 
-            if(savedTokenDetails.exp > ((new Date()).getTime() / 1000)) {
+            if (savedTokenDetails.exp > ((new Date()).getTime() / 1000)) {
                 authorizeHandler(savedToken);
                 return true;
             }
@@ -49,7 +56,7 @@ export function AuthContextProvider(props) {
         setUserToken(token);
         localStorage.setItem("api_token", token);
 
-        if(token != null) {
+        if (token != null) {
             setUserDetails(jwt(token))
         }
     }
@@ -61,6 +68,8 @@ export function AuthContextProvider(props) {
 
         setUserDetails({});
     }
+
+
 
     return <AuthContext.Provider value={context}>
         {props.children}

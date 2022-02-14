@@ -1,6 +1,7 @@
 import {Alert, Button} from "react-bootstrap";
 
 import {Link} from "react-router-dom";
+import TagListItem from "./TagListItem";
 
 function MixedList(props) {
     if (!props.tags || !props.publishers || (props.tags.length === 0 && props.publishers.length === 0)) {
@@ -15,7 +16,8 @@ function MixedList(props) {
         <ul className={`${props.listClass} list-unstyled mb-0`}>
             {props.tags.map((tag) => (
                 <li key={tag.name} className="d-grid me-2 mb-2">
-                    <Button as={Link} to={`/tags/${tag.name}`} variant={props.variant} size={props.size} className="w-100">{tag.name}</Button>
+                    <TagListItem as={Link} tag={tag} isFavorible={false}
+                                 variant={props.variant} size={props.size} className="w-100">{tag.name}</TagListItem>
                 </li>
             ))}
             {props.publishers.map((publisher) => (

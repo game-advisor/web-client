@@ -11,7 +11,7 @@ function GameListWrapper(props) {
     }
 
     return (
-        <Row as="ul" className="list-unstyled">
+        <Row as="ul" className="list-unstyled g-2">
             {props.games.map((game) => (
                 <Col as="li" key={game.gameID} md={6} lg={4}>
                     <GameListItem

@@ -5,13 +5,14 @@ import {Link, Navigate, useParams} from "react-router-dom";
 import useAPI from "../api/API";
 import authContext from "../store/AuthContext";
 
-import MainLayout from "../components/Layout/MainLayout";
+import FilterLayout from "../components/Layout/FilterLayout";
 import PageSection from "../components/Layout/PageSection";
 import {GameListWrapper} from "../components/Games/GameListWrapper";
 import LazyComponent from "../components/LazyComponent";
 import {Breadcrumb, Container} from "react-bootstrap";
+import FilterForm from "../components/Filters/FilterForm";
 
-function Search() {
+function AdvancedSearch() {
     const [appState, setAppState] = useState({
         loaded: false,
         games: [],
@@ -73,22 +74,25 @@ function Search() {
         return <Navigate to="/login" replace/>
 
     return (
-        <MainLayout>
+        <FilterLayout>
             <Container className="g-0">
                 <Breadcrumb>
                     <Breadcrumb.Item linkAs={Link} linkProps={{to: "/"}}>Home</Breadcrumb.Item>
                     <Breadcrumb.Item linkAs={Link} linkProps={{to: "games"}}>Games</Breadcrumb.Item>
-                    <Breadcrumb.Item active>Search</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Filter</Breadcrumb.Item>
                 </Breadcrumb>
             </Container>
 
+            <Container className="g-0">
+                <FilterForm />
+            </Container>
             {params.query ?
             <PageSection name={`All games matching with: ${params.query}`} description="A list of all games matching with your query"
                          withAction={false}>
                 <LazyGameList isLoaded={appState.loaded} games={appState.games} errors={appState.errors}/>
             </PageSection> : ''}
-        </MainLayout>
+        </FilterLayout>
     );
 }
 
-export default Search;
+export default AdvancedSearch;

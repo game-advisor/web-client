@@ -10,6 +10,7 @@ import MainLayout from "../components/Layout/MainLayout";
 import PageSection from "../components/Layout/PageSection";
 import {GameListWrapper} from "../components/Games/GameListWrapper";
 import LazyComponent from "../components/LazyComponent";
+import FavoritesContext from "../store/FavoritesContext";
 
 function Home() {
     const [appState, setAppState] = useState({
@@ -19,11 +20,13 @@ function Home() {
     })
 
     const authCtx = useContext(authContext);
+    const favCtx = useContext(FavoritesContext);
     const api = useAPI();
     const LazyGameList = LazyComponent(GameListWrapper);
 
     useEffect(() => {
         setAppState({loaded: false});
+        const token = authCtx.token;
 
         api.post('/games/getByDatePublished', {
             "dateBegin": "1970-01-01",
@@ -67,10 +70,15 @@ function Home() {
                         }
                     });
             });
-    }, []);
+
+        favCtx.loadGames(token);
+        favCtx.loadTags(token);
+    }, [authCtx.token]);
 
     if (authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>
+
+
 
     return (
         <MainLayout>

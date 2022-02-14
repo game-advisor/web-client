@@ -2,12 +2,12 @@
 import {useState, useEffect} from 'react';
 import {Link} from "react-router-dom";
 
-import useAPI from "../../../../api/API";
+import useAPI from "../../../api/API";
 
 import {Button} from "react-bootstrap";
-import LazyComponent from "../../../LazyComponent";
-import MixedList from "../../../Tags/MixedList";
-import styles from "../MainHeader.module.scss";
+import LazyComponent from "../../LazyComponent";
+import MixedList from "../../Tags/MixedList";
+import styles from "./MainHeader.module.scss";
 
 function TagsCloud() {
     const [appState, setAppState] = useState({

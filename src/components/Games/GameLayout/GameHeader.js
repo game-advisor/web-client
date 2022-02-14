@@ -1,11 +1,32 @@
-import {Fragment} from "react";
-import {Link} from "react-router-dom";
+import {Fragment, useContext} from "react";
+
+import useAPI from "../../../api/API";
+import FavoritesContext from "../../../store/FavoritesContext";
 
 import {Alert, Button, Col, Container, Row} from "react-bootstrap";
 import GameTags from "./GameTags";
 import styles from "./GameHeader.module.scss";
 
+
 function GameHeader(props) {
+    const favCtx = useContext(FavoritesContext);
+
+    const api = useAPI();
+    const isFavorite = favCtx.gameIsFavorite(props.game.gameID);
+
+    function toggleFavStatus() {
+        if (isFavorite) {
+            api.delete(`/user/favGames/${props.game.gameID}/delete`)
+                .then((response) => favCtx.removeFavGame(props.game.gameID))
+                .catch((error) => console.log(error));
+        } else {
+            api.post(`/user/favGames/${props.game.gameID}/add`)
+                .then((response) => favCtx.addFavGame(props.game.gameID))
+                .catch((error) => console.log(error));
+        }
+
+    }
+
     if (!props.game || props.game === {})
         if (props.errors)
             return (
@@ -34,7 +55,7 @@ function GameHeader(props) {
 
                     <div className={`${styles.header} ms-3`}>
                         <h1 className="fw-bold me-auto">{props.game.name}</h1>
-                        <div><Button as={Link} to={"edit"} variant="outline-light" className="mb-2">Follow</Button>
+                        <div><Button onClick={toggleFavStatus} variant="outline-light" className="mb-2">{isFavorite ? "Remove from favs" : "Save to favs"}</Button>
                         </div>
                     </div>
                 </Container>

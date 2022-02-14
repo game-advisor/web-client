@@ -1,23 +1,53 @@
-import {Button, Card} from "react-bootstrap";
+import {useContext} from "react";
 import {Link} from "react-router-dom";
+
+import useAPI from "../../api/API";
+import FavoritesContext from "../../store/FavoritesContext";
+
+import {Button, ButtonGroup, Card} from "react-bootstrap";
 import GameTags from "./GameLayout/GameTags";
 
+
 function GameListItem(props) {
+    const favCtx = useContext(FavoritesContext);
+
+    const api = useAPI();
+    const isFavorite = favCtx.gameIsFavorite(props.id);
+
+    function toggleFavStatus() {
+        if (isFavorite) {
+            api.delete(`/user/favGames/${props.id}/delete`)
+                .then((response) => favCtx.removeFavGame(props.id))
+                .catch((error) => console.log(error));
+        } else {
+            api.post(`/user/favGames/${props.id}/add`)
+                .then((response) => favCtx.addFavGame(props.id))
+                .catch((error) => console.log(error));
+        }
+
+    }
+
     return (
         <Card>
-            <Card.Img variant="top" src={`${process.env.REACT_APP_API_URL}/game/${props.id}/thumbnail`} alt={props.title} />
+            <Card.Img variant="top" src={`${process.env.REACT_APP_API_URL}/game/${props.id}/thumbnail`}
+                      alt={props.title}/>
             <Card.Body>
                 <Card.Title>{props.title}</Card.Title>
 
                 <Card.Subtitle className="text-muted mb-3">{props.publisher} &bull; {props.date}</Card.Subtitle>
                 <Card.Text>
-                    <GameTags id={props.id} variant="outline-secondary" className="d-flex flex-wrap" />
+                    <GameTags id={props.id} variant="outline-secondary" className="d-flex flex-wrap"/>
                 </Card.Text>
 
 
             </Card.Body>
             <Card.Footer>
-                <Button as={Link} to={`/games/${props.id}`} variant="primary" className="d-grid">See more</Button>
+                <ButtonGroup className="d-flex w-100">
+                    <Button as={Link} to={`/games/${props.id}`} variant="primary">See more</Button>
+                    <Button onClick={toggleFavStatus}
+                            variant="outline-secondary">{isFavorite ? "Remove from favs" : "Save to favs"}</Button>
+                </ButtonGroup>
+
             </Card.Footer>
         </Card>
     );
