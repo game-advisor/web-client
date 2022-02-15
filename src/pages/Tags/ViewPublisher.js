@@ -32,7 +32,6 @@ function ViewPublisher() {
                     loaded: true,
                     games: response.data[0].gameList
                 });
-                console.log(response.data[0].gameList);
             })
             .catch((error) => {
                 if (error.response)

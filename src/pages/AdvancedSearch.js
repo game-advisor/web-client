@@ -36,7 +36,7 @@ function AdvancedSearch() {
             tags: (filters.selectedTags) !== "" ? filters.selectedTags : filters.allTags,
             publishers: filters.selectedPublishers,
         }
-        const endpointQuery = filters.publishers !== "" ? `/game/getByCompaniesAndTags/?companiesIDs=${requestData.publishers}&tags=${requestData.tags}` : `/game/getByTagsAndCompany/0?tags=${requestData.tags}`;
+        const endpointQuery = requestData.publishers !== "" ? `/game/getByCompaniesAndTags/?companiesIDs=${requestData.publishers}&tags=${requestData.tags}` : `/game/getByTagsAndCompany/0?tags=${requestData.tags}`;
 
         setAppState({loaded: false});
         api.get(endpointQuery)
