@@ -22,107 +22,62 @@ function AdvancedSearch() {
     const api = useAPI();
     const LazyGameList = LazyComponent(GameListWrapper);
 
-    function handleSubmit(values, allTags) {
-        const tags = [];
-
-        allTags.forEach((element) => tags.push(element.name));
-
-        const data = {
-            selectedTags: values.tags.join(','),
-            selectedPublishers: values.publishers.join(','),
-            allTags: tags.join(','),
-        };
+    function handleSubmit(values, tags) {
+        const allTags = [];
+        tags.forEach((element) => allTags.push(element.name));
 
         const filters = {
-            tags: (data.selectedTags) !== "" ? data.selectedTags : data.allTags,
-            publishers: data.selectedPublishers,
+            selectedTags: values.tags.join(','),
+            selectedPublishers: values.publishers.join(','),
+            allTags: allTags.join(','),
+        };
+
+        const requestData = {
+            tags: (filters.selectedTags) !== "" ? filters.selectedTags : filters.allTags,
+            publishers: filters.selectedPublishers,
         }
+        const endpointQuery = filters.publishers !== "" ? `/game/getByCompaniesAndTags/?companiesIDs=${requestData.publishers}&tags=${requestData.tags}` : `/game/getByTagsAndCompany/0?tags=${requestData.tags}`;
 
         setAppState({loaded: false});
-
-        if (filters.publishers !== "") {
-            api.get(`/game/getByCompaniesAndTags/?companiesIDs=${filters.publishers}&tags=${filters.tags}`)
-                .then((response) => {
-                    setAppState({
-                        loaded: true,
-                        games: response.data
-                    });
-                })
-                .catch((error) => {
-                    if (error.response)
-                        if (error.response.data.code === 404)
-                            setAppState({
-                                loaded: true,
-                                games: []
-                            });
-                        else
-                            setAppState({
-                                loaded: true,
-                                errors: {
-                                    code: error.response.data.code,
-                                    message: `${error.response.data.message}. Try refresh the page.`
-                                }
-                            });
-
-                    else if (error.request)
+        api.get(endpointQuery)
+            .then((response) => {
+                setAppState({
+                    loaded: true,
+                    games: response.data
+                });
+            })
+            .catch((error) => {
+                if (error.response)
+                    if (error.response.data.code === 404)
                         setAppState({
                             loaded: true,
-                            errors: {
-                                message: "Incorrect request. Try refresh the page."
-                            }
+                            games: []
                         });
-
                     else
                         setAppState({
                             loaded: true,
                             errors: {
-                                message: "Unexpected error occured."
+                                code: error.response.data.code,
+                                message: `${error.response.data.message}. Try refresh the page.`
                             }
                         });
-                });
-        }
 
-        else {
-            api.get(`/game/getByTagsAndCompany/0?tags=${filters.tags}`)
-                .then((response) => {
+                else if (error.request)
                     setAppState({
                         loaded: true,
-                        games: response.data
+                        errors: {
+                            message: "Incorrect request. Try refresh the page."
+                        }
                     });
-                })
-                .catch((error) => {
-                    if (error.response)
-                        if (error.response.data.code === 404)
-                            setAppState({
-                                loaded: true,
-                                games: []
-                            });
-                        else
-                            setAppState({
-                                loaded: true,
-                                errors: {
-                                    code: error.response.data.code,
-                                    message: `${error.response.data.message}. Try refresh the page.`
-                                }
-                            });
 
-                    else if (error.request)
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                message: "Incorrect request. Try refresh the page."
-                            }
-                        });
-
-                    else
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                message: "Unexpected error occured."
-                            }
-                        });
-                });
-        }
+                else
+                    setAppState({
+                        loaded: true,
+                        errors: {
+                            message: "Unexpected error occured."
+                        }
+                    });
+            });
     }
 
     if (authCtx.getstatus() === false)
