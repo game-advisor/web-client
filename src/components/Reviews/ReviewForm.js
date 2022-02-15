@@ -57,7 +57,7 @@ function ReviewForm(props) {
                                              importantly, performance
                                              of {props.game ? props.game.name : 'the game'}.</p>
                                          <p>You can also provide how you was able to run game on your device - to help
-                                             with incompatible devices.</p>
+                                             others with incompatible devices.</p>
                                      </Fragment>
                                  }>
                         <FloatingLabel className="mb-3" controlId="game" label="Game">
