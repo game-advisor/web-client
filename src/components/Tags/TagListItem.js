@@ -3,6 +3,8 @@ import FavoritesContext from "../../store/FavoritesContext";
 import useAPI from "../../api/API";
 import {Link} from "react-router-dom";
 import {Button, ButtonGroup} from "react-bootstrap";
+import {HeartIcon as FilledHeartIcon} from "@heroicons/react/solid";
+import {HeartIcon as UnfilledHeartIcon} from "@heroicons/react/outline";
 
 function FavListItem(props) {
     const favCtx = useContext(FavoritesContext);
@@ -29,7 +31,7 @@ function FavListItem(props) {
                 <Button as={Link} to={`/tags/${props.tag.name}`} variant={props.variant} size={props.size} className="w-100">{props.tag.name}</Button>
 
                 <Button variant={`outline-${props.variant}`} size={props.size}
-                        onClick={toggleFavStatus}>{isFavorite ? "-" : "+"}</Button>
+                        onClick={toggleFavStatus}>{isFavorite ? <FilledHeartIcon width="24" height="24" /> : <UnfilledHeartIcon width="24" height="24" />}</Button>
             </ButtonGroup>
         );
     return (

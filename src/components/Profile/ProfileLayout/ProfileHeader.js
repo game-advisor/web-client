@@ -2,6 +2,7 @@ import {Alert, Button, Container} from "react-bootstrap";
 import {Fragment} from "react";
 import {Link} from "react-router-dom";
 import styles from './ProfileHeader.module.scss'
+import {PencilIcon} from "@heroicons/react/outline";
 function ProfileHeader(props) {
     if (!props.user || props.user === {})
         if (props.errors)
@@ -38,7 +39,7 @@ function ProfileHeader(props) {
                 <Container className="pt-2 pb-5 d-flex align-items-center">
                     <p className={`${styles.subheader} lead me-auto`}>{props.user.roles === "ROLE_ADMIN" ? "Administrator" : "Contributor"}</p>
                     {props.isPersonal ?
-                        <Button as={Link} to={"edit"} variant="outline-dark">Edit profile</Button> : ''}
+                        <Button as={Link} to={"edit"} variant="outline-dark">Edit profile <PencilIcon width="24" height="24" /></Button> : ''}
                 </Container>
             </Container>
         </Fragment>

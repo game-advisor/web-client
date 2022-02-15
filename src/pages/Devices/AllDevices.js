@@ -9,6 +9,7 @@ import ProfileLayout from "../../components/Profile/ProfileLayout";
 import PageSection from "../../components/Layout/PageSection";
 import {BreadcrumbItem} from "react-bootstrap";
 import DeviceList from "../../components/Devices/DeviceList";
+import {ViewGridAddIcon} from "@heroicons/react/outline";
 
 function AllDevices() {
     const authCtx = useContext(authContext);
@@ -21,7 +22,7 @@ function AllDevices() {
         <ProfileLayout isPersonal={true} subpages={<BreadcrumbItem active>Devices</BreadcrumbItem>}>
             <PageSection name={i18n["devices.sectionTitle"]} description={i18n["devices.sectionDesc"]}
                          withAction={true}
-                         actionName={i18n["devices.actionAdd"]} onAction={() => history("create")}>
+                         actionName={i18n["devices.actionAdd"]} actionIcon={<ViewGridAddIcon width="24" height="24" />} onAction={() => history("create")}>
                 <DeviceList isPersonal={true} />
             </PageSection>
         </ProfileLayout>

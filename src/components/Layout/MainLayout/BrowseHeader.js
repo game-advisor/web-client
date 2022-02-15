@@ -1,11 +1,12 @@
-import {Container} from "react-bootstrap";
+import {Container, InputGroup} from "react-bootstrap";
 import {Link, useNavigate} from "react-router-dom";
 
 import * as yup from "yup";
 import * as formik from "formik";
 
-import {Button, Col, Form, Row} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 import TagsCloud from "./TagsCloud";
+import {SearchIcon} from "@heroicons/react/outline";
 
 function BrowseHeader() {
     const schema = yup.object().shape({
@@ -33,32 +34,30 @@ function BrowseHeader() {
                           errors,
                       }) => (
                         <Form noValidate onSubmit={handleSubmit}>
-                            <Row className="g-0">
-                                <Col xs={8} md={9}>
-                                    <Form.Group controlId="name" >
-                                        <Form.Control
-                                            type="text"
-                                            value={values.name}
-                                            size="lg"
-                                            placeholder="Search"
-                                            onChange={handleChange}
-                                            isInvalid={!!errors.name}/>
-                                        <Form.Control.Feedback type="invalid">
-                                            {errors.name}
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
-                                </Col>
-                                <Col className="d-grid ms-2">
-                                    <Button variant="primary" type="submit">Search</Button>
-                                </Col>
-                            </Row>
+                            <Form.Group controlId="name">
+                                <InputGroup>
+                                    <Form.Control
+                                        type="text"
+                                        value={values.name}
+                                        size="lg"
+                                        placeholder="Search"
+                                        onChange={handleChange}
+                                        isInvalid={!!errors.name}/>
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.name}
+                                    </Form.Control.Feedback>
+                                    <Button variant="primary" type="submit"><SearchIcon width="24"
+                                                                                        height="24"/></Button>
+                                </InputGroup>
+                            </Form.Group>
                             <Form.Text>Eg. “Need for Speed”, “Half-Life”</Form.Text>
                         </Form>
                     )}
                 </Formik>
 
-                <p className="mt-5">...don’t know what do you want to play? Check our suggestions or use <Link to={`/search/advanced`}>advanced search</Link></p>
-                <TagsCloud />
+                <p className="mt-5">...don’t know what do you want to play? Check our suggestions or use <Link
+                    to={`/search/advanced`}>advanced search</Link></p>
+                <TagsCloud/>
             </Container>
         </Container>
     );

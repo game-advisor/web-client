@@ -12,7 +12,7 @@ function PageSection(props) {
                     <h2>{props.name}</h2>
                     <p className="text-muted mb-0">{props.description}</p>
                 </div>
-                { props.withAction ? <Button variant="primary" onClick={performAction}>{props.actionName}</Button> : '' }
+                { props.withAction ? <Button variant="primary" onClick={performAction}>{props.actionName} {props.actionIcon}</Button> : '' }
             </div>
             {props.children}
         </Container>

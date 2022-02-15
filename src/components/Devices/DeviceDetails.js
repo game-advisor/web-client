@@ -14,7 +14,7 @@ import {
     Row
 } from "react-bootstrap";
 import computer from "../../assets/computer.svg";
-import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/outline";
+import {CheckCircleIcon, PencilIcon, TrashIcon, XCircleIcon} from "@heroicons/react/outline";
 import PageSection from "../Layout/PageSection";
 
 
@@ -47,9 +47,9 @@ function DeviceDetails(props) {
                 />
                 <Card.Title>{props.device.shortName}</Card.Title>
                 <ButtonGroup>
-                    <Button as={Link} to={`edit`} variant="primary">Edit</Button>
+                    <Button as={Link} to={`edit`} variant="primary">Edit <PencilIcon width="24" height="24" /></Button>
                     <Button variant="outline-danger"
-                            onClick={() => props.onDelete(props.device.deviceID)}>Delete</Button>
+                            onClick={() => props.onDelete(props.device.deviceID)}><TrashIcon width="24" height="24" /></Button>
                 </ButtonGroup>
             </Col>
             <Col lg={8}>

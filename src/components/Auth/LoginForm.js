@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 
 import * as yup from "yup";
 import * as formik from "formik";
+import {LoginIcon} from "@heroicons/react/outline";
 
 function LoginForm(props) {
     const schema = yup.object().shape({
@@ -70,7 +71,7 @@ function LoginForm(props) {
                     </Form.Group>
 
                             <ButtonGroup className="mb-3">
-                                <Button variant="primary" type="submit">Login</Button>
+                                <Button variant="primary" type="submit">Login <LoginIcon width="24" height="24" /></Button>
                                 <Button variant="outline-secondary" onClick={() => history(-1)}>Nevermind</Button>
                             </ButtonGroup>
                 </Form>

@@ -24,7 +24,7 @@
     "publisher.sectionDesc": "A list of all matching games currently on our site!",
     "devices.sectionTitle": "Your devices",
     "devices.sectionDesc": "A list of all your devices",
-    "devices.actionAdd": "Add new device",
+    "devices.actionAdd": "Add new",
     "device.cpu": "Processor",
     "device.gpu": "Graphics Card",
     "device.ram": "Memory",

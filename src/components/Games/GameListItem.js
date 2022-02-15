@@ -6,6 +6,8 @@ import FavoritesContext from "../../store/FavoritesContext";
 
 import {Button, ButtonGroup, Card} from "react-bootstrap";
 import GameTags from "./GameLayout/GameTags";
+import {HeartIcon as FilledHeartIcon} from "@heroicons/react/solid";
+import {HeartIcon as UnfilledHeartIcon} from "@heroicons/react/outline";
 
 
 function GameListItem(props) {
@@ -43,9 +45,9 @@ function GameListItem(props) {
             </Card.Body>
             <Card.Footer>
                 <ButtonGroup className="d-flex w-100">
-                    <Button as={Link} to={`/games/${props.id}`} variant="primary">See more</Button>
+                    <Button as={Link} to={`/games/${props.id}`} variant="primary" className="w-100">See more</Button>
                     <Button onClick={toggleFavStatus}
-                            variant="outline-secondary">{isFavorite ? "Remove from favs" : "Save to favs"}</Button>
+                            variant="outline-secondary">{isFavorite ? <FilledHeartIcon width="24" height="24" /> : <UnfilledHeartIcon width="24" height="24" />}</Button>
                 </ButtonGroup>
 
             </Card.Footer>

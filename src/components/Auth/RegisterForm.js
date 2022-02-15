@@ -6,6 +6,7 @@ import * as formik from "formik";
 
 import {Alert, Button, ButtonGroup, Col, FloatingLabel, Form, Row} from "react-bootstrap";
 import FormSection from "../Layout/FormSection";
+import {UserAddIcon} from "@heroicons/react/outline";
 
 function RegisterForm(props) {
     const schema = yup.object().shape({
@@ -137,7 +138,7 @@ function RegisterForm(props) {
                         <Col md={4}/>
                         <Col md={8}>
                             <ButtonGroup className="mb-3">
-                                <Button variant="primary" type="submit">Register</Button>
+                                <Button variant="primary" type="submit">Register <UserAddIcon width="24" height="24" /></Button>
                                 <Button variant="outline-secondary" onClick={() => history(-1)}>Nevermind</Button>
                             </ButtonGroup>
                         </Col>

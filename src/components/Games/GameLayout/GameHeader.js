@@ -5,8 +5,10 @@ import FavoritesContext from "../../../store/FavoritesContext";
 
 import {Alert, Button, Col, Container, Row} from "react-bootstrap";
 import GameTags from "./GameTags";
-import styles from "./GameHeader.module.scss";
+import {HeartIcon as FilledHeartIcon} from "@heroicons/react/solid";
+import {HeartIcon as UnfilledHeartIcon} from "@heroicons/react/outline";
 
+import styles from "./GameHeader.module.scss";
 
 function GameHeader(props) {
     const favCtx = useContext(FavoritesContext);
@@ -55,7 +57,13 @@ function GameHeader(props) {
 
                     <div className={`${styles.header} ms-3`}>
                         <h1 className="fw-bold me-auto">{props.game.name}</h1>
-                        <div><Button onClick={toggleFavStatus} variant="outline-light" className="mb-2">{isFavorite ? "Remove from favs" : "Save to favs"}</Button>
+                        <div>
+                            <Button onClick={toggleFavStatus} variant="outline-light" className="mb-2">
+                                {isFavorite ?
+                                    <Fragment>Remove favorite <FilledHeartIcon width="24" height="24" /></Fragment> :
+                                    <Fragment>Save favorite <UnfilledHeartIcon width="24" height="24" /></Fragment>
+                                }
+                            </Button>
                         </div>
                     </div>
                 </Container>

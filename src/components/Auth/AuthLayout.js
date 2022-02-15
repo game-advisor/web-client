@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom";
 import {Card, Container, Nav} from "react-bootstrap";
+import {LoginIcon, UserAddIcon} from "@heroicons/react/outline";
 
 function AuthLayout(props) {
     return (
@@ -8,10 +9,10 @@ function AuthLayout(props) {
                 <Card.Header>
                     <Nav fill variant="tabs" defaultActiveKey="/register">
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/login" className={props.location === "/login" ? "active" : ""}>Login</Nav.Link>
+                            <Nav.Link as={Link} to="/login" className={props.location === "/login" ? "active" : ""}>Login <LoginIcon width="18" height="18" /></Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/register" className={props.location === "/register" ? "active" : ""}>Register</Nav.Link>
+                            <Nav.Link as={Link} to="/register" className={props.location === "/register" ? "active" : ""}>Register <UserAddIcon width="18" height="18" /></Nav.Link>
                         </Nav.Item>
                     </Nav>
                 </Card.Header>

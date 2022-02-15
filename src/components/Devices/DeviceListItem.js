@@ -1,6 +1,7 @@
 import {Button, ButtonGroup, Card, Col, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import computer from "../../assets/computer.svg";
+import {PencilIcon, TrashIcon} from "@heroicons/react/outline";
 
 function DeviceListItem(props) {
     return (
@@ -25,8 +26,8 @@ function DeviceListItem(props) {
                         </Card.Text>
                         {props.isPersonal ? <ButtonGroup>
                             <Button as={Link} to={`/me/devices/${props.device.deviceID}`} variant="primary">Show</Button>
-                            <Button as={Link} to={`/me/devices/${props.device.deviceID}/edit`} variant="outline-secondary">Edit</Button>
-                            <Button variant="outline-danger" onClick={() => props.onDelete(props.device.deviceID)}>Delete</Button>
+                            <Button as={Link} to={`/me/devices/${props.device.deviceID}/edit`} variant="outline-secondary"><PencilIcon width="24" height="24" /></Button>
+                            <Button variant="outline-danger" onClick={() => props.onDelete(props.device.deviceID)}><TrashIcon width="24" height="24" /></Button>
                         </ButtonGroup> : ''}
                     </Card.Body>
                 </Col>
