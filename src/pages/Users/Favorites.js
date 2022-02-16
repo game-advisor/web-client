@@ -53,7 +53,7 @@ function Favorites() {
                 return {
                     ...prevState,
                     loaded: res.completed,
-                    games: res.data,
+                    tags: res.data,
                     errors: res.errors
                 }
             }))
@@ -61,7 +61,7 @@ function Favorites() {
                 return {
                     ...prevState,
                     loaded: err.completed,
-                    games: err.data,
+                    tags: err.data,
                     errors: err.errors
                 }
             }))

@@ -63,7 +63,7 @@ export function FavoritesContextProvider(props) {
             })
             .catch((error) => {
                 if (error.response && error.response.data.code === 404)
-                    setFavGames([]);
+                    setFavTags([]);
 
                 else console.log(error);
             });
@@ -103,9 +103,9 @@ export function FavoritesContextProvider(props) {
 
     const context = {
         favGames: favGames,
-        totalFavGames: favGames.length,
+        totalFavGames: favGames ? favGames.length : 0,
         favTags: favTags,
-        totalFavTags: favTags.length,
+        totalFavTags: favTags ? favTags.length : 0,
         loadGames: loadFavGamesHandler,
         loadTags: loadFavTagsHandler,
         addFavGame: addFavGameHandler,
