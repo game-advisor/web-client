@@ -50,6 +50,7 @@ function DeviceForm(props) {
         if (manufacturer !== "")
             fetchCPUSeries(manufacturer);
     }
+
     function onCPUSeriesChange(series) {
         setCpuData((prevState) => {
             return {
@@ -64,6 +65,7 @@ function DeviceForm(props) {
         if (series !== "")
             fetchCPUModels(series);
     }
+
     function onCPUModelChange(model) {
         setCpuData((prevState) => {
             return {
@@ -92,6 +94,7 @@ function DeviceForm(props) {
             .then((res) => setCPUSeries(res.data))
             .catch((err) => console.log(err.errors))
     }
+
     function fetchCPUModels(series) {
         api.get(`/cpu/${series}`)
             .then((res) => setCPUModels(res.data))
@@ -114,6 +117,7 @@ function DeviceForm(props) {
         if (manufacturer !== "")
             fetchGPUSeries(manufacturer);
     }
+
     function onGPUSeriesChange(series) {
         setGpuData((prevState) => {
             return {
@@ -128,6 +132,7 @@ function DeviceForm(props) {
         if (series !== "")
             fetchGPUModels(series);
     }
+
     function onGPUModelChange(model) {
         setGpuData((prevState) => {
             return {
@@ -156,6 +161,7 @@ function DeviceForm(props) {
             .then((res) => setGPUSeries(res.data))
             .catch((err) => console.log(err.errors))
     }
+
     function fetchGPUModels(series) {
         api.get(`/gpu/${series}`)
             .then((res) => setGPUModels(res.data))
@@ -175,6 +181,7 @@ function DeviceForm(props) {
         if (developer !== "")
             fetchSystemVersions(developer);
     }
+
     function fetchSystemVersions(developer) {
         api.get(`/os/${developer}`)
             .then((res) => setOSVersions(res.data))
@@ -214,18 +221,19 @@ function DeviceForm(props) {
         if (props.editMode)
             deviceName = (props.device.shortName !== values.shortName) ? values.shortName : "";
 
-        props.onSubmit({
-            "shortName": deviceName,
-            "cpuID": cpuData.id,
-            "gpuID": gpuData.id,
-            "amountOfSticks": values.ramSticks,
-            "size": values.ramSize,
-            "freq": values.ramFreq,
-            "latency": values.ramLatency,
-            "hdd": values.hdd,
-            "ssd": values.ssd,
-            "osID": osData.id
-        });
+        if (cpuData.id !== 0 && gpuData.id && osData.id)
+            props.onSubmit({
+                "shortName": deviceName,
+                "cpuID": cpuData.id,
+                "gpuID": gpuData.id,
+                "amountOfSticks": values.ramSticks,
+                "size": values.ramSize,
+                "freq": values.ramFreq,
+                "latency": values.ramLatency,
+                "hdd": values.hdd,
+                "ssd": values.ssd,
+                "osID": osData.id
+            });
     }
 
     useEffect(() => {
