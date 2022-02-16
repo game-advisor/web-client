@@ -13,7 +13,7 @@ function ReviewForm(props) {
             .max(500)
             .required(),
         fps: yup.number()
-            .min(0)
+            .positive()
             .required(),
         gameplayRating: yup.number()
             .required(),

@@ -2,7 +2,7 @@
 import {useState, useEffect, useContext} from 'react';
 import {Navigate} from "react-router-dom";
 
-import useAPI from "../api/API";
+import APIService from "../api/APIService";
 import authContext from "../store/AuthContext";
 import i18n from "../i18n/en.json";
 
@@ -21,7 +21,7 @@ function Home() {
 
     const authCtx = useContext(authContext);
     const favCtx = useContext(FavoritesContext);
-    const api = useAPI();
+    const api = APIService();
     const LazyGameList = LazyComponent(GameListWrapper);
 
     useEffect(() => {
@@ -32,44 +32,16 @@ function Home() {
             "dateBegin": "1970-01-01",
             "dateEnd": ""
         })
-            .then((response) => {
-                setAppState({
-                    loaded: true,
-                    games: response.data
-                });
-            })
-            .catch((error) => {
-                if (error.response)
-                    if (error.response.data.code === 404)
-                        setAppState({
-                            loaded: true,
-                            games: []
-                        });
-                    else
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                code: error.response.data.code,
-                                message: `${error.response.data.message}. Try refresh the page.`
-                            }
-                        });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .then((res) => setAppState({
+                loaded: res.completed,
+                games: res.data,
+                errors: res.errors
+            }))
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                games: err.data,
+                errors: err.errors
+            }))
 
         favCtx.loadGames(token);
         favCtx.loadTags(token);
@@ -77,8 +49,6 @@ function Home() {
 
     if (authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>
-
-
 
     return (
         <MainLayout>

@@ -7,7 +7,7 @@ import * as formik from "formik";
 import {Alert, Button, ButtonGroup, Col, FloatingLabel, Form, Row} from "react-bootstrap";
 import FormSection from "../Layout/FormSection";
 
-function RegisterForm(props) {
+function EditProfileForm(props) {
     const schema = yup.object().shape({
         username: yup.string()
             .max(64),
@@ -165,4 +165,4 @@ function RegisterForm(props) {
     );
 }
 
-export default RegisterForm;
+export default EditProfileForm;

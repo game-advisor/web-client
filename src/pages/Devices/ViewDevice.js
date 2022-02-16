@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useState, useEffect, Fragment} from 'react';
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 import i18n from "../../i18n/en.json"
 
 import {Alert, BreadcrumbItem} from "react-bootstrap";
@@ -26,8 +26,7 @@ function ViewDevice() {
         errors: null,
     });
 
-    const api = useAPI();
-    const history = useNavigate();
+    const api = APIService();
     const params = useParams();
     const deviceID = params.deviceId;
 
@@ -43,41 +42,18 @@ function ViewDevice() {
                     onClick: () => {
                         setDeleteState({completed: false})
                         api.delete(`/device/${id}/delete`)
-                            .then((response) => {
-                                setDeleteState({
-                                    completed: true,
-                                    success: {
-                                        message: i18n["device.deleteSuccess"]
-                                    }
-                                });
-                                history(`/me/devices`);
-                            })
-                            .catch((error) => {
-                                if (error.response)
-                                    setDeleteState({
-                                        loaded: true,
-                                        errors: {
-                                            code: error.response.data.code,
-                                            message: `${error.response.data.message}. Try refresh the page.`
-                                        }
-                                    });
-
-                                else if (error.request)
-                                    setDeleteState({
-                                        loaded: true,
-                                        errors: {
-                                            message: "Incorrect request. Try refresh the page."
-                                        }
-                                    });
-
-                                else
-                                    setDeleteState({
-                                        loaded: true,
-                                        errors: {
-                                            message: "Unexpected error occured."
-                                        }
-                                    });
-                            });
+                            .then((res) => setDeleteState({
+                                completed: res.completed,
+                                success: {
+                                    message: i18n["device.deleteSuccess"]
+                                },
+                                errors: res.errors
+                            }))
+                            .catch((err) => setDeleteState({
+                                completed: err.completed,
+                                success: err.data,
+                                errors: err.errors
+                            }));
                     }
                 },
                 {
@@ -93,45 +69,24 @@ function ViewDevice() {
         setAppState({loaded: false});
 
         api.get(`/device/${deviceID}`)
-            .then((response) => {
-                setAppState({
-                    loaded: true,
-                    device: response.data
-                });
-            })
-            .catch((error) => {
-                if (error.response)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            code: error.response.data.code,
-                            message: `${error.response.data.message}. Try refresh the page.`
-                        }
-                    });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .then((res) => setAppState({
+                loaded: res.completed,
+                device: res.data,
+                errors: res.errors
+            }))
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                device: err.data,
+                errors: err.errors
+            }))
     }, [deviceID, deleteState]);
 
     return (
         <ProfileLayout isPersonal={true}
                        subpages={<Fragment>
                            <BreadcrumbItem linkAs={Link} linkProps={{to: "/me/devices"}}>Devices</BreadcrumbItem>
-                           <BreadcrumbItem active>{appState.loaded ? appState.device.shortName : "Unknown"}</BreadcrumbItem>
+                           <BreadcrumbItem
+                               active>{appState.loaded ? appState.device.shortName : "Unknown"}</BreadcrumbItem>
                        </Fragment>}>
             {deleteState.success ? <Alert variant="success">{deleteState.success.message}</Alert> : ''}
             {deleteState.errors ? <Alert

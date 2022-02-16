@@ -2,7 +2,7 @@
 import {useState, useEffect, useContext} from 'react';
 import {Link, Navigate, useParams} from "react-router-dom";
 
-import useAPI from "../api/API";
+import APIService from "../api/APIService";
 import authContext from "../store/AuthContext";
 
 import MainLayout from "../components/Layout/MainLayout";
@@ -20,52 +20,24 @@ function Search() {
 
     const params = useParams();
     const authCtx = useContext(authContext);
-    const api = useAPI();
+    const api = APIService();
     const LazyGameList = LazyComponent(GameListWrapper);
 
     useEffect(() => {
-        if(params.query) {
+        if (params.query) {
             setAppState({loaded: false});
 
             api.get(`/game/${params.query}`)
-                .then((response) => {
-                    setAppState({
-                        loaded: true,
-                        games: response.data
-                    });
-                })
-                .catch((error) => {
-                    if (error.response)
-                        if (error.response.data.code === 404)
-                            setAppState({
-                                loaded: true,
-                                games: []
-                            });
-                        else
-                            setAppState({
-                                loaded: true,
-                                errors: {
-                                    code: error.response.data.code,
-                                    message: `${error.response.data.message}. Try refresh the page.`
-                                }
-                            });
-
-                    else if (error.request)
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                message: "Incorrect request. Try refresh the page."
-                            }
-                        });
-
-                    else
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                message: "Unexpected error occured."
-                            }
-                        });
-                });
+                .then((res) => setAppState({
+                    loaded: res.completed,
+                    games: res.data,
+                    errors: res.errors
+                }))
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    games: err.data,
+                    errors: err.errors
+                }))
         }
     }, [params.query]);
 
@@ -82,10 +54,11 @@ function Search() {
             </Container>
 
             {params.query ?
-            <PageSection name={`All games matching with: ${params.query}`} description="A list of all games matching with your query"
-                         withAction={false}>
-                <LazyGameList isLoaded={appState.loaded} games={appState.games} errors={appState.errors}/>
-            </PageSection> : ''}
+                <PageSection name={`All games matching with: ${params.query}`}
+                             description="A list of all games matching with your query"
+                             withAction={false}>
+                    <LazyGameList isLoaded={appState.loaded} games={appState.games} errors={appState.errors}/>
+                </PageSection> : ''}
         </MainLayout>
     );
 }

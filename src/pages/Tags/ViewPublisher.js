@@ -2,15 +2,15 @@
 import {useState, useEffect, useContext} from 'react';
 import {Link, Navigate, useParams} from "react-router-dom";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 import authContext from "../../store/AuthContext";
 import i18n from "../../i18n/en.json"
 
+import {Breadcrumb, Container} from "react-bootstrap";
 import MainLayout from "../../components/Layout/MainLayout";
 import PageSection from "../../components/Layout/PageSection";
 import {GameListWrapper} from "../../components/Games/GameListWrapper";
 import LazyComponent from "../../components/LazyComponent";
-import {Breadcrumb, Container} from "react-bootstrap";
 
 function ViewPublisher() {
     const [appState, setAppState] = useState({
@@ -21,50 +21,23 @@ function ViewPublisher() {
 
     const params = useParams();
     const authCtx = useContext(authContext);
-    const api = useAPI();
+    const api = APIService();
     const LazyGameList = LazyComponent(GameListWrapper);
 
     useEffect(() => {
         setAppState({loaded: false});
-        api.get(`games/${params.publisherName}`)
-            .then((response) => {
-                setAppState({
-                    loaded: true,
-                    games: response.data[0].gameList
-                });
-            })
-            .catch((error) => {
-                if (error.response)
-                    if (error.response.data.code === 404)
-                        setAppState({
-                            loaded: true,
-                            games: []
-                        });
-                    else
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                code: error.response.data.code,
-                                message: `${error.response.data.message}. Try refresh the page.`
-                            }
-                        });
 
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+        api.get(`/games/${params.publisherName}`)
+            .then((res) => setAppState({
+                loaded: res.completed,
+                games: res.data[0].gameList,
+                errors: res.errors
+            }))
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                games: err.data,
+                errors: err.errors
+            }))
     }, [params]);
 
     if (authCtx.getstatus() === false)

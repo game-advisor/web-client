@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 import {Navigate, useNavigate} from "react-router-dom";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 import AuthContext from "../../store/AuthContext";
 
 import {Breadcrumb} from "react-bootstrap";
@@ -18,7 +18,7 @@ function EditProfile() {
     });
 
     const history = useNavigate();
-    const api = useAPI();
+    const api = APIService();
     const authCtx = useContext(AuthContext);
 
     const LazyEditProfileForm = LazyComponent(EditProfileForm);
@@ -27,38 +27,16 @@ function EditProfile() {
         setAppState({loaded: false});
 
         api.get(`/user/${authCtx.details.userID}`)
-            .then((response) => {
-                setAppState({
-                    loaded: true,
-                    user: response.data
-                });
-            })
-            .catch((error) => {
-                if (error.response)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            code: error.response.data.code,
-                            message: `${error.response.data.message}. Try refresh the page.`
-                        }
-                    });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .then((res) => setAppState({
+                loaded: res.completed,
+                user: res.data,
+                errors: res.errors
+            }))
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                user: err.data,
+                errors: err.errors
+            }))
     }, [authCtx]);
 
     const [submitErrors, setSubmitErrors] = useState(null);
@@ -70,26 +48,8 @@ function EditProfile() {
             "username": userData.username,
             "password": userData.password,
         })
-            .then((response) => {
-                history(`/me`);
-            })
-            .catch((error) => {
-                if (error.response)
-                    setSubmitErrors({
-                        code: error.response.data.code,
-                        message: `${error.response.data.message}. Try refresh the page.`
-                    });
-
-                else if (error.request)
-                    setSubmitErrors({
-                        message: "Incorrect request. Try refresh the page."
-                    });
-
-                else
-                    setSubmitErrors({
-                        message: "Unexpected error occured."
-                    });
-            });
+            .then(() => history(`/me`))
+            .catch((err) => setSubmitErrors(err.errors))
     }
 
     if (authCtx.getstatus() === false)
@@ -97,8 +57,8 @@ function EditProfile() {
 
     return (
         <ProfileLayout isPersonal={true} subpages={<Breadcrumb.Item active>Edit profile</Breadcrumb.Item>}>
-                <LazyEditProfileForm isLoaded={appState.loaded} loadErrors={appState.errors}
-                                     user={appState.user} onEdit={updateUser} submitErrors={submitErrors}/>
+            <LazyEditProfileForm isLoaded={appState.loaded} loadErrors={appState.errors}
+                                 user={appState.user} onEdit={updateUser} submitErrors={submitErrors}/>
         </ProfileLayout>
     );
 }

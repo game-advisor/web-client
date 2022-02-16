@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 import i18n from "../../i18n/en.json";
 
 import {Accordion, Badge, Col, ListGroup, Row} from "react-bootstrap";
@@ -15,106 +15,79 @@ function CompatibilityListItem(props) {
         errors: null
     })
 
-    const api = useAPI();
+    const api = APIService();
 
     useEffect(() => {
         setAppState({loaded: false});
 
         api.post(`/gameRequirementsCompare/${props.gameId}/${props.device.deviceID}/min`)
-            .then((response) => {
+            .then((res) => {
                 setAppState({
-                    loaded: false,
+                    loaded: res.completed,
                     min: {
-                        device: (response.data.cpuOK && response.data.gpuOK && response.data.osOK && response.data.ramSizeOK),
-                        cpu: (response.data.cpuOK),
-                        gpu: (response.data.gpuOK),
-                        os: (response.data.osOK),
-                        ram: (response.data.ramSizeOK)
-                    }
+                        device: (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK),
+                        cpu: (res.data.cpuOK),
+                        gpu: (res.data.gpuOK),
+                        os: (res.data.osOK),
+                        ram: (res.data.ramSizeOK)
+                    },
+                    max: {
+                        device: (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK),
+                        cpu: (res.data.cpuOK),
+                        gpu: (res.data.gpuOK),
+                        os: (res.data.osOK),
+                        ram: (res.data.ramSizeOK)
+                    },
+                    errors: res.errors
                 });
 
-                if (response.data.cpuOK && response.data.gpuOK && response.data.osOK && response.data.ramSizeOK) {
-                    api.post(`/gameRequirementsCompare/${props.gameId}/${props.device.deviceID}/max`)
-                        .then((response) => {
-                            setAppState((prevState) => {
-                                return {
-                                    ...prevState,
-                                    loaded: true,
-                                    max: {
-                                        device: (response.data.cpuOK && response.data.gpuOK && response.data.osOK && response.data.ramSizeOK),
-                                        cpu: (response.data.cpuOK),
-                                        gpu: (response.data.gpuOK),
-                                        os: (response.data.osOK),
-                                        ram: (response.data.ramSizeOK)
-                                    }
-                                }
-                            });
-                        })
-                        .catch((error) => {
-                            setAppState((prevState) => {
-                                return {
-                                    ...prevState,
-                                    loaded: true,
-                                    max: prevState.min
-                                }
-                            });
-                        });
-                }
-
-                else
+                if (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK) {
                     setAppState((prevState) => {
                         return {
                             ...prevState,
-                            loaded: true,
-                            max: prevState.min
+                            loaded: false
                         }
-                    });
+                    })
+                    ;
+                    api.post(`/gameRequirementsCompare/${props.gameId}/${props.device.deviceID}/max`)
+                        .then((res) => {
+                            setAppState((prevState) => {
+                                return {
+                                    ...prevState,
+                                    loaded: res.completed,
+                                    max: {
+                                        device: (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK),
+                                        cpu: (res.data.cpuOK),
+                                        gpu: (res.data.gpuOK),
+                                        os: (res.data.osOK),
+                                        ram: (res.data.ramSizeOK)
+                                    },
+                                    errors: res.errors
+                                }
+                            });
+                        })
+                        .catch(() => {
+                        });
+                }
             })
-            .catch((error) => {
-                if (error.response)
-                    if (error.response.data.code === 404)
-                        setAppState({
-                            loaded: true,
-                            min: {
-                                device: true,
-                                cpu: true,
-                                gpu: true,
-                                os: true,
-                                ram: true
-                            },
-                            max: {
-                                device: true,
-                                cpu: true,
-                                gpu: true,
-                                os: true,
-                                ram: true
-                            }
-                        });
-                    else
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                code: error.response.data.code,
-                                message: `${error.response.data.message}. Try refresh the page.`
-                            }
-                        });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                min: {
+                    device: true,
+                    cpu: true,
+                    gpu: true,
+                    os: true,
+                    ram: true
+                },
+                max: {
+                    device: true,
+                    cpu: true,
+                    gpu: true,
+                    os: true,
+                    ram: true
+                },
+                errors: err.errors
+            }));
     }, [props.gameId, props.device.deviceID]);
 
     return (
@@ -184,11 +157,11 @@ function CompatibilityListItem(props) {
                             </div>
                             {appState.loaded ?
                                 (appState.max.ram ?
-                                    <Badge bg="success" pill>Passed</Badge> :
-                                    (appState.min.ram ?
-                                        <Badge bg="warning" pill>Needs attention</Badge> :
-                                        <Badge bg="danger" pill>Not passed</Badge>
-                                    )
+                                        <Badge bg="success" pill>Passed</Badge> :
+                                        (appState.min.ram ?
+                                                <Badge bg="warning" pill>Needs attention</Badge> :
+                                                <Badge bg="danger" pill>Not passed</Badge>
+                                        )
                                 ) : ''}
                         </ListGroup.Item>
 

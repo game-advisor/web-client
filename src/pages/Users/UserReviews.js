@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 
 import { BreadcrumbItem } from "react-bootstrap";
 import ProfileLayout from "../../components/Profile/ProfileLayout";
@@ -18,7 +18,7 @@ function UserReviews(props) {
         errors: null
     });
 
-    const api = useAPI();
+    const api = APIService();
     const LazyReviewList = LazyComponent(ReviewList);
 
     useEffect(() => {
@@ -26,44 +26,16 @@ function UserReviews(props) {
 
         const endpoint = props.isPersonal ? `/user/current/reviews/get` : `/user/${params.userId}/reviews/get`;
         api.get(endpoint)
-            .then((response) => {
-                setAppState({
-                    loaded: true,
-                    reviews: response.data.slice(0, 3)
-                });
-            })
-            .catch((error) => {
-                if (error.response)
-                    if (error.response.data.code === 404)
-                        setAppState({
-                            loaded: true,
-                            reviews: []
-                        });
-                    else
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                code: error.response.data.code,
-                                message: `${error.response.data.message}. Try refresh the page.`
-                            }
-                        });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .then((res) => setAppState({
+                loaded: res.completed,
+                reviews: res.data,
+                errors: res.errors
+            }))
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                reviews: err.data,
+                errors: err.errors
+            }))
     }, [props.isPersonal, params.userId]);
 
     return (

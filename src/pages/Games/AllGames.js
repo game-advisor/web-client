@@ -2,7 +2,7 @@
 import {useState, useEffect, useContext} from 'react';
 import {Link, Navigate} from "react-router-dom";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 import authContext from "../../store/AuthContext";
 import i18n from "../../i18n/en.json"
 
@@ -22,7 +22,7 @@ function AllGames() {
 
     const authCtx = useContext(authContext);
     const favCtx = useContext(FavoritesContext);
-    const api = useAPI();
+    const api = APIService();
     const LazyGameList = LazyComponent(GameListWrapper);
 
     useEffect(() => {

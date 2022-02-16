@@ -20,8 +20,8 @@ function DeviceListItem(props) {
                     <Card.Body>
                         <Card.Title>{props.device.shortName}</Card.Title>
                         <Card.Text className="text-muted">
-                            {props.device.cpu.company.name} {props.device.cpu.series} &bull;
-                            {props.device.gpu.company.name} {props.device.gpu.series} &bull;
+                            {props.device.cpu.company.name}{props.device.cpu.series !== "" ? ` ${props.device.cpu.series}` : ""}&nbsp;&bull;&nbsp;
+                            {props.device.gpu.company.name}{props.device.gpu.series !== "" ? ` ${props.device.gpu.series}` : ""}&nbsp;&bull;&nbsp;
                             {props.device.os.company.name} {props.device.os.name}
                         </Card.Text>
                         {props.isPersonal ? <ButtonGroup>

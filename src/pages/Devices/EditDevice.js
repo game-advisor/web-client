@@ -1,12 +1,12 @@
 import {Fragment, useContext, useEffect, useState} from "react";
 import {Link, Navigate, useNavigate, useParams} from "react-router-dom";
 
+import APIService from "../../api/APIService";
 import AuthContext from "../../store/AuthContext";
 
 import ProfileLayout from "../../components/Profile/ProfileLayout";
 import PageSection from "../../components/Layout/PageSection";
 import DeviceForm from "../../components/Devices/DeviceForm";
-import useAPI from "../../api/API";
 import LazyComponent from "../../components/LazyComponent";
 import {BreadcrumbItem} from "react-bootstrap";
 
@@ -18,7 +18,8 @@ function EditDevice() {
     });
 
     const [submitState, setSubmitState] = useState({
-        response: null,
+        completed: false,
+        data: null,
         errors: null
     });
 
@@ -26,133 +27,72 @@ function EditDevice() {
     const params = useParams();
     const deviceID = params.deviceId;
 
-    const api = useAPI();
+    const api = APIService();
     const history = useNavigate();
 
     const LazyDeviceForm = LazyComponent(DeviceForm)
 
-    function validateDevice(deviceData) {
-        if (
-            deviceData.cpuID === 0 ||
-            deviceData.gpuID === 0 ||
-            deviceData.amountOfSticks <= 0 ||
-            deviceData.size <= 0 ||
-            deviceData.freq <= 0 ||
-            deviceData.latency <= 0 ||
-            (!deviceData.hdd && !deviceData.ssd) ||
-            deviceData.osID === 0
-        ) {
-            setSubmitState({
-                errors: {
-                    message: `You might miss some information about your device. Try again.`
-                }
-            });
-            return false;
-        }
-
-        return true;
-    }
     function submitDevice(deviceData) {
         setSubmitState({
-            response: null
+            completed: false,
+            data: null
         });
 
-        if(!validateDevice(deviceData))
-            return;
-
-            api.put(`/device/${deviceID}/edit`, deviceData)
-            .then((response) => {
-                setSubmitState({response: response.data});
-                history(`/me/devices/${deviceID}`);
+        api.put(`/device/${deviceID}/edit`, deviceData)
+            .then((res) => {
+                setSubmitState({
+                    completed: res.completed,
+                    data: res.data,
+                    errors: res.errors
+                })
+                history(`/me/devices`);
             })
-            .catch((error) => {
-                if (error.response)
-                    setSubmitState({
-                        errors: {
-                            code: error.response.data.code,
-                            message: `${error.response.data.message}. Try refresh the page.`
-                        }
-                    });
-
-                else if (error.request)
-                    setSubmitState({
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setSubmitState({
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .catch((err) => setSubmitState({
+                completed: err.completed,
+                data: err.data,
+                errors: err.errors
+            }))
     }
 
     useEffect(() => {
         setAppState({loaded: false});
 
         api.get(`/device/${deviceID}`)
-            .then((response) => {
-                setAppState({
-                    loaded: true,
-                    device: {
-                        deviceID: response.data.deviceID,
-                        shortName: response.data.shortName,
-                        cpu: {
-                            id: response.data.cpu.cpuID,
-                            manufacturer: response.data.cpu.company.name,
-                            series: response.data.cpu.series,
-                            model: response.data.cpu.name
-                        },
-                        gpu: {
-                            id: response.data.gpu.gpuID,
-                            manufacturer: response.data.gpu.company.name,
-                            series: response.data.gpu.series,
-                            model: response.data.gpu.name
-                        },
-                        ram: {
-                            sticks: response.data.ram.amountOfSticks,
-                            size: response.data.ram.size,
-                            frequency: response.data.ram.freq,
-                            latency: response.data.ram.latency
-                        },
-                        hdd: response.data.hdd,
-                        ssd: response.data.ssd,
-                        system: {
-                            id: response.data.os.osID,
-                            developer: response.data.os.company.name
-                        }
+            .then((res) => setAppState({
+                loaded: res.completed,
+                device: {
+                    deviceID: res.data.deviceID,
+                    shortName: res.data.shortName,
+                    cpu: {
+                        id: res.data.cpu.cpuID,
+                        manufacturer: res.data.cpu.company.name,
+                        series: res.data.cpu.series !== "" ? res.data.cpu.series : "%20",
+                        model: res.data.cpu.name
+                    },
+                    gpu: {
+                        id: res.data.gpu.gpuID,
+                        manufacturer: res.data.gpu.company.name,
+                        series: res.data.gpu.series !== "" ? res.data.gpu.series : "%20",
+                        model: res.data.gpu.name
+                    },
+                    ramSticks: res.data.ram.amountOfSticks,
+                    ramSize: res.data.ram.size,
+                    ramFreq: res.data.ram.freq,
+                    ramLatency: res.data.ram.latency,
+                    hdd: res.data.hdd,
+                    ssd: res.data.ssd,
+                    os: {
+                        id: res.data.os.osID,
+                        developer: res.data.os.company.name
                     }
-                });
-            })
-            .catch((error) => {
-                if (error.response)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            code: error.response.data.code,
-                            message: `${error.response.data.message}. Try refresh the page.`
-                        }
-                    });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+                },
+                errors: res.errors
+            }))
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                device: err.data,
+                errors: err.errors
+            }))
     }, [deviceID]);
 
     if (authCtx.getstatus() === false)
@@ -162,13 +102,15 @@ function EditDevice() {
         <ProfileLayout isPersonal={true}
                        subpages={<Fragment>
                            <BreadcrumbItem linkAs={Link} linkProps={{to: "/me/devices"}}>Devices</BreadcrumbItem>
-                           {(appState.loaded && appState.device) ? <BreadcrumbItem linkAs={Link} linkProps={{to: `/me/devices/${appState.device.deviceID}`}}>{appState.device.shortName}</BreadcrumbItem> : ""}
+                           {(appState.loaded && appState.device) ? <BreadcrumbItem linkAs={Link}
+                                                                                   linkProps={{to: `/me/devices/${appState.device.deviceID}`}}>{appState.device.shortName}</BreadcrumbItem> : ""}
                            <BreadcrumbItem active>Edit device</BreadcrumbItem>
                        </Fragment>}>
             <PageSection name="Edit device" description="Manage your device using forms below"
                          withAction={false}>
-                <LazyDeviceForm isLoaded={appState.loaded} loadErrors={appState.errors} submitResponse={submitState.response} submitErrors={submitState.errors}
-                editMode={true} device={appState.device}  onSubmit={submitDevice}/>
+                <LazyDeviceForm isLoaded={appState.loaded} loadErrors={appState.errors}
+                                submitResponse={submitState.response} submitErrors={submitState.errors}
+                                editMode={true} device={appState.device} onSubmit={submitDevice}/>
             </PageSection>
         </ProfileLayout>
     );

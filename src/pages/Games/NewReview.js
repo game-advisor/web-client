@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 import AuthContext from "../../store/AuthContext";
 
 import LazyComponent from "../../components/LazyComponent";
@@ -19,7 +19,7 @@ function NewReview() {
 
     const params = useParams();
     const history = useNavigate();
-    const api = useAPI();
+    const api = APIService();
     const authCtx = useContext(AuthContext);
 
     const LazyReviewForm = LazyComponent(ReviewForm);
@@ -28,38 +28,16 @@ function NewReview() {
         setAppState({loaded: false});
 
         api.get(`/game/${params.gameId}/info`)
-            .then((response) => {
-                setAppState({
-                    loaded: true,
-                    game: response.data
-                });
-            })
-            .catch((error) => {
-                if (error.response)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            code: error.response.data.code,
-                            message: `${error.response.data.message}. Try refresh the page.`
-                        }
-                    });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .then((res) => setAppState({
+                loaded: res.completed,
+                game: res.data,
+                errors: res.errors
+            }))
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                game: err.data,
+                errors: err.errors
+            }))
     }, [params.gameId]);
 
     const [submitErrors, setSubmitErrors] = useState(null);
@@ -74,26 +52,8 @@ function NewReview() {
             "graphicsRating": reviewData.graphicsRating,
             "musicRating": reviewData.musicRating
         })
-            .then((response) => {
-                history(-1);
-            })
-            .catch((error) => {
-                if (error.response)
-                    setSubmitErrors({
-                        code: error.response.data.code,
-                        message: `${error.response.data.message}. Try refresh the page.`
-                    });
-
-                else if (error.request)
-                    setSubmitErrors({
-                        message: "Incorrect request. Try refresh the page."
-                    });
-
-                else
-                    setSubmitErrors({
-                        message: "Unexpected error occured."
-                    });
-            });
+            .then(() => history(-1))
+            .catch((err) => setSubmitErrors(err.errors))
     }
 
     if (authCtx.getstatus() === false)
@@ -105,7 +65,7 @@ function NewReview() {
                          withAction={true}
                          actionName="Add new review" onAction={() => history("create")}>
                 <LazyReviewForm isLoaded={appState.loaded} loadErrors={appState.errors}
-                                     game={appState.game} onCreate={createReview} submitErrors={submitErrors}/>
+                                game={appState.game} onCreate={createReview} submitErrors={submitErrors}/>
             </PageSection>
         </GameLayout>
     );

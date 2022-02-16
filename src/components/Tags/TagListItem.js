@@ -1,6 +1,6 @@
 import {useContext} from "react";
 import FavoritesContext from "../../store/FavoritesContext";
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 import {Link} from "react-router-dom";
 import {Button, ButtonGroup} from "react-bootstrap";
 import {HeartIcon as FilledHeartIcon} from "@heroicons/react/solid";
@@ -9,18 +9,18 @@ import {HeartIcon as UnfilledHeartIcon} from "@heroicons/react/outline";
 function FavListItem(props) {
     const favCtx = useContext(FavoritesContext);
 
-    const api = useAPI();
+    const api = APIService();
     const isFavorite = props.isFavorible ? favCtx.tagIsFavorite(props.tag.tagID) : false;
 
     function toggleFavStatus() {
         if (isFavorite) {
             api.delete(`/user/favTags/${props.tag.tagID}/delete`)
-                .then((response) => favCtx.removeFavTag(props.tag.tagID))
-                .catch((error) => console.log(error));
+                .then(() => favCtx.removeFavTag(props.tag.tagID))
+                .catch((err) => console.log(err.errors));
         } else {
             api.post(`/user/favTags/${props.tag.tagID}/add`)
-                .then((response) => favCtx.addFavTag(props.tag.tagID))
-                .catch((error) => console.log(error));
+                .then(() => favCtx.addFavTag(props.tag.tagID))
+                .catch((err) => console.log(err.errors));
         }
 
     }

@@ -2,7 +2,7 @@
 import {useState, useEffect, useContext} from 'react';
 import {Link, Navigate} from "react-router-dom";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 import authContext from "../../store/AuthContext";
 import i18n from "../../i18n/en.json"
 
@@ -24,7 +24,7 @@ function AllTags() {
 
     const authCtx = useContext(authContext);
     const favCtx = useContext(FavoritesContext);
-    const api = useAPI();
+    const api = APIService();
     const LazyTagList = LazyComponent(TagList);
     const LazyPublisherList = LazyComponent(PublisherList);
 
@@ -33,91 +33,36 @@ function AllTags() {
         const token = authCtx.token;
 
         api.get(`/tags`)
-            .then((response) => {
+            .then((res) => {
                 setAppState({
                     loaded: false,
-                    tags: response.data,
-                    companies: []
+                    tags: res.data,
+                    errors: res.errors
                 });
 
                 api.get(`/company/getGameCompanies`)
-                    .then((response) => {
-                        setAppState((prevState) => {
-                            return {
-                                ...prevState,
-                                loaded: true,
-                                companies: response.data
-                            }
-                        });
-                    })
-                    .catch((error) => {
-                        if (error.response)
-                            if (error.response.data.code === 404)
-                                setAppState((prevState) => {
-                                    return {
-                                        ...prevState,
-                                        loaded: true,
-                                        companies: []
-                                    }
-                                });
-                            else
-                                setAppState({
-                                    loaded: true,
-                                    errors: {
-                                        code: error.response.data.code,
-                                        message: `${error.response.data.message}. Try refresh the page.`
-                                    }
-                                });
-
-                        else if (error.request)
-                            setAppState({
-                                loaded: true,
-                                errors: {
-                                    message: "Incorrect request. Try refresh the page."
-                                }
-                            });
-
-                        else
-                            setAppState({
-                                loaded: true,
-                                errors: {
-                                    message: "Unexpected error occured."
-                                }
-                            });
-                    });
+                    .then((res) => setAppState((prevState) => {
+                        return {
+                            ...prevState,
+                            loaded: res.completed,
+                            companies: res.data,
+                            errors: res.errors
+                        }
+                    }))
+                    .catch((err) => setAppState((prevState) => {
+                        return {
+                            ...prevState,
+                            loaded: err.completed,
+                            companies: err.data,
+                            errors: err.errors
+                        }
+                    }))
             })
-            .catch((error) => {
-                if (error.response)
-                    if (error.response.data.code === 404)
-                        setAppState({
-                            loaded: true,
-                            tags: []
-                        });
-                    else
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                code: error.response.data.code,
-                                message: `${error.response.data.message}. Try refresh the page.`
-                            }
-                        });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                tags: err.data,
+                errors: err.errors
+            }))
 
         favCtx.loadTags(token);
     }, []);

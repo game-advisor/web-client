@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useState, useEffect} from 'react';
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 
 import CompatibilityListWrapper from "./CompatibilityListWrapper"
 import LazyComponent from "../../components/LazyComponent";
@@ -13,54 +13,27 @@ function CompatibilityList(props) {
         errors: null
     });
 
-    const api = useAPI();
+    const api = APIService();
     const LazyCompatibilityList = LazyComponent(CompatibilityListWrapper);
 
     useEffect(() => {
         setAppState({loaded: false});
         api.get('/device/user')
-            .then((response) => {
-                setAppState({
-                    loaded: true,
-                    devices: response.data
-                });
-            })
-            .catch((error) => {
-                if (error.response)
-                    if (error.response.data.code === 404)
-                        setAppState({
-                            loaded: true,
-                            devices: []
-                        });
-                    else
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                code: error.response.data.code,
-                                message: `${error.response.data.message}. Try refresh the page.`
-                            }
-                        });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .then((res) => setAppState({
+                loaded: res.loaded,
+                devices: res.data,
+                errors: res.errors
+            }))
+            .catch((err) => setAppState({
+                loaded: err.loaded,
+                devices: err.data,
+                errors: err.errors
+            }))
     }, []);
 
     return (
-        <LazyCompatibilityList isLoaded={appState.loaded} devices={appState.devices} gameId={props.gameId} errors={appState.errors} />
+        <LazyCompatibilityList isLoaded={appState.loaded} devices={appState.devices} gameId={props.gameId}
+                               errors={appState.errors}/>
     );
 }
 

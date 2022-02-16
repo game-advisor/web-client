@@ -3,7 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import {useParams, Navigate, useNavigate} from "react-router-dom";
 
 import AuthContext from "../../store/AuthContext";
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 
 import {Button, Col, Row} from "react-bootstrap";
 import GameLayout from "../../components/Games/GameLayout";
@@ -23,51 +23,23 @@ function ViewGame() {
         errors: null
     });
 
-    const api = useAPI();
+    const api = APIService();
     const LazyReviewList = LazyComponent(ReviewList);
 
     useEffect(() => {
         setAppState({loaded: false});
 
         api.get(`/game/${params.gameId}/review`)
-            .then((response) => {
-                setAppState({
-                    loaded: true,
-                    reviews: response.data.slice(0, 3)
-                });
-            })
-            .catch((error) => {
-                if (error.response)
-                    if (error.response.data.code === 404)
-                        setAppState({
-                            loaded: true,
-                            reviews: []
-                        });
-                    else
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                code: error.response.data.code,
-                                message: `${error.response.data.message}. Try refresh the page.`
-                            }
-                        });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .then((res) => setAppState({
+                loaded: res.completed,
+                reviews: res.data.slice(0, 3),
+                errors: res.errors
+            }))
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                reviews: err.data,
+                errors: err.errors
+            }))
     }, [params.gameId]);
 
     if(authCtx.getstatus() === false)

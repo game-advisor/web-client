@@ -60,7 +60,7 @@ function DeviceDetails(props) {
                                         className="d-flex justify-content-between align-items-start">
                             <div className="ms-2 me-auto">
                                 <div className="fw-bold">{i18n["device.cpu"]}</div>
-                                {props.device.cpu.company.name} {props.device.cpu.name} ({props.device.cpu.series} Series)
+                                {props.device.cpu.company.name} {props.device.cpu.name} {props.device.cpu.series !== "" ? `(${props.device.cpu.series} Series)` : ""}
                             </div>
                             <Badge variant="primary" pill>
                                 {props.device.cpu.score} points
@@ -70,7 +70,7 @@ function DeviceDetails(props) {
                                         className="d-flex justify-content-between align-items-start">
                             <div className="ms-2 me-auto">
                                 <div className="fw-bold">{i18n["device.gpu"]}</div>
-                                {props.device.gpu.company.name} {props.device.gpu.name} ({props.device.gpu.series} Series)
+                                {props.device.gpu.company.name} {props.device.gpu.name} {props.device.gpu.series !== "" ? `(${props.device.gpu.series} Series)` : ""}
                             </div>
                             <Badge variant="primary" pill>
                                 {props.device.gpu.score} points

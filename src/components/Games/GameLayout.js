@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useEffect, useState, Fragment} from "react";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 
 import {Breadcrumb, Container} from "react-bootstrap";
 import GameHeader from "./GameLayout/GameHeader";
@@ -16,49 +16,29 @@ function GameLayout(props) {
     });
     const [reviews, setReviews] = useState(0)
 
-    const api = useAPI();
+    const api = APIService();
     const LazyGameHeader = LazyHeader(GameHeader);
 
     useEffect(() => {
         setAppState({loaded: false});
 
         api.get(`/game/${props.id}/info`)
-            .then((response) => {
+            .then((res) => {
                 setAppState({
-                    loaded: true,
-                    game: response.data
+                    loaded: res.completed,
+                    game: res.data,
+                    errors: res.errors
                 });
 
                 api.get(`/game/${props.id}/review/count`)
-                    .then((response) => setReviews(response.data))
-                    .catch((err) => console.log(err));
+                    .then((res) => setReviews(res.data))
+                    .catch((err) => console.log(err.errors));
             })
-            .catch((error) => {
-                if (error.response)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            code: error.response.data.code,
-                            message: `${error.response.data.message}. Try refresh the page.`
-                        }
-                    });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                game: err.data,
+                errors: err.errors
+            }))
     }, [props.id]);
 
     return (

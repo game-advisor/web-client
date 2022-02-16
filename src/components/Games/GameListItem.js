@@ -1,7 +1,7 @@
 import {useContext} from "react";
 import {Link} from "react-router-dom";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 import FavoritesContext from "../../store/FavoritesContext";
 
 import {Button, ButtonGroup, Card} from "react-bootstrap";
@@ -13,18 +13,18 @@ import {HeartIcon as UnfilledHeartIcon} from "@heroicons/react/outline";
 function GameListItem(props) {
     const favCtx = useContext(FavoritesContext);
 
-    const api = useAPI();
+    const api = APIService();
     const isFavorite = favCtx.gameIsFavorite(props.id);
 
     function toggleFavStatus() {
         if (isFavorite) {
             api.delete(`/user/favGames/${props.id}/delete`)
-                .then((response) => favCtx.removeFavGame(props.id))
-                .catch((error) => console.log(error));
+                .then(() => favCtx.removeFavGame(props.id))
+                .catch((err) => console.log(err.errors));
         } else {
             api.post(`/user/favGames/${props.id}/add`)
-                .then((response) => favCtx.addFavGame(props.id))
-                .catch((error) => console.log(error));
+                .then(() => favCtx.addFavGame(props.id))
+                .catch((err) => console.log(err.errors));
         }
 
     }

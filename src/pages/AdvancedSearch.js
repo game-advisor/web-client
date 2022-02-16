@@ -2,7 +2,7 @@
 import {useState, useContext} from 'react';
 import {Link, Navigate} from "react-router-dom";
 
-import useAPI from "../api/API";
+import APIService from "../api/APIService";
 import authContext from "../store/AuthContext";
 
 import {Accordion, Breadcrumb, Container} from "react-bootstrap";
@@ -19,7 +19,7 @@ function AdvancedSearch() {
     });
 
     const authCtx = useContext(authContext);
-    const api = useAPI();
+    const api = APIService();
     const LazyGameList = LazyComponent(GameListWrapper);
 
     function handleSubmit(values, tags) {
@@ -40,44 +40,16 @@ function AdvancedSearch() {
 
         setAppState({loaded: false});
         api.get(endpointQuery)
-            .then((response) => {
-                setAppState({
-                    loaded: true,
-                    games: response.data
-                });
-            })
-            .catch((error) => {
-                if (error.response)
-                    if (error.response.data.code === 404)
-                        setAppState({
-                            loaded: true,
-                            games: []
-                        });
-                    else
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                code: error.response.data.code,
-                                message: `${error.response.data.message}. Try refresh the page.`
-                            }
-                        });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .then((res) => setAppState({
+                loaded: res.completed,
+                games: res.data,
+                errors: res.errors
+            }))
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                games: err.data,
+                errors: err.errors
+            }))
     }
 
     if (authCtx.getstatus() === false)

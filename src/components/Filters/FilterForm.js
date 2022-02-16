@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 import * as formik from "formik";
 
 import {Button, ButtonGroup, Form, Row} from "react-bootstrap";
@@ -10,24 +10,18 @@ function FilterForm(props) {
     const [availablePublishers, setAvailablePublishers] = useState([]);
 
     const {Formik} = formik;
-    const api = useAPI();
+    const api = APIService();
 
     function fetchPublishers() {
         api.get('/company/getGameCompanies')
-            .then((response) => {
-                setAvailablePublishers(response.data);
-            })
-
-            .catch((error) => console.log(error))
+            .then((res) => setAvailablePublishers(res.data))
+            .catch((err) => console.log(err.errors))
     }
 
     function fetchTags() {
         api.get('/tags')
-            .then((response) => {
-                setAvailableTags(response.data);
-            })
-
-            .catch((error) => console.log(error))
+            .then((res) => setAvailableTags(res.data))
+            .catch((err) => console.log(err.errors))
     }
 
     useEffect(() => {

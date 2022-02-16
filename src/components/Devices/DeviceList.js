@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useState, useEffect, Fragment} from 'react';
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 
 import DeviceListWrapper from "./DeviceListWrapper"
 import LazyComponent from "../../components/LazyComponent";
@@ -23,7 +23,7 @@ function DeviceList(props) {
         errors: null,
     });
 
-    const api = useAPI();
+    const api = APIService();
     const history = useNavigate();
     const LazyDeviceList = LazyComponent(DeviceListWrapper);
 
@@ -37,40 +37,18 @@ function DeviceList(props) {
                     onClick: () => {
                         setDeleteState({completed: false})
                         api.delete(`/device/${id}/delete`)
-                            .then((response) => {
-                                setDeleteState({
-                                    completed: true,
+                            .then((res) => setDeleteState({
+                                    completed: res.completed,
                                     success: {
                                         message: i18n["device.deleteSuccess"]
-                                    }
-                                })
-                            })
-                            .catch((error) => {
-                                if (error.response)
-                                    setDeleteState({
-                                        loaded: true,
-                                        errors: {
-                                            code: error.response.data.code,
-                                            message: `${error.response.data.message}. Try refresh the page.`
-                                        }
-                                    });
-
-                                else if (error.request)
-                                    setDeleteState({
-                                        loaded: true,
-                                        errors: {
-                                            message: "Incorrect request. Try refresh the page."
-                                        }
-                                    });
-
-                                else
-                                    setDeleteState({
-                                        loaded: true,
-                                        errors: {
-                                            message: "Unexpected error occured."
-                                        }
-                                    });
-                            });
+                                    },
+                                    errors: res.errors
+                                }))
+                            .catch((err) => setDeleteState({
+                                completed: err.completed,
+                                success: err.data,
+                                errors: err.errors
+                            }));
                     }
                 },
                 {
@@ -88,51 +66,26 @@ function DeviceList(props) {
         const endpoint = props.isPersonal ? `/device/user` : `/device/user/${props.userId}?pageNumber=0&pageSize=3&sortBy=deviceID`;
 
         api.get(endpoint)
-            .then((response) => {
+            .then((res) => {
                 if(props.isPersonal)
                     setAppState({
-                        loaded: true,
-                        devices: response.data
+                        loaded: res.completed,
+                        devices: res.data,
+                        errors: res.errors
                     });
 
                 else
                     setAppState({
-                        loaded: true,
-                        devices: response.data.content
+                        loaded: res.completed,
+                        devices: res.data.content,
+                        errors: res.errors
                     });
             })
-            .catch((error) => {
-                if (error.response)
-                    if (error.response.data.code === 404)
-                        setAppState({
-                            loaded: true,
-                            devices: []
-                        });
-                    else
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                code: error.response.data.code,
-                                message: `${error.response.data.message}. Try refresh the page.`
-                            }
-                        });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                devices: err.data,
+                errors: err.errors
+            }));
     }, [props.isPersonal, props.userId]);
 
     return (

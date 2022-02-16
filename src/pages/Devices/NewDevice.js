@@ -1,7 +1,7 @@
 import {Fragment, useContext, useState} from "react";
 import {Link, Navigate, useNavigate} from "react-router-dom";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 import AuthContext from "../../store/AuthContext";
 
 import { BreadcrumbItem } from "react-bootstrap";
@@ -9,77 +9,37 @@ import ProfileLayout from "../../components/Profile/ProfileLayout";
 import PageSection from "../../components/Layout/PageSection";
 import DeviceForm from "../../components/Devices/DeviceForm";
 
-
-
 function NewDevice() {
     const [submitState, setSubmitState] = useState({
-        response: null,
+        completed: false,
+        data: null,
         errors: null
     });
 
     const authCtx = useContext(AuthContext);
-    const api = useAPI();
+    const api = APIService();
     const history = useNavigate();
-
-    function validateDevice(deviceData) {
-        if (
-            deviceData.shortName === "" ||
-            deviceData.cpuID === 0 ||
-            deviceData.gpuID === 0 ||
-            deviceData.amountOfSticks <= 0 ||
-            deviceData.size <= 0 ||
-            deviceData.freq <= 0 ||
-            deviceData.latency <= 0 ||
-            (!deviceData.hdd && !deviceData.ssd) ||
-            deviceData.osID === 0
-        ) {
-            setSubmitState({
-                errors: {
-                    message: `You might miss some information about your device. Try again.`
-                }
-            });
-            return false;
-        }
-
-        return true;
-    }
 
     function submitDevice(deviceData) {
         setSubmitState({
-            response: null
+            completed: false,
+            data: null
         });
 
-        if(!validateDevice(deviceData))
-            return;
-
         api.post('/device/add', deviceData)
-            .then((response) => {
-                setSubmitState({response: response.data})
+            .then((res) => {
+                setSubmitState({
+                    completed: res.completed,
+                    data: res.data,
+                    errors: res.errors
+                })
                 history(`/me/devices`);
             })
-            .catch((error) => {
-                if (error.response)
-                    setSubmitState({
-                        errors: {
-                            code: error.response.data.code,
-                            message: `${error.response.data.message}. Try refresh the page.`
-                        }
-                    });
-
-                else if (error.request)
-                    setSubmitState({
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setSubmitState({
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .catch((err) => setSubmitState({
+                completed: err.completed,
+                data: err.data,
+                errors: err.errors
+            }))
     }
 
     if (authCtx.getstatus() === false)
@@ -94,7 +54,7 @@ function NewDevice() {
 
             <PageSection name="Add new device" description="Add your device using forms below"
                          withAction={false}>
-                <DeviceForm onSubmit={submitDevice} submitResponse={submitState.response} submitErrors={submitState.errors}/>
+                <DeviceForm onSubmit={submitDevice} submitResponse={submitState.data} submitErrors={submitState.errors}/>
             </PageSection>
         </ProfileLayout>
     );

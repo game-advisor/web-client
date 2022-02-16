@@ -1,6 +1,6 @@
 import {Fragment, useContext} from "react";
 
-import useAPI from "../../../api/API";
+import APIService from "../../../api/APIService";
 import FavoritesContext from "../../../store/FavoritesContext";
 
 import {Alert, Button, Col, Container, Row} from "react-bootstrap";
@@ -13,18 +13,18 @@ import styles from "./GameHeader.module.scss";
 function GameHeader(props) {
     const favCtx = useContext(FavoritesContext);
 
-    const api = useAPI();
+    const api = APIService();
     const isFavorite = favCtx.gameIsFavorite(props.game.gameID);
 
     function toggleFavStatus() {
         if (isFavorite) {
             api.delete(`/user/favGames/${props.game.gameID}/delete`)
-                .then((response) => favCtx.removeFavGame(props.game.gameID))
-                .catch((error) => console.log(error));
+                .then(() => favCtx.removeFavGame(props.game.gameID))
+                .catch((err) => console.log(err.errors));
         } else {
             api.post(`/user/favGames/${props.game.gameID}/add`)
-                .then((response) => favCtx.addFavGame(props.game.gameID))
-                .catch((error) => console.log(error));
+                .then(() => favCtx.addFavGame(props.game.gameID))
+                .catch((err) => console.log(err.errors));
         }
 
     }

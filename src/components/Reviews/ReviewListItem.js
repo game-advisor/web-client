@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import ReactMarkdown from "react-markdown";
 import {Link} from "react-router-dom";
 
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 
 import {FormattedDate, FormattedTime} from "react-intl";
 import {Card, Col, ProgressBar, Row} from "react-bootstrap";
@@ -14,44 +14,22 @@ function ReviewListItem(props) {
         errors: null
     });
 
-    const api = useAPI();
+    const api = APIService();
 
     useEffect(() => {
         setAppState({loaded: false});
 
         api.get(`/user/${props.author}`)
-            .then((response) => {
-                setAppState({
-                    loaded: true,
-                    user: response.data
-                });
-            })
-            .catch((error) => {
-                if (error.response)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            code: error.response.data.code,
-                            message: `${error.response.data.message}. Try refresh the page.`
-                        }
-                    });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .then((res) => setAppState({
+                loaded: res.completed,
+                user: res.data,
+                errors: res.errors
+            }))
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                user: err.data,
+                errors: err.errors
+            }))
     }, [props.author]);
 
     return (

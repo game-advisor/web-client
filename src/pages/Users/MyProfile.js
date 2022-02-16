@@ -6,7 +6,7 @@ import {Button, Col, Row} from "react-bootstrap";
 import ProfileLayout from "../../components/Profile/ProfileLayout";
 import PageSection from "../../components/Layout/PageSection";
 import DeviceList from "../../components/Devices/DeviceList";
-import useAPI from "../../api/API";
+import APIService from "../../api/APIService";
 import LazyComponent from "../../components/LazyComponent";
 import ReviewList from "../../components/Reviews/ReviewList";
 
@@ -19,51 +19,23 @@ function MyProfile() {
         errors: null
     });
 
-    const api = useAPI();
+    const api = APIService();
     const LazyReviewList = LazyComponent(ReviewList);
 
     useEffect(() => {
         setAppState({loaded: false});
 
         api.get(`/user/current/reviews/get`)
-            .then((response) => {
-                setAppState({
-                    loaded: true,
-                    reviews: response.data.slice(0, 3)
-                });
-            })
-            .catch((error) => {
-                if (error.response)
-                    if (error.response.data.code === 404)
-                        setAppState({
-                            loaded: true,
-                            reviews: []
-                        });
-                    else
-                        setAppState({
-                            loaded: true,
-                            errors: {
-                                code: error.response.data.code,
-                                message: `${error.response.data.message}. Try refresh the page.`
-                            }
-                        });
-
-                else if (error.request)
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Incorrect request. Try refresh the page."
-                        }
-                    });
-
-                else
-                    setAppState({
-                        loaded: true,
-                        errors: {
-                            message: "Unexpected error occured."
-                        }
-                    });
-            });
+            .then((res) => setAppState({
+                loaded: res.completed,
+                reviews: res.data.slice(0, 3),
+                errors: res.errors
+            }))
+            .catch((err) => setAppState({
+                loaded: err.completed,
+                reviews: err.data,
+                errors: err.errors
+            }))
     }, []);
 
     return (
