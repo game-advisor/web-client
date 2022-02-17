@@ -23,15 +23,8 @@ function CompatibilityListItem(props) {
         api.post(`/gameRequirementsCompare/${props.gameId}/${props.device.deviceID}/min`)
             .then((res) => {
                 setAppState({
-                    loaded: res.completed,
+                    loaded: false,
                     min: {
-                        device: (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK),
-                        cpu: (res.data.cpuOK),
-                        gpu: (res.data.gpuOK),
-                        os: (res.data.osOK),
-                        ram: (res.data.ramSizeOK)
-                    },
-                    max: {
                         device: (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK),
                         cpu: (res.data.cpuOK),
                         gpu: (res.data.gpuOK),
@@ -41,57 +34,40 @@ function CompatibilityListItem(props) {
                     errors: res.errors
                 });
 
-                if (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK) {
-                    setAppState((prevState) => {
-                        return {
-                            ...prevState,
-                            loaded: false
-                        }
-                    })
-                    ;
-                    api.post(`/gameRequirementsCompare/${props.gameId}/${props.device.deviceID}/max`)
-                        .then((res) => {
-                            setAppState((prevState) => {
-                                return {
-                                    ...prevState,
-                                    loaded: res.completed,
-                                    max: {
-                                        device: (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK),
-                                        cpu: (res.data.cpuOK),
-                                        gpu: (res.data.gpuOK),
-                                        os: (res.data.osOK),
-                                        ram: (res.data.ramSizeOK)
-                                    },
-                                    errors: res.errors
-                                }
-                            });
+                api.post(`/gameRequirementsCompare/${props.gameId}/${props.device.deviceID}/max`)
+                    .then((res) => {
+                        setAppState((prevState) => {
+                            return {
+                                ...prevState,
+                                loaded: res.completed,
+                                max: {
+                                    device: (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK),
+                                    cpu: (res.data.cpuOK),
+                                    gpu: (res.data.gpuOK),
+                                    os: (res.data.osOK),
+                                    ram: (res.data.ramSizeOK)
+                                },
+                                errors: res.errors
+                            }
                         })
-                        .catch((err) => {
-                            setAppState((prevState) => {
-                                return {
-                                    ...prevState,
-                                    loaded: err.completed,
-                                    errors: err.errors
-                                }
-                            });
-                        });
-                }
+                    })
+                    .catch(() => {});
             })
             .catch((err) => setAppState({
                 loaded: err.completed,
                 min: {
-                    device: true,
-                    cpu: true,
-                    gpu: true,
-                    os: true,
-                    ram: true
+                    device: false,
+                    cpu: false,
+                    gpu: false,
+                    os: false,
+                    ram: false
                 },
                 max: {
-                    device: true,
-                    cpu: true,
-                    gpu: true,
-                    os: true,
-                    ram: true
+                    device: false,
+                    cpu: false,
+                    gpu: false,
+                    os: false,
+                    ram: false
                 },
                 errors: err.errors
             }));
