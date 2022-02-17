@@ -2,8 +2,6 @@ import { createContext, useState } from 'react';
 import axios from "axios";
 
 const FavoritesContext = createContext({
-    isGamesLoaded: false,
-    isTagsLoaded: false,
     favGames: null,
     totalFavGames: 0,
     favTags: null,

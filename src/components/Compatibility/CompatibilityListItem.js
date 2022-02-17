@@ -66,7 +66,14 @@ function CompatibilityListItem(props) {
                                 }
                             });
                         })
-                        .catch(() => {
+                        .catch((err) => {
+                            setAppState((prevState) => {
+                                return {
+                                    ...prevState,
+                                    loaded: err.completed,
+                                    errors: err.errors
+                                }
+                            });
                         });
                 }
             })

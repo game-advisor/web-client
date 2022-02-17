@@ -20,12 +20,12 @@ function CompatibilityList(props) {
         setAppState({loaded: false});
         api.get('/device/user')
             .then((res) => setAppState({
-                loaded: res.loaded,
+                loaded: res.completed,
                 devices: res.data,
                 errors: res.errors
             }))
             .catch((err) => setAppState({
-                loaded: err.loaded,
+                loaded: err.completed,
                 devices: err.data,
                 errors: err.errors
             }))
