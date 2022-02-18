@@ -1,4 +1,5 @@
 import {Fragment, useContext} from "react";
+import {FormattedDate} from "react-intl";
 
 import APIService from "../../../api/APIService";
 import FavoritesContext from "../../../store/FavoritesContext";
@@ -71,8 +72,13 @@ function GameHeader(props) {
             <Container fluid className="bg-light mb-3">
                 <Container className="pt-2 pb-5">
                     <Row className={`${styles.subheader} g-0 align-items-start`}>
-                        <Col
-                            className="lead me-auto">{props.reviews} reviews &bull; {props.game.company.name} &bull; {props.game.publishDate}</Col>
+                        <Col className="lead me-auto">
+                            {props.reviews} reviews
+                            &nbsp;&bull;&nbsp;
+                            {props.game.company.name}
+                            &nbsp;&bull;&nbsp;
+                            <FormattedDate value={props.game.publishDate} day="2-digit" month="short" year="numeric"/>
+                        </Col>
                         <GameTags id={props.game.gameID} variant="outline-dark"
                             className="col d-flex flex-wrap justify-content-end"/>
                     </Row>

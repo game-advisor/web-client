@@ -8,6 +8,7 @@ import {Button, ButtonGroup, Card} from "react-bootstrap";
 import GameTags from "./GameLayout/GameTags";
 import {HeartIcon as FilledHeartIcon} from "@heroicons/react/solid";
 import {HeartIcon as UnfilledHeartIcon} from "@heroicons/react/outline";
+import {FormattedDate} from "react-intl";
 
 
 function GameListItem(props) {
@@ -36,7 +37,7 @@ function GameListItem(props) {
             <Card.Body>
                 <Card.Title>{props.title}</Card.Title>
 
-                <Card.Subtitle className="text-muted mb-3">{props.publisher} &bull; {props.date}</Card.Subtitle>
+                <Card.Subtitle className="text-muted mb-3">{props.publisher} &bull; <FormattedDate value={props.date} day="2-digit" month="short" year="numeric"/></Card.Subtitle>
                 <Card.Text>
                     <GameTags id={props.id} variant="outline-secondary" className="d-flex flex-wrap"/>
                 </Card.Text>
