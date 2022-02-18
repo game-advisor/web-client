@@ -13,9 +13,9 @@ function AppFooter() {
                     <img
                         alt=""
                         src={logo}
-                        width="30"
-                        height="30"
-                        className="d-inline-block align-top"
+                        width="24"
+                        height="24"
+                        className="d-inline-block align-top me-2"
                     />Game Advisor
                 </Navbar.Brand>
                 <Nav className="ms-auto">
