@@ -1,6 +1,5 @@
 import {Container, Nav, Navbar} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import logo from "../../assets/logo.svg";
 import i18n from "../../i18n/en.json"
 
 function AppFooter() {
@@ -10,13 +9,7 @@ function AppFooter() {
                 <Container>
 
                 <Navbar.Brand as={Link} to="/">
-                    <img
-                        alt=""
-                        src={logo}
-                        width="20"
-                        height="20"
-                        className="d-inline-block align-baseline me-2"
-                    />Game Advisor
+                    Game Advisor
                 </Navbar.Brand>
                 <Nav className="ms-auto">
                     <Nav.Link as={Link} to="/">{i18n["navigation.home"]}</Nav.Link>

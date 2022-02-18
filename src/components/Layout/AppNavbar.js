@@ -4,7 +4,6 @@ import AuthContext from "../../store/AuthContext";
 import i18n from "../../i18n/en.json"
 
 import {Container, Nav, Navbar} from "react-bootstrap";
-import logo from "../../assets/logo.svg";
 import UserLinks from "./AppNavbar/UserLinks";
 import RegistrationLinks from "./AppNavbar/RegistrationLinks";
 
@@ -15,13 +14,7 @@ function AppNavbar() {
         <Navbar bg="dark" variant="dark" expand="lg">
             <Container>
                 <Navbar.Brand as={Link} to="/">
-                    <img
-                        alt=""
-                        src={logo}
-                        width="20"
-                        height="20"
-                        className="d-inline-block align-baseline me-2"
-                    />Game Advisor
+                    Game Advisor
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="main-navbar-nav"/>
                 <Navbar.Collapse id="main-navbar-nav">
