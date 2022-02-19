@@ -51,10 +51,10 @@ function NewDevice() {
                            <BreadcrumbItem linkAs={Link} linkProps={{to: "/me/devices"}}>Devices</BreadcrumbItem>
                            <BreadcrumbItem active>New device</BreadcrumbItem>
                        </Fragment>}>
-
             <PageSection name="Add new device" description="Add your device using forms below"
                          withAction={false}>
-                <DeviceForm onSubmit={submitDevice} submitResponse={submitState.data} submitErrors={submitState.errors}/>
+                <DeviceForm onSubmit={submitDevice}
+                            submitResponse={submitState.data} submitErrors={submitState.errors}/>
             </PageSection>
         </ProfileLayout>
     );

@@ -356,6 +356,7 @@ function DeviceForm(props) {
                                         isInvalid={gpuData.manufacturer === ""}
                                     >
                                         <option value="">Choose one</option>
+                                        <option>Intel</option>
                                         <option>nVidia</option>
                                         <option>AMD</option>
                                     </Form.Select>

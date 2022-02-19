@@ -106,7 +106,7 @@ function EditDevice() {
                                                                                    linkProps={{to: `/me/devices/${appState.device.deviceID}`}}>{appState.device.shortName}</BreadcrumbItem> : ""}
                            <BreadcrumbItem active>Edit device</BreadcrumbItem>
                        </Fragment>}>
-            <PageSection name="Edit device" description="Manage your device using forms below"
+            <PageSection name="Edit device" description="Manage your device using form below"
                          withAction={false}>
                 <LazyDeviceForm isLoaded={appState.loaded} loadErrors={appState.errors}
                                 submitResponse={submitState.response} submitErrors={submitState.errors}
