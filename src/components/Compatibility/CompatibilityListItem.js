@@ -51,7 +51,16 @@ function CompatibilityListItem(props) {
                             }
                         })
                     })
-                    .catch(() => {});
+                    .catch(() => {
+                        setAppState((prevState) => {
+                            return {
+                                ...prevState,
+                                loaded: res.completed,
+                                max: prevState.min,
+                                errors: res.errors
+                            }
+                        })
+                    })
             })
             .catch((err) => setAppState({
                 loaded: err.completed,
