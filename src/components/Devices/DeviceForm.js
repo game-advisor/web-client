@@ -309,6 +309,7 @@ function DeviceForm(props) {
                                         <option value="">Choose one</option>
                                         <option>Intel</option>
                                         <option>AMD</option>
+                                        <option>Other</option>
                                     </Form.Select>
                                 </FloatingLabel>
                             </Col>
@@ -359,6 +360,7 @@ function DeviceForm(props) {
                                         <option>Intel</option>
                                         <option>nVidia</option>
                                         <option>AMD</option>
+                                        <option>Other</option>
                                     </Form.Select>
                                 </FloatingLabel>
                             </Col>
