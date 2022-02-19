@@ -16,6 +16,16 @@
     "games.sectionDesc": "A list of all the games currently on our site!",
     "tags.sectionTitle": "All tags",
     "tags.sectionDesc": "A list of all the pre-defined tags currently on our site!",
+
+    "favgames.sectionTitle": "Favorite games",
+    "favgames.sectionDesc": "All games you like on our site!",
+    "favtags.sectionTitle": "Favorite tags",
+    "favtags.sectionDesc": "All tags you like on our site!",
+
+    "recommended.sectionTitle": "Recommended games",
+    "recommended.sectionDesc": "Try pick one game you like from list below!",
+    "tags.sectionTitle": "All tags",
+    "tags.sectionDesc": "A list of all the pre-defined tags currently on our site!",
     "tag.sectionTitle": "All games matching with tag: ",
     "tag.sectionDesc": "A list of all matching games currently on our site!",
     "publishers.sectionTitle": "All publishers",

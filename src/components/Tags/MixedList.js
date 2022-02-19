@@ -13,16 +13,16 @@ function MixedList(props) {
     }
 
     return (
-        <ul className={`${props.listClass} list-unstyled mb-0`}>
+        <ul className={`${props.listClass} list-unstyled align-items-stretch mb-0`}>
             {props.tags.map((tag) => (
-                <li key={tag.name} className="d-grid me-2 mb-2">
+                <li key={tag.name} className={props.elemClass ? props.elemClass : "d-grid me-2 mb-2"} >
                     <TagListItem as={Link} tag={tag} isFavorible={false}
-                                 variant={props.variant} size={props.size} className="w-100">{tag.name}</TagListItem>
+                                 variant={props.variant} size={props.size} className="w-100 h-100">{tag.name}</TagListItem>
                 </li>
             ))}
             {props.publishers.map((publisher) => (
-                <li key={publisher.name} className="d-grid me-2 mb-2">
-                    <Button as={Link} to={`/publisher/${publisher.name}`} variant={props.variant} size={props.size} className="w-100">{publisher.name}</Button>
+                <li key={publisher.name} className={props.elemClass ? props.elemClass : "d-grid me-2 mb-2"}>
+                    <Button as={Link} to={`/publisher/${publisher.name}`} variant={props.variant} size={props.size} className="w-100 h-100">{publisher.name}</Button>
                 </li>
             ))}
             {props.children}

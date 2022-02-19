@@ -20,7 +20,7 @@ function ProfileHeader(props) {
         <Fragment>
             <Container as="header" fluid className="bg-dark text-white">
                 <Container className="pt-5 d-flex align-items-end">
-                    <div className={`${styles.avatar} shadow-sm p-3 mb-5 bg-body rounded`}>
+                    <div className={`${styles.avatar} d-none d-lg-block shadow-sm p-3 mb-5 bg-body rounded `}>
                         <img
                             alt=""
                             src={`${process.env.REACT_APP_API_URL}/user/${props.id}/avatar`}
@@ -30,7 +30,7 @@ function ProfileHeader(props) {
                         />
                     </div>
 
-                    <div className={`${styles.header} ms-3`}>
+                    <div className={`${styles.header} ms-lg-3`}>
                         <h1 className="fw-bold">{props.user.username}</h1>
                     </div>
                 </Container>

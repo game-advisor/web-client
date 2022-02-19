@@ -17,5 +17,10 @@
 .subheader {
   margin-top: .5rem !important;
   margin-bottom: 0 !important;
-  padding-left: 13rem;
+}
+
+@media (min-width: 992px) {
+  .subheader {
+    padding-left: 13rem;
+  }
 }

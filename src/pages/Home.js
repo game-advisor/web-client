@@ -52,7 +52,7 @@ function Home() {
 
     return (
         <MainLayout>
-            <PageSection name={i18n["games.sectionTitle"]} description={i18n["games.sectionDesc"]}
+            <PageSection name={i18n["recommended.sectionTitle"]} description={i18n["recommended.sectionDesc"]}
                          withAction={false}>
                 <LazyGameList isLoaded={appState.loaded} games={appState.games} errors={appState.errors}/>
             </PageSection>

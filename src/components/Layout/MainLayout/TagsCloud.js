@@ -62,9 +62,10 @@ function TagsCloud() {
         <LazyMixedList isLoaded={appState.loaded} tags={appState.tags} publishers={appState.companies}
                        errors={appState.errors}
                        variant="outline-light" size="md"
-                       listClass={`${styles.tags} d-flex align-items-stretch flex-wrap`}>
-            <li className="d-grid mb-2"><Button as={Link} to={`/tags`} variant="outline-light" size="md"
-                                                className="w-100">More tags...</Button></li>
+                       listClass={`${styles.tags} row row-cols-3 row-cols-lg-6 g-2`}
+                       elemClass="col">
+            <li className="col"><Button as={Link} to={`/tags`} variant="outline-light" size="md"
+                                                className="w-100 h-100">More tags...</Button></li>
         </LazyMixedList>
     );
 }

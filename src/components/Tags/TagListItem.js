@@ -27,15 +27,15 @@ function FavListItem(props) {
 
     if(props.isFavorible)
         return (
-            <ButtonGroup className="d-flex w-100">
-                <Button as={Link} to={`/tags/${props.tag.name}`} variant={props.variant} size={props.size} className="w-100">{props.tag.name}</Button>
+            <ButtonGroup className="d-flex w-100 h-100">
+                <Button as={Link} to={`/tags/${props.tag.name}`} variant={props.variant} size={props.size} className="w-100 h-100">{props.tag.name}</Button>
 
                 <Button variant={`outline-${props.variant}`} size={props.size}
                         onClick={toggleFavStatus}>{isFavorite ? <FilledHeartIcon width="24" height="24" /> : <UnfilledHeartIcon width="24" height="24" />}</Button>
             </ButtonGroup>
         );
     return (
-        <Button as={Link} to={`/tags/${props.tag.name}`} variant={props.variant} size={props.size} className="w-100">{props.tag.name}</Button>
+        <Button as={Link} to={`/tags/${props.tag.name}`} variant={props.variant} size={props.size} className="w-100 h-100">{props.tag.name}</Button>
     );
 
 }

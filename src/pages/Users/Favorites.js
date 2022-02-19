@@ -72,12 +72,12 @@ function Favorites() {
 
     return (
         <ProfileLayout isPersonal={true} subpages={<BreadcrumbItem active>Favorities</BreadcrumbItem>}>
-            <PageSection name="Favorite games" description={i18n["games.sectionDesc"]}
+            <PageSection name={i18n["favgames.sectionTitle"]} description={i18n["favgames.sectionDesc"]}
                          withAction={false}>
                 <LazyGameList isLoaded={appState.loaded} games={appState.games} errors={appState.errors}/>
             </PageSection>
 
-            <PageSection name="Favorite tags" description={i18n["tags.sectionDesc"]}
+            <PageSection name={i18n["favtags.sectionTitle"]} description={i18n["favtags.sectionDesc"]}
                          withAction={false}>
                 <LazyTagList isLoaded={appState.loaded} tags={appState.tags} errors={appState.errors} isFavorible={true}
                              variant="secondary" size="lg" listClass="d-flex flex-wrap justify-content-start"/>

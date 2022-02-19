@@ -7,8 +7,7 @@ function DeviceListWrapper(props) {
             return (<Alert
                 variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert>);
 
-        return (<p className="mt-5 h2 text-center text-muted">No devices found. Try add more devices using button
-            above.</p>)
+        return (<p className="mt-5 h2 text-center text-muted">No devices found.</p>)
     }
 
     if (props.flow === "column")
