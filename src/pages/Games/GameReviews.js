@@ -13,32 +13,34 @@ import ReviewList from "../../components/Reviews/ReviewList";
 function GameReviews() {
     const params = useParams();
     const history = useNavigate();
-    const authCtx = useContext(AuthContext);
 
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         reviews: [],
         errors: null
     });
 
+    const authCtx = useContext(AuthContext);
     const api = APIService();
     const LazyReviewList = LazyComponent(ReviewList);
 
     useEffect(() => {
-        setAppState({loaded: false});
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
 
-        api.get(`/game/${params.gameId}/review`)
-            .then((res) => setAppState({
+            api.get(`/game/${params.gameId}/review`)
+                .then((res) => setAppState({
                     loaded: res.completed,
                     reviews: res.data,
                     errors: res.errors
                 }))
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                reviews: err.data,
-                errors: err.errors
-            }))
-    }, [params.gameId]);
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    reviews: err.data,
+                    errors: err.errors
+                }))
+        }
+    }, [params.gameId, authCtx]);
 
     if (authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>;

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useState, useEffect, Fragment} from 'react';
+import {useState, useEffect, Fragment, useContext} from 'react';
 import {Link, useParams} from "react-router-dom";
 
 import APIService from "../../api/APIService";
@@ -12,10 +12,11 @@ import LazyComponent from "../../components/LazyComponent";
 
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import AuthContext from "../../store/AuthContext";
 
 function ViewDevice() {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         device: {},
         errors: null
     });
@@ -25,6 +26,8 @@ function ViewDevice() {
         success: null,
         errors: null,
     });
+
+    const authCtx = useContext(AuthContext);
 
     const api = APIService();
     const params = useParams();
@@ -66,20 +69,22 @@ function ViewDevice() {
     }
 
     useEffect(() => {
-        setAppState({loaded: false});
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
 
-        api.get(`/device/${deviceID}`)
-            .then((res) => setAppState({
-                loaded: res.completed,
-                device: res.data,
-                errors: res.errors
-            }))
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                device: err.data,
-                errors: err.errors
-            }))
-    }, [deviceID, deleteState]);
+            api.get(`/device/${deviceID}`)
+                .then((res) => setAppState({
+                    loaded: res.completed,
+                    device: res.data,
+                    errors: res.errors
+                }))
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    device: err.data,
+                    errors: err.errors
+                }))
+        }
+    }, [deviceID, authCtx]);
 
     return (
         <ProfileLayout isPersonal={true}

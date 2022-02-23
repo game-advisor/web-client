@@ -22,7 +22,7 @@ function MixedList(props) {
             ))}
             {props.publishers.map((publisher) => (
                 <li key={publisher.name} className={props.elemClass ? props.elemClass : "d-grid me-2 mb-2"}>
-                    <Button as={Link} to={`/publisher/${publisher.name}`} variant={props.variant} size={props.size} className="w-100 h-100">{publisher.name}</Button>
+                    <Button as={Link} to={`/publishers/${publisher.name}`} variant={props.variant} size={props.size} className="w-100 h-100">{publisher.name}</Button>
                 </li>
             ))}
             {props.children}

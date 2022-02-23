@@ -3,7 +3,7 @@ import {useState, useEffect, useContext} from 'react';
 import {Link, Navigate, useParams} from "react-router-dom";
 
 import APIService from "../../api/APIService";
-import authContext from "../../store/AuthContext";
+import AuthContext from "../../store/AuthContext";
 import i18n from "../../i18n/en.json"
 
 import {Breadcrumb, Container} from "react-bootstrap";
@@ -14,31 +14,33 @@ import LazyComponent from "../../components/LazyComponent";
 
 function ViewPublisher() {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         games: [],
         errors: null
     })
 
     const params = useParams();
-    const authCtx = useContext(authContext);
+    const authCtx = useContext(AuthContext);
     const api = APIService();
     const LazyGameList = LazyComponent(GameListWrapper);
 
     useEffect(() => {
-        setAppState({loaded: false});
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
 
-        api.get(`/games/${params.publisherName}`)
-            .then((res) => setAppState({
-                loaded: res.completed,
-                games: res.data[0].gameList,
-                errors: res.errors
-            }))
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                games: err.data,
-                errors: err.errors
-            }))
-    }, [params]);
+            api.get(`/games/${params.publisherName}`)
+                .then((res) => setAppState({
+                    loaded: res.completed,
+                    games: res.data[0].gameList,
+                    errors: res.errors
+                }))
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    games: err.data,
+                    errors: err.errors
+                }))
+        }
+    }, [params.publisherName, authCtx]);
 
     if (authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>

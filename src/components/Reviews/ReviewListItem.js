@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import ReactMarkdown from "react-markdown";
 import {Link} from "react-router-dom";
 
@@ -6,31 +6,35 @@ import APIService from "../../api/APIService";
 
 import {FormattedDate, FormattedTime} from "react-intl";
 import {Card, Col, ProgressBar, Row} from "react-bootstrap";
+import authContext from "../../store/AuthContext";
 
 function ReviewListItem(props) {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         user: {},
         errors: null
     });
 
+    const authCtx = useContext(authContext);
     const api = APIService();
 
     useEffect(() => {
-        setAppState({loaded: false});
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
 
-        api.get(`/user/${props.author}`)
-            .then((res) => setAppState({
-                loaded: res.completed,
-                user: res.data,
-                errors: res.errors
-            }))
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                user: err.data,
-                errors: err.errors
-            }))
-    }, [props.author]);
+            api.get(`/user/${props.author}`)
+                .then((res) => setAppState({
+                    loaded: res.completed,
+                    user: res.data,
+                    errors: res.errors
+                }))
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    user: err.data,
+                    errors: err.errors
+                }))
+        }
+    }, [props.author, authCtx]);
 
     return (
         <div className="d-flex w-100 mb-3">

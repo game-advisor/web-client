@@ -49,7 +49,7 @@ function App() {
                     <Route path='*' element={<NotFound/>}/>
                 </Route>
 
-                <Route path='publisher/:publisherName' element={<ViewPublisher/>}/>
+                <Route path='publishers/:publisherName' element={<ViewPublisher/>}/>
 
                 {/* Game-related Routes */}
                 <Route path='games'>

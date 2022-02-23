@@ -13,7 +13,7 @@ import {Breadcrumb, Container} from "react-bootstrap";
 
 function Search() {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         games: [],
         errors: null
     })
@@ -24,7 +24,7 @@ function Search() {
     const LazyGameList = LazyComponent(GameListWrapper);
 
     useEffect(() => {
-        if (params.query) {
+        if (params.query && authCtx.getstatus()) {
             setAppState({loaded: false});
 
             api.get(`/game/${params.query}`)
@@ -39,7 +39,7 @@ function Search() {
                     errors: err.errors
                 }))
         }
-    }, [params.query]);
+    }, [params.query, authCtx]);
 
     if (authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>

@@ -10,7 +10,7 @@ import {Link} from "react-router-dom";
 
 function ProfileLayout(props) {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         user: {},
         errors: null
     })
@@ -22,20 +22,22 @@ function ProfileLayout(props) {
     const LazyProfileHeader = LazyHeader(ProfileHeader);
 
     useEffect(() => {
-        setAppState({loaded: false});
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
 
-        api.get(`/user/${userID}`)
-            .then((res) => setAppState({
-                loaded: res.completed,
-                user: res.data,
-                errors: res.errors
-            }))
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                user: err.data,
-                errors: err.errors
-            }))
-    }, [userID]);
+            api.get(`/user/${userID}`)
+                .then((res) => setAppState({
+                    loaded: res.completed,
+                    user: res.data,
+                    errors: res.errors
+                }))
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    user: err.data,
+                    errors: err.errors
+                }))
+        }
+    }, [userID, authCtx]);
 
     return (
         <Fragment>

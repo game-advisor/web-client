@@ -16,7 +16,7 @@ import FavoritesContext from "../../store/FavoritesContext";
 
 function AllTags() {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         tags: [],
         companies: [],
         errors: null
@@ -29,43 +29,45 @@ function AllTags() {
     const LazyPublisherList = LazyComponent(PublisherList);
 
     useEffect(() => {
-        setAppState({loaded: false});
-        const token = authCtx.token;
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
+            const token = authCtx.token;
 
-        api.get(`/tags`)
-            .then((res) => {
-                setAppState({
-                    loaded: false,
-                    tags: res.data,
-                    errors: res.errors
-                });
+            api.get(`/tags`)
+                .then((res) => {
+                    setAppState({
+                        loaded: false,
+                        tags: res.data,
+                        errors: res.errors
+                    });
 
-                api.get(`/company/getGameCompanies`)
-                    .then((res) => setAppState((prevState) => {
-                        return {
-                            ...prevState,
-                            loaded: res.completed,
-                            companies: res.data,
-                            errors: res.errors
-                        }
-                    }))
-                    .catch((err) => setAppState((prevState) => {
-                        return {
-                            ...prevState,
-                            loaded: err.completed,
-                            companies: err.data,
-                            errors: err.errors
-                        }
-                    }))
-            })
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                tags: err.data,
-                errors: err.errors
-            }))
+                    api.get(`/company/getGameCompanies`)
+                        .then((res) => setAppState((prevState) => {
+                            return {
+                                ...prevState,
+                                loaded: res.completed,
+                                companies: res.data,
+                                errors: res.errors
+                            }
+                        }))
+                        .catch((err) => setAppState((prevState) => {
+                            return {
+                                ...prevState,
+                                loaded: err.completed,
+                                companies: err.data,
+                                errors: err.errors
+                            }
+                        }))
+                })
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    tags: err.data,
+                    errors: err.errors
+                }))
 
-        favCtx.loadTags(token);
-    }, []);
+            favCtx.loadTags(token);
+        }
+    }, [authCtx]);
 
     if (authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>

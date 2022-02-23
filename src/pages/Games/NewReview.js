@@ -12,7 +12,7 @@ import ReviewForm from "../../components/Reviews/ReviewForm";
 
 function NewReview() {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         game: {},
         errors: null
     });
@@ -25,20 +25,22 @@ function NewReview() {
     const LazyReviewForm = LazyComponent(ReviewForm);
 
     useEffect(() => {
-        setAppState({loaded: false});
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
 
-        api.get(`/game/${params.gameId}/info`)
-            .then((res) => setAppState({
-                loaded: res.completed,
-                game: res.data,
-                errors: res.errors
-            }))
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                game: err.data,
-                errors: err.errors
-            }))
-    }, [params.gameId]);
+            api.get(`/game/${params.gameId}/info`)
+                .then((res) => setAppState({
+                    loaded: res.completed,
+                    game: res.data,
+                    errors: res.errors
+                }))
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    game: err.data,
+                    errors: err.errors
+                }))
+        }
+    }, [params.gameId, authCtx]);
 
     const [submitErrors, setSubmitErrors] = useState(null);
 

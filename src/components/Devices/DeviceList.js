@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useState, useEffect, Fragment} from 'react';
+import {useState, useEffect, Fragment, useContext} from 'react';
 
 import APIService from "../../api/APIService";
 
@@ -9,10 +9,11 @@ import {confirmAlert} from "react-confirm-alert";
 import i18n from "../../i18n/en.json";
 import {Alert} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
+import authContext from "../../store/AuthContext";
 
 function DeviceList(props) {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         devices: [],
         errors: null
     });
@@ -23,6 +24,7 @@ function DeviceList(props) {
         errors: null,
     });
 
+    const authCtx = useContext(authContext);
     const api = APIService();
     const history = useNavigate();
     const LazyDeviceList = LazyComponent(DeviceListWrapper);
@@ -61,32 +63,35 @@ function DeviceList(props) {
     }
 
     useEffect(() => {
-        setAppState({loaded: false});
 
-        const endpoint = props.isPersonal ? `/device/user` : `/device/user/${props.userId}?pageNumber=0&pageSize=3&sortBy=deviceID`;
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
 
-        api.get(endpoint)
-            .then((res) => {
-                if(props.isPersonal)
-                    setAppState({
-                        loaded: res.completed,
-                        devices: res.data,
-                        errors: res.errors
-                    });
+            const endpoint = props.isPersonal ? `/device/user` : `/device/user/${props.userId}?pageNumber=0&pageSize=3&sortBy=deviceID`;
 
-                else
-                    setAppState({
-                        loaded: res.completed,
-                        devices: res.data.content,
-                        errors: res.errors
-                    });
-            })
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                devices: err.data,
-                errors: err.errors
-            }));
-    }, [props.isPersonal, props.userId]);
+            api.get(endpoint)
+                .then((res) => {
+                    if (props.isPersonal)
+                        setAppState({
+                            loaded: res.completed,
+                            devices: res.data,
+                            errors: res.errors
+                        });
+
+                    else
+                        setAppState({
+                            loaded: res.completed,
+                            devices: res.data.content,
+                            errors: res.errors
+                        });
+                })
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    devices: err.data,
+                    errors: err.errors
+                }));
+        }
+    }, [props.isPersonal, props.userId, authCtx]);
 
     return (
         <Fragment>

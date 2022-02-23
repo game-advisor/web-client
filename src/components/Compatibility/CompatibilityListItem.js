@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 
 import APIService from "../../api/APIService";
 import i18n from "../../i18n/en.json";
@@ -6,81 +6,74 @@ import i18n from "../../i18n/en.json";
 import {Accordion, Badge, Col, ListGroup, Row} from "react-bootstrap";
 import computer from "../../assets/computer.svg";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/outline";
+import authContext from "../../store/AuthContext";
 
 function CompatibilityListItem(props) {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         min: {},
         max: {},
         errors: null
     })
 
+    const authCtx = useContext(authContext);
     const api = APIService();
 
     useEffect(() => {
-        setAppState({loaded: false});
 
-        api.post(`/gameRequirementsCompare/${props.gameId}/${props.device.deviceID}/min`)
-            .then((res) => {
-                setAppState({
-                    loaded: false,
-                    min: {
-                        device: (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK),
-                        cpu: (res.data.cpuOK),
-                        gpu: (res.data.gpuOK),
-                        os: (res.data.osOK),
-                        ram: (res.data.ramSizeOK)
-                    },
-                    errors: res.errors
-                });
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
 
-                api.post(`/gameRequirementsCompare/${props.gameId}/${props.device.deviceID}/max`)
-                    .then((res) => {
-                        setAppState((prevState) => {
-                            return {
-                                ...prevState,
-                                loaded: res.completed,
-                                max: {
-                                    device: (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK),
-                                    cpu: (res.data.cpuOK),
-                                    gpu: (res.data.gpuOK),
-                                    os: (res.data.osOK),
-                                    ram: (res.data.ramSizeOK)
-                                },
-                                errors: res.errors
-                            }
+            api.post(`/gameRequirementsCompare/${props.gameId}/${props.device.deviceID}/min`)
+                .then((res) => {
+                    setAppState({
+                        loaded: false,
+                        min: {
+                            device: (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK),
+                            cpu: (res.data.cpuOK),
+                            gpu: (res.data.gpuOK),
+                            os: (res.data.osOK),
+                            ram: (res.data.ramSizeOK)
+                        },
+                        errors: res.errors
+                    });
+
+                    api.post(`/gameRequirementsCompare/${props.gameId}/${props.device.deviceID}/max`)
+                        .then((res) => {
+                            setAppState((prevState) => {
+                                return {
+                                    ...prevState,
+                                    loaded: res.completed,
+                                    max: {
+                                        device: (res.data.cpuOK && res.data.gpuOK && res.data.osOK && res.data.ramSizeOK),
+                                        cpu: (res.data.cpuOK),
+                                        gpu: (res.data.gpuOK),
+                                        os: (res.data.osOK),
+                                        ram: (res.data.ramSizeOK)
+                                    },
+                                    errors: res.errors
+                                }
+                            })
                         })
-                    })
-                    .catch(() => {
-                        setAppState((prevState) => {
-                            return {
-                                ...prevState,
-                                loaded: res.completed,
-                                max: prevState.min,
-                                errors: res.errors
-                            }
+                        .catch(() => {
+                            setAppState((prevState) => {
+                                return {
+                                    ...prevState,
+                                    loaded: res.completed,
+                                    max: prevState.min,
+                                    errors: res.errors
+                                }
+                            })
                         })
-                    })
-            })
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                min: {
-                    device: false,
-                    cpu: false,
-                    gpu: false,
-                    os: false,
-                    ram: false
-                },
-                max: {
-                    device: false,
-                    cpu: false,
-                    gpu: false,
-                    os: false,
-                    ram: false
-                },
-                errors: err.errors
-            }));
-    }, [props.gameId, props.device.deviceID]);
+                })
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    min: {},
+                    max: {},
+                    errors: err.errors
+                }));
+        }
+    }, [props.gameId, props.device.deviceID, authCtx]);
 
     return (
         <Accordion>
@@ -99,12 +92,14 @@ function CompatibilityListItem(props) {
                         <Col md={9}>
                             <h5>{props.device.shortName}</h5>
                             {appState.loaded ?
-                                (appState.max.device ?
-                                        <Badge bg="success" pill>Passed</Badge> :
-                                        (appState.min.device ?
-                                                <Badge bg="warning" pill>Needs attention</Badge> :
-                                                <Badge bg="danger" pill>Not passed</Badge>
-                                        )
+                                (appState.min !== {} ?
+                                        (appState.max.device ?
+                                            <Badge bg="success" pill>Passed</Badge> :
+                                            (appState.min.device ?
+                                                    <Badge bg="warning" pill>Needs attention</Badge> :
+                                                    <Badge bg="danger" pill>Not passed</Badge>
+                                            )) :
+                                        <Badge bg="info" pill>Unknown</Badge>
                                 ) : ''}
                         </Col>
                     </Row>
@@ -118,12 +113,14 @@ function CompatibilityListItem(props) {
                                 {props.device.cpu.name}
                             </div>
                             {appState.loaded ?
-                                (appState.max.cpu ?
-                                        <Badge bg="success" pill>Passed</Badge> :
-                                        (appState.min.cpu ?
-                                                <Badge bg="warning" pill>Needs attention</Badge> :
-                                                <Badge bg="danger" pill>Not passed</Badge>
-                                        )
+                                (appState.min !== {} ?
+                                        (appState.max.cpu ?
+                                            <Badge bg="success" pill>Passed</Badge> :
+                                            (appState.min.cpu ?
+                                                    <Badge bg="warning" pill>Needs attention</Badge> :
+                                                    <Badge bg="danger" pill>Not passed</Badge>
+                                            )) :
+                                        <Badge bg="info" pill>Unknown</Badge>
                                 ) : ''}
                         </ListGroup.Item>
                         <ListGroup.Item as="li"
@@ -133,12 +130,14 @@ function CompatibilityListItem(props) {
                                 {props.device.gpu.name}
                             </div>
                             {appState.loaded ?
-                                (appState.max.gpu ?
-                                        <Badge bg="success" pill>Passed</Badge> :
-                                        (appState.min.gpu ?
-                                                <Badge bg="warning" pill>Needs attention</Badge> :
-                                                <Badge bg="danger" pill>Not passed</Badge>
-                                        )
+                                (appState.min !== {} ?
+                                        (appState.max.gpu ?
+                                            <Badge bg="success" pill>Passed</Badge> :
+                                            (appState.min.gpu ?
+                                                    <Badge bg="warning" pill>Needs attention</Badge> :
+                                                    <Badge bg="danger" pill>Not passed</Badge>
+                                            )) :
+                                        <Badge bg="info" pill>Unknown</Badge>
                                 ) : ''}
                         </ListGroup.Item>
                         <ListGroup.Item as="li"
@@ -148,12 +147,14 @@ function CompatibilityListItem(props) {
                                 {props.device.ram.amountOfSticks * props.device.ram.size} GB
                             </div>
                             {appState.loaded ?
-                                (appState.max.ram ?
-                                        <Badge bg="success" pill>Passed</Badge> :
-                                        (appState.min.ram ?
-                                                <Badge bg="warning" pill>Needs attention</Badge> :
-                                                <Badge bg="danger" pill>Not passed</Badge>
-                                        )
+                                (appState.min !== {} ?
+                                        (appState.max.ram ?
+                                            <Badge bg="success" pill>Passed</Badge> :
+                                            (appState.min.ram ?
+                                                    <Badge bg="warning" pill>Needs attention</Badge> :
+                                                    <Badge bg="danger" pill>Not passed</Badge>
+                                            )) :
+                                        <Badge bg="info" pill>Unknown</Badge>
                                 ) : ''}
                         </ListGroup.Item>
 
@@ -182,12 +183,14 @@ function CompatibilityListItem(props) {
                                 {props.device.os.name}
                             </div>
                             {appState.loaded ?
-                                (appState.max.os ?
-                                        <Badge bg="success" pill>Passed</Badge> :
-                                        (appState.min.os ?
-                                                <Badge bg="warning" pill>Needs attention</Badge> :
-                                                <Badge bg="danger" pill>Not passed</Badge>
-                                        )
+                                (appState.min !== {} ?
+                                        (appState.max.os ?
+                                            <Badge bg="success" pill>Passed</Badge> :
+                                            (appState.min.os ?
+                                                    <Badge bg="warning" pill>Needs attention</Badge> :
+                                                    <Badge bg="danger" pill>Not passed</Badge>
+                                            )) :
+                                        <Badge bg="info" pill>Unknown</Badge>
                                 ) : ''}
                         </ListGroup.Item>
                     </ListGroup>

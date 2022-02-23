@@ -1,15 +1,17 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 
 import APIService from "../../api/APIService";
 import * as formik from "formik";
 
 import {Button, ButtonGroup, Form, Row} from "react-bootstrap";
+import authContext from "../../store/AuthContext";
 
 function FilterForm(props) {
     const [availableTags, setAvailableTags] = useState([]);
     const [availablePublishers, setAvailablePublishers] = useState([]);
 
     const {Formik} = formik;
+    const authCtx = useContext(authContext);
     const api = APIService();
 
     function fetchPublishers() {
@@ -27,7 +29,7 @@ function FilterForm(props) {
     useEffect(() => {
         fetchTags();
         fetchPublishers();
-    }, []);
+    }, [authCtx]);
 
     return (
         <Formik

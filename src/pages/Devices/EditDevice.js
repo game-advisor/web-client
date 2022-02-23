@@ -12,7 +12,7 @@ import {BreadcrumbItem} from "react-bootstrap";
 
 function EditDevice() {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         device: {},
         errors: null
     });
@@ -55,45 +55,47 @@ function EditDevice() {
     }
 
     useEffect(() => {
-        setAppState({loaded: false});
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
 
-        api.get(`/device/${deviceID}`)
-            .then((res) => setAppState({
-                loaded: res.completed,
-                device: {
-                    deviceID: res.data.deviceID,
-                    shortName: res.data.shortName,
-                    cpu: {
-                        id: res.data.cpu.cpuID,
-                        manufacturer: res.data.cpu.company.name,
-                        series: res.data.cpu.series !== "" ? res.data.cpu.series : "%20",
-                        model: res.data.cpu.name
+            api.get(`/device/${deviceID}`)
+                .then((res) => setAppState({
+                    loaded: res.completed,
+                    device: {
+                        deviceID: res.data.deviceID,
+                        shortName: res.data.shortName,
+                        cpu: {
+                            id: res.data.cpu.cpuID,
+                            manufacturer: res.data.cpu.company.name,
+                            series: res.data.cpu.series !== "" ? res.data.cpu.series : "%20",
+                            model: res.data.cpu.name
+                        },
+                        gpu: {
+                            id: res.data.gpu.gpuID,
+                            manufacturer: res.data.gpu.company.name,
+                            series: res.data.gpu.series !== "" ? res.data.gpu.series : "%20",
+                            model: res.data.gpu.name
+                        },
+                        ramSticks: res.data.ram.amountOfSticks,
+                        ramSize: res.data.ram.size,
+                        ramFreq: res.data.ram.freq,
+                        ramLatency: res.data.ram.latency,
+                        hdd: res.data.hdd,
+                        ssd: res.data.ssd,
+                        os: {
+                            id: res.data.os.osID,
+                            developer: res.data.os.company.name
+                        }
                     },
-                    gpu: {
-                        id: res.data.gpu.gpuID,
-                        manufacturer: res.data.gpu.company.name,
-                        series: res.data.gpu.series !== "" ? res.data.gpu.series : "%20",
-                        model: res.data.gpu.name
-                    },
-                    ramSticks: res.data.ram.amountOfSticks,
-                    ramSize: res.data.ram.size,
-                    ramFreq: res.data.ram.freq,
-                    ramLatency: res.data.ram.latency,
-                    hdd: res.data.hdd,
-                    ssd: res.data.ssd,
-                    os: {
-                        id: res.data.os.osID,
-                        developer: res.data.os.company.name
-                    }
-                },
-                errors: res.errors
-            }))
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                device: err.data,
-                errors: err.errors
-            }))
-    }, [deviceID]);
+                    errors: res.errors
+                }))
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    device: err.data,
+                    errors: err.errors
+                }))
+        }
+    }, [deviceID, authCtx]);
 
     if (authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>;

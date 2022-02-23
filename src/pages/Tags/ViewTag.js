@@ -3,7 +3,7 @@ import {useState, useEffect, useContext} from 'react';
 import {Link, Navigate, useParams} from "react-router-dom";
 
 import APIService from "../../api/APIService";
-import authContext from "../../store/AuthContext";
+import AuthContext from "../../store/AuthContext";
 import i18n from "../../i18n/en.json"
 
 import MainLayout from "../../components/Layout/MainLayout";
@@ -20,25 +20,27 @@ function ViewTag() {
     })
 
     const params = useParams();
-    const authCtx = useContext(authContext);
+    const authCtx = useContext(AuthContext);
     const api = APIService();
     const LazyGameList = LazyComponent(GameListWrapper);
 
     useEffect(() => {
-        setAppState({loaded: false});
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
 
-        api.get(`/game/getByTagsAndCompany/0?tags=${params.tagName}`)
-            .then((res) => setAppState({
-                loaded: res.completed,
-                games: res.data,
-                errors: res.errors
-            }))
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                games: err.data,
-                errors: err.errors
-            }))
-    }, [params]);
+            api.get(`/game/getByTagsAndCompany/0?tags=${params.tagName}`)
+                .then((res) => setAppState({
+                    loaded: res.completed,
+                    games: res.data,
+                    errors: res.errors
+                }))
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    games: err.data,
+                    errors: err.errors
+                }))
+        }
+    }, [params.tagName, authCtx]);
 
     if (authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>

@@ -14,7 +14,7 @@ import FavoritesContext from "../store/FavoritesContext";
 
 function Home() {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         games: [],
         errors: null
     })
@@ -25,27 +25,29 @@ function Home() {
     const LazyGameList = LazyComponent(GameListWrapper);
 
     useEffect(() => {
-        setAppState({loaded: false});
-        const token = authCtx.token;
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
+            const token = authCtx.token;
 
-        api.post('/games/getByDatePublished', {
-            "dateBegin": "1970-01-01",
-            "dateEnd": ""
-        })
-            .then((res) => setAppState({
-                loaded: res.completed,
-                games: res.data,
-                errors: res.errors
-            }))
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                games: err.data,
-                errors: err.errors
-            }))
+            api.post('/games/getByDatePublished', {
+                "dateBegin": "1970-01-01",
+                "dateEnd": ""
+            })
+                .then((res) => setAppState({
+                    loaded: res.completed,
+                    games: res.data,
+                    errors: res.errors
+                }))
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    games: err.data,
+                    errors: err.errors
+                }))
 
-        favCtx.loadGames(token);
-        favCtx.loadTags(token);
-    }, [authCtx.token]);
+            favCtx.loadGames(token);
+            favCtx.loadTags(token);
+        }
+    }, [authCtx]);
 
     if (authCtx.getstatus() === false)
         return <Navigate to="/login" replace/>

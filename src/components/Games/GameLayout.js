@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useEffect, useState, Fragment} from "react";
+import {useEffect, useState, Fragment, useContext} from "react";
 
 import APIService from "../../api/APIService";
 
@@ -7,39 +7,43 @@ import {Breadcrumb, Container} from "react-bootstrap";
 import GameHeader from "./GameLayout/GameHeader";
 import LazyHeader from "../LazyHeader";
 import {Link} from "react-router-dom";
+import authContext from "../../store/AuthContext";
 
 function GameLayout(props) {
     const [appState, setAppState] = useState({
-        loaded: false,
+        loaded: true,
         game: {},
         errors: null
     });
     const [reviews, setReviews] = useState(0)
 
+    const authCtx = useContext(authContext);
     const api = APIService();
     const LazyGameHeader = LazyHeader(GameHeader);
 
     useEffect(() => {
-        setAppState({loaded: false});
+        if (authCtx.getstatus()) {
+            setAppState({loaded: false});
 
-        api.get(`/game/${props.id}/info`)
-            .then((res) => {
-                setAppState({
-                    loaded: res.completed,
-                    game: res.data,
-                    errors: res.errors
-                });
+            api.get(`/game/${props.id}/info`)
+                .then((res) => {
+                    setAppState({
+                        loaded: res.completed,
+                        game: res.data,
+                        errors: res.errors
+                    });
 
-                api.get(`/game/${props.id}/review/count`)
-                    .then((res) => setReviews(res.data))
-                    .catch((err) => console.log(err.errors));
-            })
-            .catch((err) => setAppState({
-                loaded: err.completed,
-                game: err.data,
-                errors: err.errors
-            }))
-    }, [props.id]);
+                    api.get(`/game/${props.id}/review/count`)
+                        .then((res) => setReviews(res.data))
+                        .catch((err) => console.log(err.errors));
+                })
+                .catch((err) => setAppState({
+                    loaded: err.completed,
+                    game: err.data,
+                    errors: err.errors
+                }))
+        }
+    }, [props.id, authCtx]);
 
     return (
         <Fragment>
