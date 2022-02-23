@@ -14,7 +14,7 @@ function UserReviews(props) {
     const params = useParams();
 
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         reviews: [],
         errors: null
     });

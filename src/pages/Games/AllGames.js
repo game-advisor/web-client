@@ -15,7 +15,7 @@ import FavoritesContext from "../../store/FavoritesContext";
 
 function AllGames() {
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         games: [],
         errors: null
     })

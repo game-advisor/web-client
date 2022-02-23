@@ -16,7 +16,7 @@ import AuthContext from "../../store/AuthContext";
 
 function ViewDevice() {
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         device: {},
         errors: null
     });

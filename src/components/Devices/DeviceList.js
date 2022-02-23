@@ -13,7 +13,7 @@ import authContext from "../../store/AuthContext";
 
 function DeviceList(props) {
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         devices: [],
         errors: null
     });

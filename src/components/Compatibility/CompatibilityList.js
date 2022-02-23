@@ -9,7 +9,7 @@ import authContext from "../../store/AuthContext";
 
 function CompatibilityList(props) {
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         devices: [],
         errors: null
     });

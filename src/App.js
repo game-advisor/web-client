@@ -26,6 +26,7 @@ import NotFound from "./errors/NotFound";
 import Layout from "./components/Layout";
 import ViewPublisher from "./pages/Tags/ViewPublisher";
 import AdvancedSearch from "./pages/AdvancedSearch";
+import EditReview from "./pages/Games/EditReview";
 
 function App() {
     return (
@@ -59,6 +60,7 @@ function App() {
                         <Route path='reviews'>
                             <Route path='' element={<GameReviews/>}/>
                             <Route path='create' element={<NewReview/>}/>
+                            <Route path=':reviewId/edit' element={<EditReview/>}/>
 
                             <Route path='*' element={<NotFound/>}/>
                         </Route>

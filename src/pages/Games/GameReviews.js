@@ -15,7 +15,7 @@ function GameReviews() {
     const history = useNavigate();
 
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         reviews: [],
         errors: null
     });

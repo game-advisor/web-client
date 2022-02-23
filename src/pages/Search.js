@@ -13,7 +13,7 @@ import {Breadcrumb, Container} from "react-bootstrap";
 
 function Search() {
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         games: [],
         errors: null
     })

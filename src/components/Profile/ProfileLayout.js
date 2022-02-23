@@ -10,7 +10,7 @@ import {Link} from "react-router-dom";
 
 function ProfileLayout(props) {
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         user: {},
         errors: null
     })

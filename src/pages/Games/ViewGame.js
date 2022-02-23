@@ -18,7 +18,7 @@ function ViewGame() {
     const history = useNavigate();
 
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         reviews: [],
         errors: null
     });

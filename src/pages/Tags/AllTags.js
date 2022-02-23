@@ -16,7 +16,7 @@ import FavoritesContext from "../../store/FavoritesContext";
 
 function AllTags() {
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         tags: [],
         companies: [],
         errors: null

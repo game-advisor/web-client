@@ -14,7 +14,7 @@ import LazyComponent from "../../components/LazyComponent";
 
 function ViewPublisher() {
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         games: [],
         errors: null
     })

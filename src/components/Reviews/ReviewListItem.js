@@ -5,12 +5,13 @@ import {Link} from "react-router-dom";
 import APIService from "../../api/APIService";
 
 import {FormattedDate, FormattedTime} from "react-intl";
-import {Card, Col, ProgressBar, Row} from "react-bootstrap";
+import {Button, Card, Col, ProgressBar, Row} from "react-bootstrap";
 import authContext from "../../store/AuthContext";
+import {PencilIcon, TrashIcon} from "@heroicons/react/outline";
 
 function ReviewListItem(props) {
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         user: {},
         errors: null
     });
@@ -38,13 +39,22 @@ function ReviewListItem(props) {
 
     return (
         <div className="d-flex w-100 mb-3">
+            <div className="d-flex flex-column me-2">
             <img
                 alt=""
                 src={`${process.env.REACT_APP_API_URL}/user/${props.author}/avatar`}
-                width="40"
-                height="40"
-                className="user-avatar rounded shadow me-2"
+                width="48"
+                height="48"
+                className="user-avatar rounded shadow"
             />
+                {props.author === authCtx.details.userID ?
+                    <>
+                    <Button as={Link} to={`edit`} variant="outline-secondary" className="w-100 mt-2"><PencilIcon width="16" height="16" /></Button>
+                    <Button variant="outline-danger"  className="w-100 mt-2"
+                            onClick={() => props.onDelete(props.device.deviceID)} ><TrashIcon width="20" height="20" /></Button>
+                    </> : ''
+                }
+            </div>
             <Card body className="flex-fill">
                 <Card.Title>{(appState.loaded && appState.user) ? <Link to={`/users/${props.author}`} className="text-reset text-decoration-none">{appState.user.username}</Link> : ''}</Card.Title>
                 <Card.Subtitle className="mb-2"><FormattedDate value={props.date} day="2-digit" month="short" year="numeric"/> <FormattedTime value={props.date} hour="numeric" minute="numeric" /></Card.Subtitle>

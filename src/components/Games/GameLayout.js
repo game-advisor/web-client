@@ -11,7 +11,7 @@ import authContext from "../../store/AuthContext";
 
 function GameLayout(props) {
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         game: {},
         errors: null
     });

@@ -10,7 +10,7 @@ import GameLayout from "../../components/Games/GameLayout";
 import ReviewForm from "../../components/Reviews/ReviewForm";
 
 
-function NewReview() {
+function EditReview() {
     const [appState, setAppState] = useState({
         loaded: false,
         game: {},
@@ -72,4 +72,4 @@ function NewReview() {
     );
 }
 
-export default NewReview;
+export default EditReview;

@@ -12,7 +12,7 @@ import authContext from "../../../store/AuthContext";
 
 function TagsCloud() {
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         tags: [],
         companies: [],
         errors: null

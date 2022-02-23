@@ -13,7 +13,7 @@ import LazyComponent from "../components/LazyComponent";
 
 function AdvancedSearch() {
     const [appState, setAppState] = useState({
-        loaded: true,
+        loaded: false,
         games: [],
         errors: null
     });
