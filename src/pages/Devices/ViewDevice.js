@@ -3,16 +3,17 @@ import {useState, useEffect, Fragment, useContext} from 'react';
 import {Link, useParams} from "react-router-dom";
 
 import APIService from "../../api/APIService";
-import i18n from "../../i18n/en.json"
+import AuthContext from "../../store/AuthContext";
 
 import {Alert, BreadcrumbItem} from "react-bootstrap";
 import ProfileLayout from "../../components/Profile/ProfileLayout";
 import DeviceDetails from "../../components/Devices/DeviceDetails";
 import LazyComponent from "../../components/LazyComponent";
-
 import {confirmAlert} from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import AuthContext from "../../store/AuthContext";
+
+import i18n from "../../i18n/en.json";
+
 
 function ViewDevice() {
     const [appState, setAppState] = useState({
@@ -35,13 +36,13 @@ function ViewDevice() {
 
     const LazyDeviceDetails = LazyComponent(DeviceDetails)
 
-    function DeleteDevice(id) {
+    const DeleteDevice = (id) => {
         confirmAlert({
             title: i18n["device.deleteTitle"],
             message: i18n["device.deleteMessage"],
             buttons: [
                 {
-                    label: i18n["device.deleteConfirm"],
+                    label: i18n["confirm"],
                     onClick: () => {
                         setDeleteState({completed: false})
                         api.delete(`/device/${id}/delete`)
@@ -60,13 +61,13 @@ function ViewDevice() {
                     }
                 },
                 {
-                    label: i18n["device.deleteCancel"],
+                    label: i18n["cancel"],
                     onClick: () => {
                     }
                 }
             ]
         })
-    }
+    };
 
     useEffect(() => {
         if (authCtx.getstatus()) {

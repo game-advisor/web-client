@@ -5,13 +5,16 @@ import {useParams, Navigate, useNavigate} from "react-router-dom";
 import APIService from "../../api/APIService";
 import AuthContext from "../../store/AuthContext";
 
-import {Button, Col, Row} from "react-bootstrap";
+import {Alert, Button, Col, Row} from "react-bootstrap";
 import GameLayout from "../../components/Games/GameLayout";
 import PageSection from "../../components/Layout/PageSection";
 import LazyComponent from "../../components/LazyComponent";
 import ReviewList from "../../components/Reviews/ReviewList";
 import CompatibilityList from "../../components/Compatibility/CompatibilityList";
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
+import i18n from "../../i18n/en.json";
 
 function ViewGame() {
     const params = useParams();
@@ -23,9 +26,48 @@ function ViewGame() {
         errors: null
     });
 
+    const [deleteState, setDeleteState] = useState({
+        completed: false,
+        success: null,
+        errors: null,
+    });
+
     const authCtx = useContext(AuthContext);
     const api = APIService();
     const LazyReviewList = LazyComponent(ReviewList);
+
+    const DeleteReview = (id) => {
+        confirmAlert({
+            title: i18n["review.deleteTitle"],
+            message: i18n["review.deleteMessage"],
+            buttons: [
+                {
+                    label: i18n["confirm"],
+                    onClick: () => {
+                        setDeleteState({completed: false})
+                        api.delete(`/review/${id}/delete`)
+                            .then((res) => setDeleteState({
+                                completed: res.completed,
+                                success: {
+                                    message: i18n["review.deleteSuccess"]
+                                },
+                                errors: res.errors
+                            }))
+                            .catch((err) => setDeleteState({
+                                completed: err.completed,
+                                success: err.data,
+                                errors: err.errors
+                            }));
+                    }
+                },
+                {
+                    label: i18n["cancel"],
+                    onClick: () => {
+                    }
+                }
+            ]
+        })
+    };
 
     useEffect(() => {
         if (authCtx.getstatus()) {
@@ -55,7 +97,12 @@ function ViewGame() {
                     <PageSection name="Highlighted reviews" description="Randomly selected list of this game's reviews on our site"
                                  withAction={true}
                                  actionName="Add new review" onAction={() => history("reviews/create")}>
-                        <LazyReviewList isLoaded={appState.loaded} reviews={appState.reviews} errors={appState.errors} />
+                        {deleteState.success ? <Alert variant="success">{deleteState.success.message}</Alert> : ''}
+                        {deleteState.errors ? <Alert
+                            variant="danger">{deleteState.errors.code ? `[${deleteState.errors.code}] ${deleteState.errors.message}` : `${deleteState.errors.message}`}</Alert> : ''}
+
+                        <LazyReviewList isLoaded={appState.loaded} reviews={appState.reviews} errors={appState.errors}
+                                        onDelete={DeleteReview}/>
                         <div className="d-grid gap-2">
                             <Button variant="outline-secondary" size="lg" onClick={() => history("reviews")}>
                                 More reviews

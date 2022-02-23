@@ -20,6 +20,7 @@ function ReviewList(props) {
                         date={review.dateCreated}
                         content={review.content}
                         score={review.score}
+                        onDelete={props.onDelete}
                     />
                 </li>
             ))}

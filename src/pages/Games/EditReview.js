@@ -13,7 +13,7 @@ import ReviewForm from "../../components/Reviews/ReviewForm";
 function EditReview() {
     const [appState, setAppState] = useState({
         loaded: false,
-        game: {},
+        review: {},
         errors: null
     });
 
@@ -28,26 +28,29 @@ function EditReview() {
         if (authCtx.getstatus()) {
             setAppState({loaded: false});
 
-            api.get(`/game/${params.gameId}/info`)
+            api.get(`/review/${params.reviewId}/get`)
                 .then((res) => setAppState({
                     loaded: res.completed,
-                    game: res.data,
+                    game: res.data.game,
+                    review: res.data,
                     errors: res.errors
                 }))
                 .catch((err) => setAppState({
                     loaded: err.completed,
                     game: err.data,
+                    review: err.data,
                     errors: err.errors
                 }))
+            console.log(appState);
         }
-    }, [params.gameId, authCtx]);
+    }, [params.reviewId, authCtx]);
 
     const [submitErrors, setSubmitErrors] = useState(null);
 
     function createReview(reviewData) {
         setSubmitErrors(null);
 
-        api.post(`/game/${params.gameId}/review/add`, {
+        api.put(`/review/${params.reviewId}/edit`, {
             "content": reviewData.content,
             "avgFPS": reviewData.fps,
             "gameplayRating": reviewData.gameplayRating,
@@ -63,10 +66,11 @@ function EditReview() {
 
     return (
         <GameLayout id={params.gameId} subpage="Reviews">
-            <PageSection name="Add new review" description="Rate this title and help other users to choose their next game!"
+            <PageSection name="Edit review" description="Update your review and help other users to choose their next game!"
                          withAction={false}>
-                <LazyReviewForm isLoaded={appState.loaded} loadErrors={appState.errors}
-                                game={appState.game} onCreate={createReview} submitErrors={submitErrors}/>
+                <LazyReviewForm isLoaded={appState.loaded} loadErrors={appState.errors} editMode={true}
+                                game={appState.game} review={appState.review}
+                                onCreate={createReview} submitErrors={submitErrors}/>
             </PageSection>
         </GameLayout>
     );

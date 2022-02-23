@@ -1,15 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useState, useEffect, Fragment, useContext} from 'react';
+import {useNavigate} from "react-router-dom";
 
 import APIService from "../../api/APIService";
+import authContext from "../../store/AuthContext";
 
 import DeviceListWrapper from "./DeviceListWrapper"
 import LazyComponent from "../../components/LazyComponent";
-import {confirmAlert} from "react-confirm-alert";
-import i18n from "../../i18n/en.json";
 import {Alert} from "react-bootstrap";
-import {useNavigate} from "react-router-dom";
-import authContext from "../../store/AuthContext";
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
+import i18n from "../../i18n/en.json";
 
 function DeviceList(props) {
     const [appState, setAppState] = useState({
@@ -29,23 +31,23 @@ function DeviceList(props) {
     const history = useNavigate();
     const LazyDeviceList = LazyComponent(DeviceListWrapper);
 
-    function DeleteDevice(id) {
+    const DeleteDevice = (id) => {
         confirmAlert({
             title: i18n["device.deleteTitle"],
             message: i18n["device.deleteMessage"],
             buttons: [
                 {
-                    label: i18n["device.deleteConfirm"],
+                    label: i18n["confirm"],
                     onClick: () => {
                         setDeleteState({completed: false})
                         api.delete(`/device/${id}/delete`)
                             .then((res) => setDeleteState({
-                                    completed: res.completed,
-                                    success: {
-                                        message: i18n["device.deleteSuccess"]
-                                    },
-                                    errors: res.errors
-                                }))
+                                completed: res.completed,
+                                success: {
+                                    message: i18n["device.deleteSuccess"]
+                                },
+                                errors: res.errors
+                            }))
                             .catch((err) => setDeleteState({
                                 completed: err.completed,
                                 success: err.data,
@@ -54,16 +56,15 @@ function DeviceList(props) {
                     }
                 },
                 {
-                    label: i18n["device.deleteCancel"],
+                    label: i18n["cancel"],
                     onClick: () => {
                     }
                 }
             ]
         })
-    }
+    };
 
     useEffect(() => {
-
         if (authCtx.getstatus()) {
             setAppState({loaded: false});
 

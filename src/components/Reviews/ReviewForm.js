@@ -31,11 +31,11 @@ function ReviewForm(props) {
             validationSchema={schema}
             onSubmit={props.onCreate}
             initialValues={{
-                content: "",
-                fps: 0,
-                gameplayRating: 0,
-                graphicsRating: 0,
-                musicRating: 0
+                content: props.editMode ? props.review.content : "",
+                fps: props.editMode ? props.review.score.avgFPS : 0,
+                gameplayRating: props.editMode ? props.review.score.gameplayRating : 0,
+                graphicsRating: props.editMode ? props.review.score.graphicsRating : 0,
+                musicRating: props.editMode ? props.review.score.musicRating : 0
             }}
         >
             {({

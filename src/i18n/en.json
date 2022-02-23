@@ -1,4 +1,7 @@
 {
+    "confirm": "Yes, do it!",
+    "cancel": "Not now",
+
     "navigation.home": "Home",
     "navigation.discover": "Discover",
     "navigation.tags": "Explore",
@@ -6,44 +9,54 @@
     "navigation.favorites": "Saved",
     "navigation.login": "Login",
     "navigation.register": "Register",
+
     "usermenu.profile": "View profile",
     "usermenu.devices": "Your devices",
     "usermenu.favorites": "Your favorites",
     "usermenu.edit": "Edit profile",
     "usermenu.settings": "Settings",
     "usermenu.logout": "Logout",
+
     "games.sectionTitle": "All games",
     "games.sectionDesc": "A list of all the games currently on our site!",
-    "tags.sectionTitle": "All tags",
-    "tags.sectionDesc": "A list of all the pre-defined tags currently on our site!",
-
-    "favgames.sectionTitle": "Favorite games",
-    "favgames.sectionDesc": "All games you like on our site!",
-    "favtags.sectionTitle": "Favorite tags",
-    "favtags.sectionDesc": "All tags you like on our site!",
 
     "recommended.sectionTitle": "Recommended games",
     "recommended.sectionDesc": "Try pick one game you like from list below!",
+
+    "favgames.sectionTitle": "Favorite games",
+    "favgames.sectionDesc": "All games you like on our site!",
+
+    "review.deleteTitle": "Are you sure?",
+    "review.deleteMessage": "You're going to delete your review permanently. This operation cannot be undone",
+    "review.deleteSuccess": "Review deleted successfully",
+
     "tags.sectionTitle": "All tags",
     "tags.sectionDesc": "A list of all the pre-defined tags currently on our site!",
-    "tag.sectionTitle": "All games matching with tag: ",
-    "tag.sectionDesc": "A list of all matching games currently on our site!",
+
+    "favtags.sectionTitle": "Favorite tags",
+    "favtags.sectionDesc": "All tags you like on our site!",
+
     "publishers.sectionTitle": "All publishers",
     "publishers.sectionDesc": "A list of all the publishers currently on our site!",
+
+    "tag.sectionTitle": "All games matching with tag: ",
+    "tag.sectionDesc": "A list of all matching games currently on our site!",
+
     "publisher.sectionTitle": "All games published by: ",
     "publisher.sectionDesc": "A list of all matching games currently on our site!",
+
     "devices.sectionTitle": "Your devices",
     "devices.sectionDesc": "A list of all your devices",
     "devices.actionAdd": "Add new",
+
     "device.cpu": "Processor",
     "device.gpu": "Graphics Card",
     "device.ram": "Memory",
     "device.hdd": "HDD Drive",
     "device.ssd": "SSD Drive",
     "device.os": "Operating system",
+
     "device.deleteTitle": "Are you sure?",
     "device.deleteMessage": "You're going to delete your device permanently. This operation cannot be undone",
-    "device.deleteConfirm": "Yes, do it!",
-    "device.deleteCancel": "Not now",
     "device.deleteSuccess": "Device deleted successfully"
 }

@@ -4,11 +4,15 @@ import {useParams, Navigate, useNavigate} from "react-router-dom";
 import AuthContext from "../../store/AuthContext";
 import APIService from "../../api/APIService";
 
-import {BreadcrumbItem} from "react-bootstrap";
+import {Alert, BreadcrumbItem} from "react-bootstrap";
 import GameLayout from "../../components/Games/GameLayout";
 import PageSection from "../../components/Layout/PageSection";
 import LazyComponent from "../../components/LazyComponent";
 import ReviewList from "../../components/Reviews/ReviewList";
+import {confirmAlert} from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
+import i18n from "../../i18n/en.json";
 
 function GameReviews() {
     const params = useParams();
@@ -19,6 +23,45 @@ function GameReviews() {
         reviews: [],
         errors: null
     });
+
+    const [deleteState, setDeleteState] = useState({
+        completed: false,
+        success: null,
+        errors: null,
+    });
+
+    const DeleteReview = (id) => {
+        confirmAlert({
+            title: i18n["review.deleteTitle"],
+            message: i18n["review.deleteMessage"],
+            buttons: [
+                {
+                    label: i18n["confirm"],
+                    onClick: () => {
+                        setDeleteState({completed: false})
+                        api.delete(`/review/${id}/delete`)
+                            .then((res) => setDeleteState({
+                                completed: res.completed,
+                                success: {
+                                    message: i18n["review.deleteSuccess"]
+                                },
+                                errors: res.errors
+                            }))
+                            .catch((err) => setDeleteState({
+                                completed: err.completed,
+                                success: err.data,
+                                errors: err.errors
+                            }));
+                    }
+                },
+                {
+                    label: i18n["cancel"],
+                    onClick: () => {
+                    }
+                }
+            ]
+        })
+    };
 
     const authCtx = useContext(AuthContext);
     const api = APIService();
@@ -50,7 +93,12 @@ function GameReviews() {
             <PageSection name="All reviews" description="All reviews"
                          withAction={true}
                          actionName="Add new review" onAction={() => history("create")}>
-                <LazyReviewList isLoaded={appState.loaded} reviews={appState.reviews} errors={appState.errors} />
+                {deleteState.success ? <Alert variant="success">{deleteState.success.message}</Alert> : ''}
+                {deleteState.errors ? <Alert
+                    variant="danger">{deleteState.errors.code ? `[${deleteState.errors.code}] ${deleteState.errors.message}` : `${deleteState.errors.message}`}</Alert> : ''}
+
+                <LazyReviewList isLoaded={appState.loaded} reviews={appState.reviews} errors={appState.errors}
+                                onDelete={DeleteReview} />
             </PageSection>
         </GameLayout>
     );
