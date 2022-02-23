@@ -10,53 +10,31 @@ import authContext from "../../store/AuthContext";
 import {PencilIcon, TrashIcon} from "@heroicons/react/outline";
 
 function ReviewListItem(props) {
-    const [appState, setAppState] = useState({
-        loaded: false,
-        user: {},
-        errors: null
-    });
-
     const authCtx = useContext(authContext);
-    const api = APIService();
-
-    useEffect(() => {
-        if (authCtx.getstatus()) {
-            setAppState({loaded: false});
-
-            api.get(`/user/${props.author}`)
-                .then((res) => setAppState({
-                    loaded: res.completed,
-                    user: res.data,
-                    errors: res.errors
-                }))
-                .catch((err) => setAppState({
-                    loaded: err.completed,
-                    user: err.data,
-                    errors: err.errors
-                }))
-        }
-    }, [props.author, authCtx]);
 
     return (
         <div className="d-flex w-100 mb-3">
             <div className="d-flex flex-column me-2">
             <img
                 alt=""
-                src={`${process.env.REACT_APP_API_URL}/user/${props.author}/avatar`}
+                src={`${process.env.REACT_APP_API_URL}/user/${props.author.userID}/avatar`}
                 width="48"
                 height="48"
                 className="user-avatar rounded shadow"
             />
-                {props.author === authCtx.details.userID ?
+                {props.author.userID === authCtx.details.userID ?
                     <>
-                    <Button as={Link} to={`edit`} variant="outline-secondary" className="w-100 mt-2"><PencilIcon width="16" height="16" /></Button>
+                    <Button as={Link} to={`/games/${props.game.gameID}/reviews/${props.id}/edit`}
+                            variant="outline-secondary" className="w-100 mt-2"><PencilIcon width="16" height="16" /></Button>
                     <Button variant="outline-danger"  className="w-100 mt-2"
-                            onClick={() => props.onDelete(props.device.deviceID)} ><TrashIcon width="20" height="20" /></Button>
+                            onClick={() => props.onDelete(props.id)} ><TrashIcon width="20" height="20" /></Button>
                     </> : ''
                 }
             </div>
             <Card body className="flex-fill">
-                <Card.Title>{(appState.loaded && appState.user) ? <Link to={`/users/${props.author}`} className="text-reset text-decoration-none">{appState.user.username}</Link> : ''}</Card.Title>
+                <Card.Title>
+                    <Link to={`/users/${props.author.userID}`} className="text-reset text-decoration-none">{props.author.username}</Link>
+                </Card.Title>
                 <Card.Subtitle className="mb-2"><FormattedDate value={props.date} day="2-digit" month="short" year="numeric"/> <FormattedTime value={props.date} hour="numeric" minute="numeric" /></Card.Subtitle>
                 <Card.Text><ReactMarkdown>{props.content}</ReactMarkdown></Card.Text>
                 <hr/>
