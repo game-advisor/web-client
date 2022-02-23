@@ -27,6 +27,7 @@ function Favorites() {
     const LazyTagList = LazyComponent(TagList);
 
     useEffect(() => {
+        authCtx.getstatus();
         setAppState({loaded: false});
 
         api.get('/user/favGames')

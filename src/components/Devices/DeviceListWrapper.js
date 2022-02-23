@@ -4,8 +4,14 @@ import DeviceListItem from './DeviceListItem';
 function DeviceListWrapper(props) {
     if (!props.devices || props.devices.length === 0) {
         if (props.errors)
-            return (<Alert
-                variant="danger">{props.errors.code ? `[${props.errors.code}] ${props.errors.message}` : `${props.errors.message}`}</Alert>);
+            return (
+                <Alert variant="danger">
+                    {props.errors.code ?
+                        `[${props.errors.code}] ${props.errors.message}` :
+                        `${props.errors.message}`
+                    }
+                </Alert>
+            );
 
         return (<p className="mt-5 h2 text-center text-muted">No devices found.</p>)
     }

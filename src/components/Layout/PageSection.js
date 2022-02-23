@@ -10,7 +10,7 @@ function PageSection(props) {
             <div className="mb-3 d-flex justify-content-between">
                 <div className="me-auto">
                     <h2>{props.name}</h2>
-                    <p className="text-muted mb-0">{props.description}</p>
+                    <div className="text-muted mb-0">{props.description}</div>
                 </div>
                 { props.withAction ? <Button variant="primary" onClick={performAction}>{props.actionName} {props.actionIcon}</Button> : '' }
             </div>

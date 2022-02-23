@@ -42,7 +42,7 @@
     "device.ssd": "SSD Drive",
     "device.os": "Operating system",
     "device.deleteTitle": "Are you sure?",
-    "device.deleteMessage": "You\"re going to delete your device permanently. This operation cannot be undone",
+    "device.deleteMessage": "You're going to delete your device permanently. This operation cannot be undone",
     "device.deleteConfirm": "Yes, do it!",
     "device.deleteCancel": "Not now",
     "device.deleteSuccess": "Device deleted successfully"

@@ -45,7 +45,7 @@ function NewReview() {
     function createReview(reviewData) {
         setSubmitErrors(null);
 
-        api.post(`/game/${params.gameId}/review/create`, {
+        api.post(`/game/${params.gameId}/review/add`, {
             "content": reviewData.content,
             "avgFPS": reviewData.fps,
             "gameplayRating": reviewData.gameplayRating,
@@ -61,9 +61,8 @@ function NewReview() {
 
     return (
         <GameLayout id={params.gameId} subpage="Reviews">
-            <PageSection name="All reviews" description="All reviews"
-                         withAction={true}
-                         actionName="Add new review" onAction={() => history("create")}>
+            <PageSection name="Add new review" description="Rate this title and help other users to choose their next game!"
+                         withAction={false}>
                 <LazyReviewForm isLoaded={appState.loaded} loadErrors={appState.errors}
                                 game={appState.game} onCreate={createReview} submitErrors={submitErrors}/>
             </PageSection>

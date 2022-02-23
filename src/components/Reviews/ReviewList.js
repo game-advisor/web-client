@@ -15,7 +15,7 @@ function ReviewList(props) {
                 <li key={review.reviewID}>
                     <ReviewListItem
                         id={review.reviewID}
-                        author={review.reviewUserID}
+                        author={review.reviewUser.userID}
                         date={review.dateCreated}
                         content={review.content}
                         score={review.score}
