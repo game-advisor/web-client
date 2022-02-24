@@ -39,7 +39,7 @@ function ProfileHeader(props) {
                 <Container className="pt-2 pb-5 d-flex align-items-center">
                     <p className={`${styles.subheader} lead me-auto`}>{props.user.roles === "ROLE_ADMIN" ? "Administrator" : "Contributor"}</p>
                     {props.isPersonal ?
-                        <Button as={Link} to={"edit"} variant="outline-dark">Edit profile <PencilIcon width="24" height="24" /></Button> : ''}
+                        <Button as={Link} to={"/me/edit"} variant="outline-dark">Edit profile <PencilIcon width="24" height="24" /></Button> : ''}
                 </Container>
             </Container>
         </Fragment>

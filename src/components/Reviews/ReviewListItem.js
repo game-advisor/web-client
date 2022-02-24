@@ -35,7 +35,11 @@ function ReviewListItem(props) {
                 <Card.Title>
                     <Link to={`/users/${props.author.userID}`} className="text-reset text-decoration-none">{props.author.username}</Link>
                 </Card.Title>
-                <Card.Subtitle className="mb-2"><FormattedDate value={props.date} day="2-digit" month="short" year="numeric"/> <FormattedTime value={props.date} hour="numeric" minute="numeric" /></Card.Subtitle>
+                <Card.Subtitle className="mb-2 text-muted">
+                    {props.game.name}&nbsp;&bull;&nbsp;
+                    <FormattedDate value={props.date} day="2-digit" month="short" year="numeric"/>
+                    <FormattedTime value={props.date} hour="numeric" minute="numeric" />
+                </Card.Subtitle>
                 <Card.Text><ReactMarkdown>{props.content}</ReactMarkdown></Card.Text>
                 <hr/>
                 <Row className="row-cols-2">
