@@ -1,7 +1,7 @@
 <div id="top"></div>
 <div align="center">
   <a href="https://github.com/game-advisor/web-client/">
-    <img src="https://raw.githubusercontent.com/game-advisor/web-client/97bbdd529be2f63a488ab72f22ba28db404a337c/src/assets/logo-oct.svg?token=ADNBT7TQ333WH547Q4WR3BTCCZB2G" alt="Logo" width="80" height="80">
+    <img src="https://github.com/game-advisor/web-client/blob/master/public/logo512.png?raw=true" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">GameAdvisor Web Client</h3>
