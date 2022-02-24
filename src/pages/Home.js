@@ -29,10 +29,7 @@ function Home() {
             setAppState({loaded: false});
             const token = authCtx.token;
 
-            api.post('/games/getByDatePublished', {
-                "dateBegin": "1970-01-01",
-                "dateEnd": ""
-            })
+            api.get('/games/recommend')
                 .then((res) => setAppState({
                     loaded: res.completed,
                     games: res.data,

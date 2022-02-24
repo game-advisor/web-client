@@ -37,8 +37,8 @@ function ReviewListItem(props) {
                 </Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">
                     {props.game.name}&nbsp;&bull;&nbsp;
-                    <FormattedDate value={props.date} day="2-digit" month="short" year="numeric"/>
-                    <FormattedTime value={props.date} hour="numeric" minute="numeric" />
+                    <FormattedDate value={props.date} day="2-digit" month="short" year="numeric"/>&nbsp;
+                    <FormattedTime value={props.date} hour="numeric" minute="numeric" hour12={false} />
                 </Card.Subtitle>
                 <Card.Text><ReactMarkdown>{props.content}</ReactMarkdown></Card.Text>
                 <hr/>
