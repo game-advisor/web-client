@@ -68,7 +68,9 @@ function DeviceList(props) {
         if (authCtx.getstatus()) {
             setAppState({loaded: false});
 
-            const endpoint = props.isPersonal ? `/device/user` : `/device/user/${props.userId}?pageNumber=0&pageSize=3&sortBy=deviceID`;
+            const endpoint = props.isPersonal ?
+                            `/device/user` :
+                            `/device/user/${props.userId}?pageNumber=0&pageSize=3&sortBy=deviceID`;
 
             api.get(endpoint)
                 .then((res) => {

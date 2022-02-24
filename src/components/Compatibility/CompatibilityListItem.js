@@ -20,7 +20,6 @@ function CompatibilityListItem(props) {
     const api = APIService();
 
     useEffect(() => {
-
         if (authCtx.getstatus()) {
             setAppState({loaded: false});
 
@@ -55,16 +54,14 @@ function CompatibilityListItem(props) {
                                 }
                             })
                         })
-                        .catch(() => {
-                            setAppState((prevState) => {
+                        .catch(() => setAppState((prevState) => {
                                 return {
                                     ...prevState,
                                     loaded: res.completed,
                                     max: prevState.min,
                                     errors: res.errors
                                 }
-                            })
-                        })
+                            }))
                 })
                 .catch((err) => setAppState({
                     loaded: err.completed,

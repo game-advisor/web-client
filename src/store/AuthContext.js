@@ -5,10 +5,6 @@ const AuthContext = createContext({
     isLoggedIn: false,
     token: null,
     details: {},
-    favGames: null,
-    totalFavGames: 0,
-    favTags: null,
-    totalFavTags: 0,
     authorize: (token) => {
     },
     deauthorize: () => {
